@@ -20,7 +20,7 @@
               </object>
             </child>
             <child>
-              <object class="GtkEntry">
+              <object class="GtkEntry" id="address_entry">
                 <property name="margin-top">12</property>
                 <property name="margin-bottom">12</property>
                 <property name="margin-start">12</property>
@@ -44,7 +44,7 @@
               </object>
             </child>
             <child>
-              <object class="GtkEntry">
+              <object class="GtkEntry" id="nickname_entry">
                 <property name="margin-top">12</property>
                 <property name="margin-bottom">12</property>
                 <property name="margin-start">12</property>
@@ -68,7 +68,7 @@
               </object>
             </child>
             <child>
-              <object class="GtkEntry">
+              <object class="GtkEntry" id="username_entry">
                 <property name="margin-top">12</property>
                 <property name="margin-bottom">12</property>
                 <property name="margin-start">12</property>
@@ -92,7 +92,7 @@
               </object>
             </child>
             <child>
-              <object class="GtkEntry">
+              <object class="GtkEntry" id="realname_entry">
                 <property name="margin-top">12</property>
                 <property name="margin-bottom">12</property>
                 <property name="margin-start">12</property>
@@ -116,7 +116,7 @@
               </object>
             </child>
             <child>
-              <object class="GtkEntry">
+              <object class="GtkEntry" id="password_entry">
                 <property name="visibility">false</property>
                 <property name="margin-top">12</property>
                 <property name="margin-bottom">12</property>
@@ -128,6 +128,7 @@
         </child>
         <child>
           <object class="GtkButton">
+            <signal name="clicked" handler="handle_button_clicked" swapped="true"></signal>
             <property name="label">Connect</property>
             <property name="margin-top">12</property>
             <property name="margin-bottom">12</property>
