@@ -1,4 +1,5 @@
 mod registration_window;
+mod server;
 
 use gtk::prelude::*;
 use gtk::{gio, glib, Application};
