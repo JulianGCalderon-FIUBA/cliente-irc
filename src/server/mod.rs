@@ -1,3 +1,5 @@
+use std::fmt::Display;
+
 use async_std::io::{self, prelude::*, WriteExt};
 use async_std::net::{TcpStream, ToSocketAddrs};
 
@@ -15,7 +17,7 @@ impl Server {
         Ok(Self { stream })
     }
 
-    pub async fn send(&mut self, message: String) -> io::Result<()> {
+    pub async fn send<D: Display>(&mut self, message: D) -> io::Result<()> {
         write!(&mut self.stream, "{message}\r\n").await
     }
 

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="MainWindow" parent="GtkApplicationWindow">
+    <child>
+      <object class="GtkButton">
+        <property name="label">PRUEBA</property>
+      </object>
+    </child>
+  </template>
+</interface>

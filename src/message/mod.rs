@@ -1,55 +1,103 @@
-mod parsing;
-mod parsing_error;
+mod error;
+mod parser;
 
 #[cfg(test)]
 mod tests;
 
-pub use parsing_error::ParsingError;
+use std::fmt::Display;
 
-pub struct Message {
-    prefix: Option<String>,
-    command: String,
-    parameters: Vec<String>,
-    trailing: Option<String>,
+pub use error::Error;
+
+use self::parser::{Parameters, Prefix, Trailing};
+
+pub enum IrcMessage {
+    Welcome {
+        realname: String,
+        servername: String,
+        nickname: String,
+        username: String,
+        hostname: String,
+    },
+    Quit {
+        message: String,
+    },
 }
 
-const PREFIX_CHARACTER: u8 = b':';
-const MAX_LENGTH: usize = 510;
-const INVALID_CHARACTERS: [char; 3] = ['\r', '\n', '\0'];
+const WELCOME_COMMAND: &str = "001";
+const QUIT_COMMAND: &str = "QUIT";
 
-impl Message {
-    pub fn new(content: &str) -> Result<Self, ParsingError> {
-        let (prefix, command, parameters, trailing) = parsing::parse(content)?;
+impl IrcMessage {
+    pub fn new(content: &str) -> Result<Self, Error> {
+        let (prefix, command, parameters, trailing) = parser::parse(content)?;
 
-        Ok(Self {
-            prefix,
-            command,
-            parameters,
-            trailing,
+        match &command[..] {
+            WELCOME_COMMAND => Self::new_welcome(prefix, parameters, trailing),
+            QUIT_COMMAND => Self::new_quit(prefix, parameters, trailing),
+            _ => Err(Error::UnknownCommand(content.to_string())),
+        }
+    }
+
+    fn new_welcome(
+        _prefix: Prefix,
+        mut parameters: Parameters,
+        trailing: Trailing,
+    ) -> Result<Self, Error> {
+        let realname = parameters.pop().ok_or(Error::MissingParameter)?;
+
+        let trailing = trailing.ok_or(Error::MissingParameter)?;
+        let mut split_trailing = trailing.split_whitespace().map(str::to_owned);
+
+        let servername = split_trailing.nth(2).ok_or(Error::MissingParameter)?;
+        let nickname = split_trailing.nth(1).ok_or(Error::MissingParameter)?;
+        let mut username = split_trailing.next().ok_or(Error::MissingParameter)?;
+        let mut hostname = split_trailing.next().ok_or(Error::MissingParameter)?;
+
+        if username.is_empty() || hostname.is_empty() {
+            return Err(Error::InvalidParameter);
+        }
+
+        username.remove(0);
+        hostname.remove(0);
+
+        Ok(Self::Welcome {
+            realname,
+            servername,
+            nickname,
+            username,
+            hostname,
         })
     }
 
-    pub fn _unpack(self) -> (Option<String>, String, Vec<String>, Option<String>) {
-        (self.prefix, self.command, self.parameters, self.trailing)
+    fn new_quit(
+        _prefix: Prefix,
+        _parameters: Parameters,
+        trailing: Trailing,
+    ) -> Result<Self, Error> {
+        let message = trailing.ok_or(Error::MissingParameter)?;
+
+        Ok(Self::Quit { message })
     }
 }
 
-impl std::fmt::Display for Message {
+impl Display for IrcMessage {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        if let Some(prefix) = &self.prefix {
-            write!(f, ":{prefix} ")?;
-        }
+        let string = match self {
+            Self::Quit { message } => {
+                format!("{QUIT_COMMAND} :{message}")
+            }
 
-        write!(f, "{}", self.command)?;
-
-        for parameter in self.parameters.iter() {
-            write!(f, " {parameter}")?;
-        }
-
-        if let Some(trailing) = &self.trailing {
-            write!(f, " :{trailing}")
-        } else {
-            Ok(())
-        }
+            Self::Welcome {
+                realname,
+                servername,
+                nickname,
+                username,
+                hostname,
+            } => {
+                format!(
+                    "{WELCOME_COMMAND} {realname} :Welcome to {servername} Network, {nickname} !{username} @{hostname}"
+                )
+            }
+        };
+        write!(f, "{string}")
     }
 }
