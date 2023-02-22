@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="Chat" parent="GtkBox">
+    <property name="orientation">vertical</property>
+    <child>
+      <object class="GtkLabel">
+        <property name="label">Chat</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkListBox">
+        <property name="vexpand">true</property>
+        <property name="selection-mode">none</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkEntry">
+        <property name="placeholder-text">Write a message here</property>
+        <signal name="activate" handler="send_message" swapped="true" />
+      </object>
+    </child>
+  </template>
+</interface>

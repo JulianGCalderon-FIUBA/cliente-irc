@@ -1,7 +1,9 @@
 use gtk::glib::subclass::InitializingObject;
-// use gtk::prelude::*;
+use gtk::prelude::*;
 use gtk::subclass::prelude::*;
 use gtk::{glib, CompositeTemplate};
+
+use crate::application::chat::Chat;
 
 #[derive(CompositeTemplate, Default)]
 #[template(resource = "/com/jgcalderon/irc-client/main.ui")]
@@ -15,6 +17,8 @@ impl ObjectSubclass for MainWindow {
 
     fn class_init(klass: &mut Self::Class) {
         klass.bind_template();
+
+        Chat::ensure_type();
     }
 
     fn instance_init(obj: &InitializingObject<Self>) {

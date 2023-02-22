@@ -1,6 +1,8 @@
 mod imp;
+
+mod chat;
 mod main_window;
-pub mod registration_window;
+mod registration_window;
 
 use async_std::net::ToSocketAddrs;
 use async_std::task::block_on;
