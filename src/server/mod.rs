@@ -1,23 +1,18 @@
-use std::io::{Error, ErrorKind};
-use std::rc::Rc;
-
-use async_std::io::{self, prelude::*, BufReader, WriteExt};
-use async_std::net::TcpStream;
+use async_std::io::{self, prelude::*, WriteExt};
+use async_std::net::{TcpStream, ToSocketAddrs};
 
 const MESSAGE_SEPARATOR: &[u8] = b"\r\n";
 
 #[derive(Debug, Clone)]
 pub struct Server {
     stream: TcpStream,
-    reader: Rc<BufReader<TcpStream>>,
 }
 
 impl Server {
-    pub async fn connect(address: String) -> io::Result<Self> {
+    pub async fn connect<A: ToSocketAddrs>(address: A) -> io::Result<Self> {
         let stream = TcpStream::connect(address).await?;
-        let reader = Rc::new(BufReader::new(stream.clone()));
 
-        Ok(Self { stream, reader })
+        Ok(Self { stream })
     }
 
     pub async fn send(&mut self, message: String) -> io::Result<()> {
@@ -25,27 +20,21 @@ impl Server {
     }
 
     pub async fn receive(&mut self) -> io::Result<String> {
-        let reader = Rc::get_mut(&mut self.reader).unwrap();
-        read_irc_server_message(reader).await
+        read_irc_server_message(&mut self.stream).await
     }
 }
 
-pub async fn read_irc_server_message(reader: &mut BufReader<TcpStream>) -> io::Result<String> {
+pub async fn read_irc_server_message(reader: &mut TcpStream) -> io::Result<String> {
     let mut content = String::new();
 
     while !content.as_bytes().ends_with(MESSAGE_SEPARATOR) {
-        let read = reader.read_line(&mut content).await?;
-        if read == 0 {
-            return Err(unexpected_eof_error());
-        }
+        let mut buf = vec![0; 1];
+        reader.read_exact(&mut buf).await?;
+        content.push(buf[0] as char);
     }
 
     content.pop();
     content.pop();
 
     Ok(content)
-}
-
-fn unexpected_eof_error() -> Error {
-    Error::new(ErrorKind::UnexpectedEof, "")
 }
