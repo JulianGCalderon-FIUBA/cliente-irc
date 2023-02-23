@@ -3,7 +3,7 @@
   <template class="Chat" parent="GtkBox">
     <property name="orientation">vertical</property>
     <child>
-      <object class="GtkLabel">
+      <object class="GtkLabel" id="client_label">
         <property name="label">Chat</property>
       </object>
     </child>

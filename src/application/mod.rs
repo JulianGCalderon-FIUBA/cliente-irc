@@ -76,6 +76,16 @@ impl Application {
         let main_window = MainWindow::new(self);
 
         self.imp().main_window.set(Some(&main_window));
+
+        self.main_window().connect_closure(
+            "send-message",
+            true,
+            closure_local!( @strong self as _application =>
+                move |_: MainWindow, message: String, client: String| {
+                    println!("send message {message} to client {client}");
+                }
+            ),
+        );
     }
 
     fn handle_server<A: ToSocketAddrs>(&self, address: A) {
