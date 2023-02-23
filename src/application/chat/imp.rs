@@ -1,4 +1,6 @@
-use gtk::glib::subclass::InitializingObject;
+use gtk::glib::once_cell::sync::Lazy;
+use gtk::glib::subclass::{InitializingObject, Signal};
+use gtk::glib::ParamSpecString;
 use gtk::prelude::*;
 use gtk::subclass::prelude::*;
 use gtk::traits::EntryExt;
@@ -28,11 +30,23 @@ impl ObjectSubclass for Chat {
 impl Chat {
     #[template_callback]
     fn send_message(&self, entry: &Entry) {
+        entry.buffer().set_text("");
+
         let message = entry.buffer().text().to_string();
-        println!("send message: {message}")
+        self.obj()
+            .emit_by_name("send-message", &[&message.to_value()])
     }
 }
 
-impl ObjectImpl for Chat {}
+impl ObjectImpl for Chat {
+    fn signals() -> &'static [glib::subclass::Signal] {
+        static SIGNALS: Lazy<Vec<Signal>> = Lazy::new(|| {
+            vec![Signal::builder("send-message")
+                .param_types([String::static_type()])
+                .build()]
+        });
+        SIGNALS.as_ref()
+    }
+}
 impl WidgetImpl for Chat {}
 impl BoxImpl for Chat {}

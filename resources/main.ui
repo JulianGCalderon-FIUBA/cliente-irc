@@ -10,14 +10,14 @@
             <property name="orientation">vertical</property>
             <child>
               <object class="GtkStackSidebar">
-                <!-- <property name="height-request">1000</property> -->
                 <property name="vexpand">true</property>
                 <property name="stack">chats_stack</property>
               </object>
             </child>
             <child>
-              <object class="GtkButton">
-                <property name="label">Add Chat</property>
+              <object class="GtkEntry">
+                <property name="placeholder-text">Write client to add</property>
+                <signal name="activate" handler="add_client" swapped="true" />
               </object>
             </child>
           </object>
@@ -33,26 +33,6 @@
                 <property name="child">
                   <object class="GtkLabel">
                     <property name="label">DEFAULT PAGE</property>
-                  </object>
-                </property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkStackPage">
-                <property name="title">Chat1</property>
-                <property name="child">
-                  <object class="Chat">
-
-                  </object>
-                </property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkStackPage">
-                <property name="title">Chat2</property>
-                <property name="child">
-                  <object class="Chat">
-
                   </object>
                 </property>
               </object>

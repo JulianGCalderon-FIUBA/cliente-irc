@@ -1,8 +1,6 @@
 use glib::Object;
 use gtk::glib;
 
-use crate::application::Application;
-
 mod imp;
 
 glib::wrapper! {
@@ -13,9 +11,13 @@ glib::wrapper! {
 }
 
 impl Chat {
-    pub fn new(application: &Application) -> Self {
-        Object::builder()
-            .property("application", application)
-            .build()
+    pub fn new() -> Self {
+        Object::builder().build()
+    }
+}
+
+impl Default for Chat {
+    fn default() -> Self {
+        Self::new()
     }
 }
