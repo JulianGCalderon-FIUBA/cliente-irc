@@ -6,6 +6,7 @@ mod registration_window;
 
 use async_std::net::ToSocketAddrs;
 use async_std::task::block_on;
+use gtk::gio::ApplicationFlags;
 use gtk::glib::{clone, closure_local, Object};
 use gtk::prelude::{ApplicationExt, ObjectExt};
 use gtk::subclass::prelude::*;
@@ -33,6 +34,7 @@ impl Application {
     pub fn new() -> Self {
         Object::builder()
             .property("application-id", APPLICATION_ID)
+            .property("flags", ApplicationFlags::NON_UNIQUE)
             .build()
     }
 
