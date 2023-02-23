@@ -18,7 +18,7 @@ use crate::server::Server;
 use main_window::MainWindow;
 use registration_window::RegistrationWindow;
 
-const APPLICATION_ID: &str = "com.jgcalderon.irc-client";
+const APPLICATION_ID: &str = "com.jgcalderon.irc-client2";
 
 const QUIT_MESSAGE: &str = "Disconnecting client";
 
@@ -80,9 +80,9 @@ impl Application {
         self.main_window().connect_closure(
             "send-message",
             true,
-            closure_local!( @strong self as _application =>
+            closure_local!( @strong self as application =>
                 move |_: MainWindow, message: String, client: String| {
-                    println!("send message {message} to client {client}");
+                    application.send_privmsg(client, message);
                 }
             ),
         );
@@ -112,6 +112,11 @@ impl Application {
         match message {
             IrcMessage::Welcome { .. } => self.handle_welcome(),
             IrcMessage::Quit { .. } => self.handle_quit(),
+            IrcMessage::Privmsg {
+                sender,
+                target,
+                message,
+            } => self.handle_privmsg(sender, target, message),
         }
     }
 
@@ -126,12 +131,9 @@ impl Application {
         self.quit();
     }
 
-    fn send_quit(&self) {
-        let quit_message = IrcMessage::Quit {
-            message: String::from(QUIT_MESSAGE),
-        };
-
-        block_on(self.server().send(quit_message)).unwrap();
+    fn handle_privmsg(&self, sender: String, _target: String, message: String) {
+        let chat = self.main_window().get_or_insert_chat(&sender);
+        chat.add_external_message(message);
     }
 }
 
@@ -163,6 +165,22 @@ impl Application {
                 }),
             );
         }
+    }
+
+    fn send_quit(&self) {
+        let quit_command = format!("QUIT :{QUIT_MESSAGE}");
+
+        block_on(self.server().send(quit_command)).unwrap();
+    }
+
+    fn send_privmsg(&self, target: String, message: String) {
+        let privmsg_command = format!("PRIVMSG {target} :{message}");
+
+        glib::MainContext::default().spawn_local(
+            clone!(@strong self as application => async move {
+                application.server().send(privmsg_command).await.unwrap();
+            }),
+        );
     }
 }
 

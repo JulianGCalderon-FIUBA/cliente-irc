@@ -4,8 +4,6 @@ mod parser;
 #[cfg(test)]
 mod tests;
 
-use std::fmt::Display;
-
 pub use error::Error;
 
 use self::parser::{Parameters, Prefix, Trailing};
@@ -21,10 +19,16 @@ pub enum IrcMessage {
     Quit {
         message: String,
     },
+    Privmsg {
+        sender: String,
+        target: String,
+        message: String,
+    },
 }
 
 const WELCOME_COMMAND: &str = "001";
 const QUIT_COMMAND: &str = "QUIT";
+const PRIVMSG_COMMAND: &str = "PRIVMSG";
 
 impl IrcMessage {
     pub fn new(content: &str) -> Result<Self, Error> {
@@ -33,6 +37,7 @@ impl IrcMessage {
         match &command[..] {
             WELCOME_COMMAND => Self::new_welcome(prefix, parameters, trailing),
             QUIT_COMMAND => Self::new_quit(prefix, parameters, trailing),
+            PRIVMSG_COMMAND => Self::new_privmsg(prefix, parameters, trailing),
             _ => Err(Error::UnknownCommand(content.to_string())),
         }
     }
@@ -77,27 +82,22 @@ impl IrcMessage {
 
         Ok(Self::Quit { message })
     }
-}
 
-impl Display for IrcMessage {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        let string = match self {
-            Self::Quit { message } => {
-                format!("{QUIT_COMMAND} :{message}")
-            }
+    fn new_privmsg(
+        prefix: Prefix,
+        mut parameters: Parameters,
+        trailing: Trailing,
+    ) -> Result<Self, Error> {
+        parameters.reverse();
 
-            Self::Welcome {
-                realname,
-                servername,
-                nickname,
-                username,
-                hostname,
-            } => {
-                format!(
-                    "{WELCOME_COMMAND} {realname} :Welcome to {servername} Network, {nickname} !{username} @{hostname}"
-                )
-            }
-        };
-        write!(f, "{string}")
+        let sender = prefix.ok_or(Error::MissingParameter)?;
+        let message = trailing.ok_or(Error::MissingParameter)?;
+        let target = parameters.pop().ok_or(Error::MissingParameter)?;
+
+        Ok(Self::Privmsg {
+            sender,
+            target,
+            message,
+        })
     }
 }
