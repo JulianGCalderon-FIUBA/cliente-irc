@@ -40,12 +40,13 @@ impl MainWindow {
 
         let chat: Chat = Object::builder().property("client", client.clone()).build();
 
+        let main_window = self.obj().clone();
         chat.connect_closure(
             "send-message",
             true,
-            closure_local!(@to-owned self as main_window, @to-owned client =>
+            closure_local!(@to-owned client =>
                 move |_: Chat, message: String| {
-                    main_window.obj().emit_by_name::<()>("send-message", &[&message.to_value(), &client.to_value()]);
+                    main_window.emit_by_name::<()>("send-message", &[&message.to_value(), &client.to_value()]);
                 }
             ),
         );
