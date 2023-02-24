@@ -2,11 +2,11 @@
 <interface>
   <template class="RegistrationWindow" parent="GtkApplicationWindow">
     <property name="title">Registration</property>
-    <property name="address" bind-source="address_entry" bind-property="text" bind-flags="bidirectional" />
-    <property name="nickname" bind-source="nickname_entry" bind-property="text" bind-flags="bidirectional" />
-    <property name="username" bind-source="username_entry" bind-property="text" bind-flags="bidirectional" />
-    <property name="realname" bind-source="realname_entry" bind-property="text" bind-flags="bidirectional" />
-    <property name="password" bind-source="password_entry" bind-property="text" bind-flags="bidirectional" />
+    <property name="address" bind-source="address_entry" bind-property="text" />
+    <property name="nickname" bind-source="nickname_entry" bind-property="text" />
+    <property name="username" bind-source="username_entry" bind-property="text" />
+    <property name="realname" bind-source="realname_entry" bind-property="text" />
+    <property name="password" bind-source="password_entry" bind-property="text" />
     <child>
       <object class="GtkBox">
         <property name="orientation">vertical</property>
