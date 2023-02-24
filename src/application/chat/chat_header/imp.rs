@@ -1,29 +1,24 @@
 use std::cell::RefCell;
 
 use gtk::glib::once_cell::sync::Lazy;
-use gtk::glib::subclass::{InitializingObject, Signal};
+use gtk::glib::subclass::InitializingObject;
 use gtk::glib::{BindingFlags, ParamSpec, ParamSpecString};
-use gtk::prelude::*;
 use gtk::subclass::prelude::*;
-use gtk::traits::EntryExt;
-use gtk::{glib, CompositeTemplate, Entry, ListBox};
-
-use super::chat_header::ChatHeader;
+use gtk::{glib, Button, CompositeTemplate};
+use gtk::{prelude::*, Label};
 
 #[derive(CompositeTemplate, Default)]
-#[template(resource = "/com/jgcalderon/irc-client/chat.ui")]
-pub struct Chat {
+#[template(resource = "/com/jgcalderon/irc-client/chat-header.ui")]
+pub struct ChatHeader {
     #[template_child]
-    pub header: TemplateChild<ChatHeader>,
-    #[template_child]
-    pub message_list: TemplateChild<ListBox>,
+    pub client_label: TemplateChild<Label>,
     pub client: RefCell<String>,
 }
 
 #[glib::object_subclass]
-impl ObjectSubclass for Chat {
-    const NAME: &'static str = "Chat";
-    type Type = super::Chat;
+impl ObjectSubclass for ChatHeader {
+    const NAME: &'static str = "ChatHeader";
+    type Type = super::ChatHeader;
     type ParentType = gtk::Box;
 
     fn class_init(klass: &mut Self::Class) {
@@ -37,28 +32,22 @@ impl ObjectSubclass for Chat {
 }
 
 #[gtk::template_callbacks]
-impl Chat {
+impl ChatHeader {
     #[template_callback]
-    fn send_message(&self, entry: &Entry) {
-        let message = entry.buffer().text().to_string();
-
-        self.obj()
-            .emit_by_name::<()>("send-message", &[&message.to_value()]);
-
-        self.obj().add_own_message(message);
-
-        entry.buffer().set_text("");
+    fn close_window(&self, _button: &Button) {
+        println!("close button");
     }
 }
 
-impl ObjectImpl for Chat {
+impl ObjectImpl for ChatHeader {
     fn signals() -> &'static [glib::subclass::Signal] {
-        static SIGNALS: Lazy<Vec<Signal>> = Lazy::new(|| {
-            vec![Signal::builder("send-message")
-                .param_types([String::static_type()])
-                .build()]
-        });
-        SIGNALS.as_ref()
+        // static SIGNALS: Lazy<Vec<Signal>> = Lazy::new(|| {
+        //     vec![Signal::builder("send-message")
+        //         .param_types([String::static_type()])
+        //         .build()]
+        // });
+        // SIGNALS.as_ref()
+        &[]
     }
 
     fn properties() -> &'static [glib::ParamSpec] {
@@ -87,15 +76,15 @@ impl ObjectImpl for Chat {
     fn constructed(&self) {
         self.parent_constructed();
 
-        let chat = self.obj();
+        let chat_header = self.obj();
 
-        self.header
-            .bind_property("client", chat.as_ref(), "client")
+        self.client_label
+            .bind_property("label", chat_header.as_ref(), "client")
             .flags(BindingFlags::SYNC_CREATE | BindingFlags::BIDIRECTIONAL)
             .build();
     }
 
     fn dispose(&self) {}
 }
-impl WidgetImpl for Chat {}
-impl BoxImpl for Chat {}
+impl WidgetImpl for ChatHeader {}
+impl BoxImpl for ChatHeader {}

@@ -2,6 +2,7 @@ use glib::Object;
 use gtk::{glib, subclass::prelude::ObjectSubclassIsExt, Align, Label};
 
 mod imp;
+mod chat_header;
 
 glib::wrapper! {
     pub struct Chat(ObjectSubclass<imp::Chat>)

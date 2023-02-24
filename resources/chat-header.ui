@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="ChatHeader" parent="GtkBox">
+    <property name="orientation">horizontal</property>
+    <child>
+      <object class="GtkLabel" id="client_label">
+        <property name="margin-start">12</property>
+        <property name="margin-top">6</property>
+        <property name="margin-bottom">6</property>
+        <property name="margin-end">6</property>
+        <property name="halign">start</property>
+        <property name="hexpand">true</property>
+        <property name="label">chat-name</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkButton">
+        <style>
+          <class name="circular" />
+        </style>
+        <property name="halign">end</property>
+        <property name="icon-name">window-close-symbolic</property>
+        <property name="margin-start">6</property>
+        <property name="margin-end">6</property>
+        <property name="margin-top">6</property>
+        <property name="margin-bottom">6</property>
+        <signal name="clicked" handler="close_window" swapped="true" />
+      </object>
+    </child>
+  </template>
+</interface>

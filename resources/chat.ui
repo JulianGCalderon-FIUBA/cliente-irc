@@ -3,8 +3,7 @@
   <template class="Chat" parent="GtkBox">
     <property name="orientation">vertical</property>
     <child>
-      <object class="GtkLabel" id="client_label">
-        <property name="label">Chat</property>
+      <object class="ChatHeader" id="header">
       </object>
     </child>
     <child>
@@ -16,6 +15,12 @@
     <child>
       <object class="GtkEntry">
         <property name="placeholder-text">Write a message here</property>
+        <property name="secondary-icon-name">mail-send-symbolic</property>
+        <property name="margin-start">6</property>
+        <property name="margin-top">6</property>
+        <property name="margin-bottom">6</property>
+        <property name="margin-end">6</property>
+        <property name="height-request">40</property>
         <signal name="activate" handler="send_message" swapped="true" />
       </object>
     </child>
