@@ -134,7 +134,7 @@ impl Application {
     }
 
     fn handle_privmsg(&self, sender: String, _target: String, message: String) {
-        let chat = self.main_window().get_or_insert_chat(&sender);
+        let chat = self.main_window().get_or_add_chat(&sender);
         chat.add_external_message(message);
     }
 }

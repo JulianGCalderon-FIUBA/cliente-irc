@@ -37,7 +37,7 @@ impl ApplicationImpl for Application {
         self.parent_activate();
 
         application.setup_registration();
-        // application.registration_window().present();
+        application.registration_window().present();
 
         application.setup_main_window();
         application.main_window().present();

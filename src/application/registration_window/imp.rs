@@ -1,6 +1,6 @@
 use gtk::glib::once_cell::sync::Lazy;
 use gtk::glib::subclass::{InitializingObject, Signal};
-use gtk::glib::{BindingFlags, ParamSpec, ParamSpecString};
+use gtk::glib::{ParamSpec, ParamSpecString};
 use gtk::prelude::*;
 use gtk::subclass::prelude::*;
 use gtk::{glib, Button, CompositeTemplate, Entry};
@@ -107,37 +107,6 @@ impl ObjectImpl for RegistrationWindow {
             "realname" => self.realname.borrow().to_string().to_value(),
             _ => unimplemented!(),
         }
-    }
-
-    fn constructed(&self) {
-        self.parent_constructed();
-
-        let registration_window = self.obj();
-
-        self.address_entry
-            .bind_property("text", registration_window.as_ref(), "address")
-            .flags(BindingFlags::SYNC_CREATE | BindingFlags::BIDIRECTIONAL)
-            .build();
-
-        self.password_entry
-            .bind_property("text", registration_window.as_ref(), "password")
-            .flags(BindingFlags::SYNC_CREATE | BindingFlags::BIDIRECTIONAL)
-            .build();
-
-        self.nickname_entry
-            .bind_property("text", registration_window.as_ref(), "nickname")
-            .flags(BindingFlags::SYNC_CREATE | BindingFlags::BIDIRECTIONAL)
-            .build();
-
-        self.username_entry
-            .bind_property("text", registration_window.as_ref(), "username")
-            .flags(BindingFlags::SYNC_CREATE | BindingFlags::BIDIRECTIONAL)
-            .build();
-
-        self.realname_entry
-            .bind_property("text", registration_window.as_ref(), "realname")
-            .flags(BindingFlags::SYNC_CREATE | BindingFlags::BIDIRECTIONAL)
-            .build();
     }
 }
 

@@ -1,5 +1,11 @@
 use glib::Object;
-use gtk::{gio, glib, prelude::Cast, subclass::prelude::ObjectSubclassIsExt, Stack};
+use gtk::{
+    gio,
+    glib::{self, closure_local},
+    prelude::{Cast, ObjectExt, ToValue},
+    subclass::prelude::ObjectSubclassIsExt,
+    Stack,
+};
 
 use crate::application::Application;
 
@@ -27,13 +33,26 @@ impl MainWindow {
         self.imp().chats_stack.clone()
     }
 
-    pub fn get_or_insert_chat(&self, name: &str) -> Chat {
-        if let Some(chat) = self.chats_stack().child_by_name(name) {
-            return chat.downcast().unwrap();
+    pub fn get_or_add_chat(&self, name: &str) -> Chat {
+        match self.chats_stack().child_by_name(name) {
+            Some(chat) => chat.downcast().unwrap(),
+            None => self.add_chat(name),
         }
+    }
 
+    fn add_chat(&self, name: &str) -> Chat {
         let chat: Chat = Object::builder().property("client", name).build();
         self.chats_stack().add_titled(&chat, Some(name), name);
+
+        chat.connect_closure(
+            "send-message",
+            true,
+            closure_local!(@strong self as main_window, @to-owned name =>
+                move |_: Chat, message: String| {
+                    main_window.emit_by_name::<()>("send-message", &[&message.to_value(), &name.to_value()]);
+                }
+            ),
+        );
 
         chat
     }

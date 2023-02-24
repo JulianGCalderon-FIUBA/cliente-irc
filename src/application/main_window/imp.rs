@@ -1,6 +1,5 @@
 use gtk::glib::once_cell::sync::Lazy;
 use gtk::glib::subclass::{InitializingObject, Signal};
-use gtk::glib::{closure_local, Object};
 use gtk::subclass::prelude::*;
 use gtk::{glib, CompositeTemplate, Stack};
 use gtk::{prelude::*, Entry};
@@ -37,21 +36,9 @@ impl MainWindow {
     #[template_callback]
     fn add_client(&self, entry: &Entry) {
         let client = entry.buffer().text().to_string();
+        entry.buffer().set_text("");
 
-        let chat: Chat = Object::builder().property("client", client.clone()).build();
-
-        let main_window = self.obj().clone();
-        chat.connect_closure(
-            "send-message",
-            true,
-            closure_local!(@to-owned client =>
-                move |_: Chat, message: String| {
-                    main_window.emit_by_name::<()>("send-message", &[&message.to_value(), &client.to_value()]);
-                }
-            ),
-        );
-
-        self.chats_stack.add_titled(&chat, Some(&client), &client);
+        self.obj().add_chat(&client);
     }
 }
 
