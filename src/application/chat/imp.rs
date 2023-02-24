@@ -88,11 +88,6 @@ impl ObjectImpl for Chat {
         self.parent_constructed();
 
         let chat = self.obj();
-
-        self.header
-            .bind_property("client", chat.as_ref(), "client")
-            .flags(BindingFlags::SYNC_CREATE | BindingFlags::BIDIRECTIONAL)
-            .build();
     }
 
     fn dispose(&self) {}

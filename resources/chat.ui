@@ -4,6 +4,7 @@
     <property name="orientation">vertical</property>
     <child>
       <object class="ChatHeader" id="header">
+        <property name="client" bind-source="Chat" />
       </object>
     </child>
     <child>

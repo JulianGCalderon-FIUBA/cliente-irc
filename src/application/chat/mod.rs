@@ -1,8 +1,10 @@
 use glib::Object;
-use gtk::{glib, subclass::prelude::ObjectSubclassIsExt, Align, Label};
+use gtk::{
+    glib, prelude::ObjectExt, subclass::prelude::ObjectSubclassIsExt, Align, Builder, Label,
+};
 
-mod imp;
 mod chat_header;
+mod imp;
 
 glib::wrapper! {
     pub struct Chat(ObjectSubclass<imp::Chat>)
@@ -16,14 +18,26 @@ impl Chat {
         Object::builder().build()
     }
 
-    pub fn add_external_message(&self, message: String) {
-        let label = Label::builder().label(message).halign(Align::Start).build();
-        self.imp().message_list.append(&label);
+    pub fn add_external_message(&self, content: String) {
+        let message: Label =
+            Builder::from_resource("/com/jgcalderon/irc-client/chat-external-message.ui")
+                .object("message")
+                .unwrap();
+
+        message.set_property("label", &content);
+
+        self.imp().message_list.append(&message);
     }
 
-    fn add_own_message(&self, message: String) {
-        let label = Label::builder().label(message).halign(Align::End).build();
-        self.imp().message_list.append(&label);
+    fn add_own_message(&self, content: String) {
+        let message: Label =
+            Builder::from_resource("/com/jgcalderon/irc-client/chat-own-message.ui")
+                .object("message")
+                .unwrap();
+
+        message.set_property("label", content);
+
+        self.imp().message_list.append(&message);
     }
 }
 
