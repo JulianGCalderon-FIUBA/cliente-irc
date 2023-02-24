@@ -1,7 +1,7 @@
 use glib::Object;
 use gtk::{
     gio,
-    glib::{self, closure_local},
+    glib::{self, closure_local, Value},
     prelude::{Cast, ObjectExt, ToValue},
     subclass::prelude::ObjectSubclassIsExt,
     Stack,
@@ -41,15 +41,26 @@ impl MainWindow {
     }
 
     fn add_chat(&self, name: &str) -> Chat {
-        let chat: Chat = Object::builder().property("client", name).build();
+        let chat: Chat = Object::builder().property("chat-name", name).build();
         self.chats_stack().add_titled(&chat, Some(name), name);
 
         chat.connect_closure(
-            "send-message",
-            true,
-            closure_local!(@strong self as main_window, @to-owned name =>
-                move |_: Chat, message: String| {
-                    main_window.emit_by_name::<()>("send-message", &[&message.to_value(), &name.to_value()]);
+            "send-message-request",
+            false,
+            closure_local!(@strong self as main_window =>
+                move |chat: Chat, message: String| {
+                    let name: Value = chat.property("chat-name");
+                    main_window.emit_by_name::<()>("send-message-request", &[&message.to_value(), &name]);
+                }
+            ),
+        );
+
+        chat.connect_closure(
+            "close-request",
+            false,
+            closure_local!(@strong self as main_window =>
+                move |chat: Chat| {
+                    main_window.chats_stack().remove(&chat);
                 }
             ),
         );

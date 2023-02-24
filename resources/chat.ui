@@ -4,7 +4,8 @@
     <property name="orientation">vertical</property>
     <child>
       <object class="ChatHeader" id="header">
-        <property name="client" bind-source="Chat" />
+        <property name="chat-name" bind-source="Chat" />
+        <signal name="close-request" handler="emit_close_request" swapped="true" />
       </object>
     </child>
     <child>
@@ -22,7 +23,7 @@
         <property name="margin-bottom">6</property>
         <property name="margin-end">6</property>
         <property name="height-request">40</property>
-        <signal name="activate" handler="send_message" swapped="true" />
+        <signal name="activate" handler="emit_send_message_request" swapped="true" />
       </object>
     </child>
   </template>

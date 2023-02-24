@@ -47,7 +47,7 @@ impl WidgetImpl for MainWindow {}
 impl ObjectImpl for MainWindow {
     fn signals() -> &'static [glib::subclass::Signal] {
         static SIGNALS: Lazy<Vec<Signal>> = Lazy::new(|| {
-            vec![Signal::builder("send-message")
+            vec![Signal::builder("send-message-request")
                 .param_types([String::static_type(), String::static_type()])
                 .build()]
         });

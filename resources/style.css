@@ -1,15 +1,18 @@
-/* * {
-    border: 1px solid #000;
-} */
-
 #own-message {
     border-radius: 5px;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
     background-color: lightblue;
     padding: 10px;
+    border-right: 2px solid cornflowerblue;
+
 }
 
 #external-message {
     border-radius: 5px;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
     background-color: lightgreen;
     padding: 10px;
+    border-left: 2px solid green;
 }

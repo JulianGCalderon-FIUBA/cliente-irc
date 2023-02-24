@@ -80,7 +80,7 @@ impl Application {
         self.imp().main_window.set(Some(&main_window));
 
         self.main_window().connect_closure(
-            "send-message",
+            "send-message-request",
             true,
             closure_local!( @strong self as application =>
                 move |_: MainWindow, message: String, client: String| {
