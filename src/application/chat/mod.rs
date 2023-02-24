@@ -1,7 +1,6 @@
 use glib::Object;
-use gtk::{
-    glib, prelude::ObjectExt, subclass::prelude::ObjectSubclassIsExt, Align, Builder, Label,
-};
+use gtk::subclass::prelude::*;
+use gtk::{glib, Builder, Label};
 
 mod chat_header;
 mod imp;
@@ -24,7 +23,7 @@ impl Chat {
                 .object("message")
                 .unwrap();
 
-        message.set_property("label", &content);
+        message.set_label(&content);
 
         self.imp().message_list.append(&message);
     }
@@ -35,7 +34,7 @@ impl Chat {
                 .object("message")
                 .unwrap();
 
-        message.set_property("label", content);
+        message.set_label(&content);
 
         self.imp().message_list.append(&message);
     }

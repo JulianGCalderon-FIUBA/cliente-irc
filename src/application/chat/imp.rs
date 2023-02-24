@@ -2,7 +2,7 @@ use std::cell::RefCell;
 
 use gtk::glib::once_cell::sync::Lazy;
 use gtk::glib::subclass::{InitializingObject, Signal};
-use gtk::glib::{BindingFlags, ParamSpec, ParamSpecString};
+use gtk::glib::{ParamSpec, ParamSpecString};
 use gtk::prelude::*;
 use gtk::subclass::prelude::*;
 use gtk::traits::EntryExt;
@@ -86,8 +86,6 @@ impl ObjectImpl for Chat {
 
     fn constructed(&self) {
         self.parent_constructed();
-
-        let chat = self.obj();
     }
 
     fn dispose(&self) {}
