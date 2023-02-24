@@ -15,4 +15,17 @@
     background-color: lightgreen;
     padding: 10px;
     border-left: 2px solid green;
+    border-bottom: 1px solid black;
+}
+
+stacksidebar list {
+    margin: 0px;
+    padding: 0px;
+}
+
+stacksidebar row {
+    margin: 0px;
+    padding: 5px;
+    border-radius: 0px;
+    border-bottom: 1px solid lightgray;
 }

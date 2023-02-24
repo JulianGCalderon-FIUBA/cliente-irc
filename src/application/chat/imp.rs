@@ -17,6 +17,8 @@ pub struct Chat {
     pub header: TemplateChild<ChatHeader>,
     #[template_child]
     pub message_list: TemplateChild<ListBox>,
+    #[template_child]
+    pub message_entry: TemplateChild<Entry>,
     pub chat_name: RefCell<String>,
 }
 
@@ -39,19 +41,22 @@ impl ObjectSubclass for Chat {
 #[gtk::template_callbacks]
 impl Chat {
     #[template_callback]
-    fn emit_send_message_request(&self, entry: &Entry) {
-        let message = entry.buffer().text().to_string();
+    fn emit_send_message_request(&self) {
+        let message = self.message_entry.buffer().text().to_string();
+        if message.is_empty() {
+            return;
+        }
+
+        self.message_entry.buffer().set_text("");
 
         self.obj()
             .emit_by_name::<()>("send-message-request", &[&message.to_value()]);
 
         self.obj().add_own_message(message);
-
-        entry.buffer().set_text("");
     }
 
     #[template_callback]
-    fn emit_close_request(&self, _chat_header: &ChatHeader) {
+    fn emit_close_request(&self) {
         self.obj().emit_by_name::<()>("close-request", &[]);
     }
 }

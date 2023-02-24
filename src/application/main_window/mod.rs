@@ -42,7 +42,7 @@ impl MainWindow {
 
     fn add_chat(&self, name: &str) -> Chat {
         let chat: Chat = Object::builder().property("chat-name", name).build();
-        self.chats_stack().add_titled(&chat, Some(name), name);
+        let _page = self.chats_stack().add_titled(&chat, Some(name), name);
 
         chat.connect_closure(
             "send-message-request",

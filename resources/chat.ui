@@ -15,15 +15,17 @@
       </object>
     </child>
     <child>
-      <object class="GtkEntry">
+      <object class="GtkEntry" id="message_entry">
         <property name="placeholder-text">Write a message here</property>
         <property name="secondary-icon-name">mail-send-symbolic</property>
         <property name="margin-start">6</property>
         <property name="margin-top">6</property>
+        <property name="hexpand">true</property>
         <property name="margin-bottom">6</property>
         <property name="margin-end">6</property>
         <property name="height-request">40</property>
         <signal name="activate" handler="emit_send_message_request" swapped="true" />
+        <signal name="icon-release" handler="emit_send_message_request" swapped="true" />
       </object>
     </child>
   </template>
