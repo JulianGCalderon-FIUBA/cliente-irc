@@ -1,3 +1,6 @@
+mod client;
+mod message;
+
 use gtk::prelude::*;
 use gtk::{gio, glib};
 

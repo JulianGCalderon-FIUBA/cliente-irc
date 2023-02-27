@@ -13,7 +13,7 @@ use gtk::subclass::prelude::*;
 use gtk::traits::GtkWindowExt;
 use gtk::{gio, glib};
 
-use crate::message::IrcMessage;
+use crate::message_::IrcMessage;
 use crate::server::Server;
 
 use main_window::MainWindow;

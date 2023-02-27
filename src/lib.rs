@@ -1,3 +1,3 @@
 pub mod application;
-mod message;
+mod message_;
 mod server;
