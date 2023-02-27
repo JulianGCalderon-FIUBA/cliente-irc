@@ -6,11 +6,11 @@ use async_std::net::{TcpStream, ToSocketAddrs};
 const MESSAGE_SEPARATOR: &[u8] = b"\r\n";
 
 #[derive(Debug, Clone)]
-pub struct Server {
+pub struct IrcClient {
     stream: TcpStream,
 }
 
-impl Server {
+impl IrcClient {
     pub async fn connect<A: ToSocketAddrs>(address: A) -> io::Result<Self> {
         let stream = TcpStream::connect(address).await?;
 

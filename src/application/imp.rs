@@ -8,7 +8,7 @@ use gtk::StyleContext;
 use gtk::subclass::prelude::*;
 use gtk::traits::GtkWindowExt;
 
-use crate::server::Server;
+use crate::server::IrcClient;
 
 // use super::main_window::MainWindow;
 use super::MainWindow;
@@ -18,7 +18,7 @@ use super::RegistrationWindow;
 pub struct Application {
     pub registration_window: WeakRef<RegistrationWindow>,
     pub main_window: WeakRef<MainWindow>,
-    pub server: OnceCell<Server>,
+    pub server: OnceCell<IrcClient>,
 }
 
 #[glib::object_subclass]

@@ -14,7 +14,7 @@ use gtk::traits::GtkWindowExt;
 use gtk::{gio, glib};
 
 use crate::message::IrcMessage;
-use crate::server::Server;
+use crate::server::IrcClient;
 
 use main_window::MainWindow;
 use registration_window::RegistrationWindow;
@@ -46,7 +46,7 @@ impl Application {
         self.imp().main_window.upgrade().unwrap()
     }
 
-    fn server(&self) -> Server {
+    fn server(&self) -> IrcClient {
         self.imp().server.get().unwrap().clone()
     }
 
@@ -91,7 +91,7 @@ impl Application {
     }
 
     fn handle_server<A: ToSocketAddrs>(&self, address: A) {
-        let Ok(server) = block_on(Server::connect(address)) else { return };
+        let Ok(server) = block_on(IrcClient::connect(address)) else { return };
 
         self.imp().server.set(server).unwrap();
 
