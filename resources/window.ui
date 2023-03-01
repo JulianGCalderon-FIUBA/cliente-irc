@@ -2,8 +2,15 @@
 <interface>
   <template class="Window" parent="GtkApplicationWindow">
     <child>
-      <object class="GtkLabel">
-        <property name="label">hola!</property>
+      <object class="GtkStack" id="stack">
+        <child>
+          <object class="GtkStackPage">
+            <property name="name">registration</property>
+            <property name="child">
+              <object class="Registration" id="registration"></object>
+            </property>
+          </object>
+        </child>
       </object>
     </child>
   </template>

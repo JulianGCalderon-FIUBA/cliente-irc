@@ -3,10 +3,6 @@
   <gresource prefix="/com/jgcalderon/irc-client">
     <file compressed="true" preprocess="xml-stripblanks">window.ui</file>
     <file compressed="true" preprocess="xml-stripblanks">registration.ui</file>
-    <file compressed="true" preprocess="xml-stripblanks">main.ui</file>
-    <file compressed="true" preprocess="xml-stripblanks">chat.ui</file>
-    <file compressed="true" preprocess="xml-stripblanks">chat-header.ui</file>
-    <file compressed="true" preprocess="xml-stripblanks">chat-own-message.ui</file>
-    <file compressed="true" preprocess="xml-stripblanks">chat-external-message.ui</file>
+    <file compressed="true" preprocess="xml-stripblanks">registration-field.ui</file>
   </gresource>
 </gresources>

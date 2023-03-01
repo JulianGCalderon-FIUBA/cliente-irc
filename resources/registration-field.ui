@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="Field" parent="GtkBox">
+    <property name="orientation">horizontal</property>
+    <property name="text" bind-source="entry" bind-property="text"></property>
+    <child>
+      <object class="GtkLabel" id="label">
+        <property name="label" bind-source="Field"></property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkEntry" id="entry">
+      </object>
+    </child>
+  </template>
+</interface>

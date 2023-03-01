@@ -1,146 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <template class="RegistrationWindow" parent="GtkApplicationWindow">
-    <property name="title">Registration</property>
-    <property name="address" bind-source="address_entry" bind-property="text" />
-    <property name="nickname" bind-source="nickname_entry" bind-property="text" />
-    <property name="username" bind-source="username_entry" bind-property="text" />
-    <property name="realname" bind-source="realname_entry" bind-property="text" />
-    <property name="password" bind-source="password_entry" bind-property="text" />
+  <template class="Registration" parent="GtkBox">
+    <property name="orientation">vertical</property>
     <child>
-      <object class="GtkBox">
-        <property name="orientation">vertical</property>
-        <child>
-          <object class="GtkBox">
-            <property name="orientation">horizontal</property>
-            <child>
-              <object class="GtkLabel">
-                <property name="label">Server Address:</property>
-                <property name="margin-top">12</property>
-                <property name="margin-bottom">12</property>
-                <property name="margin-start">12</property>
-                <property name="margin-end">12</property>
-                <property name="width-request">120</property>
-                <property name="xalign">1</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkEntry" id="address_entry">
-                <property name="margin-top">12</property>
-                <property name="margin-bottom">12</property>
-                <property name="margin-start">12</property>
-                <property name="margin-end">12</property>
-              </object>
-            </child>
-          </object>
-        </child>
-        <child>
-          <object class="GtkBox">
-            <property name="orientation">horizontal</property>
-            <child>
-              <object class="GtkLabel">
-                <property name="label">Nickname:</property>
-                <property name="margin-top">12</property>
-                <property name="margin-bottom">12</property>
-                <property name="margin-start">12</property>
-                <property name="margin-end">12</property>
-                <property name="width-request">120</property>
-                <property name="xalign">1</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkEntry" id="nickname_entry">
-                <property name="margin-top">12</property>
-                <property name="margin-bottom">12</property>
-                <property name="margin-start">12</property>
-                <property name="margin-end">12</property>
-              </object>
-            </child>
-          </object>
-        </child>
-        <child>
-          <object class="GtkBox">
-            <property name="orientation">horizontal</property>
-            <child>
-              <object class="GtkLabel">
-                <property name="label">Username:</property>
-                <property name="margin-top">12</property>
-                <property name="margin-bottom">12</property>
-                <property name="margin-start">12</property>
-                <property name="margin-end">12</property>
-                <property name="width-request">120</property>
-                <property name="xalign">1</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkEntry" id="username_entry">
-                <property name="margin-top">12</property>
-                <property name="margin-bottom">12</property>
-                <property name="margin-start">12</property>
-                <property name="margin-end">12</property>
-              </object>
-            </child>
-          </object>
-        </child>
-        <child>
-          <object class="GtkBox">
-            <property name="orientation">horizontal</property>
-            <child>
-              <object class="GtkLabel">
-                <property name="label">Realname:</property>
-                <property name="margin-top">12</property>
-                <property name="margin-bottom">12</property>
-                <property name="margin-start">12</property>
-                <property name="margin-end">12</property>
-                <property name="width-request">120</property>
-                <property name="xalign">1</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkEntry" id="realname_entry">
-                <property name="margin-top">12</property>
-                <property name="margin-bottom">12</property>
-                <property name="margin-start">12</property>
-                <property name="margin-end">12</property>
-              </object>
-            </child>
-          </object>
-        </child>
-        <child>
-          <object class="GtkBox">
-            <property name="orientation">horizontal</property>
-            <child>
-              <object class="GtkLabel">
-                <property name="label">Password:</property>
-                <property name="margin-top">12</property>
-                <property name="margin-bottom">12</property>
-                <property name="margin-start">12</property>
-                <property name="margin-end">12</property>
-                <property name="width-request">120</property>
-                <property name="xalign">1</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkEntry" id="password_entry">
-                <property name="visibility">false</property>
-                <property name="margin-top">12</property>
-                <property name="margin-bottom">12</property>
-                <property name="margin-start">12</property>
-                <property name="margin-end">12</property>
-              </object>
-            </child>
-          </object>
-        </child>
-        <child>
-          <object class="GtkButton">
-            <signal name="clicked" handler="handle_button_clicked" swapped="true"></signal>
-            <property name="label">Connect</property>
-            <property name="margin-top">12</property>
-            <property name="margin-bottom">12</property>
-            <property name="margin-start">12</property>
-            <property name="margin-end">12</property>
-          </object>
-        </child>
+      <object class="Field" id="address">
+        <property name="label">address</property>
+      </object>
+    </child>
+    <child>
+      <object class="Field" id="nickname">
+        <property name="label">nickname</property>
+      </object>
+    </child>
+    <child>
+      <object class="Field" id="password">
+        <property name="label">password</property>
+      </object>
+    </child>
+    <child>
+      <object class="Field" id="username">
+        <property name="label">username</property>
+      </object>
+    </child>
+    <child>
+      <object class="Field" id="realname">
+        <property name="label">realname</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkButton" id="connect">
+        <signal name="clicked" handler="register" swapped="true"></signal>
       </object>
     </child>
   </template>

@@ -2,9 +2,14 @@ use glib::subclass::InitializingObject;
 use gtk::subclass::prelude::*;
 use gtk::{glib, CompositeTemplate};
 
+use super::registration::Registration;
+
 #[derive(CompositeTemplate, Default)]
 #[template(resource = "/com/jgcalderon/irc-client/window.ui")]
-pub struct Window {}
+pub struct Window {
+    #[template_child]
+    registration: TemplateChild<Registration>,
+}
 
 #[glib::object_subclass]
 impl ObjectSubclass for Window {
