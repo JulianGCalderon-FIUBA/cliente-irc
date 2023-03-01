@@ -1,11 +1,11 @@
-use super::Error;
-
 const PREFIX_CHARACTER: u8 = b':';
 const MAX_LENGTH: usize = 510;
 const INVALID_CHARACTERS: [char; 3] = ['\r', '\n', '\0'];
 
 use std::iter::Peekable;
 use std::str::SplitWhitespace;
+
+use super::ParsingError;
 
 pub type Prefix = Option<String>;
 pub type Command = String;
@@ -14,15 +14,15 @@ pub type Trailing = Option<String>;
 type IrcMessageParse = (Prefix, Command, Parameters, Trailing);
 
 /// Parses string into prefix, command, parameters and trailing
-pub fn parse(content: &str) -> Result<IrcMessageParse, Error> {
+pub fn parse(content: &str) -> Result<IrcMessageParse, ParsingError> {
     if content.is_empty() {
-        return Err(Error::EmptyMessage);
+        return Err(ParsingError::EmptyMessage);
     }
     if content.len() > MAX_LENGTH {
-        return Err(Error::TooManyParameters);
+        return Err(ParsingError::TooManyParameters);
     }
     if content.contains(INVALID_CHARACTERS) {
-        return Err(Error::InvalidCharacter);
+        return Err(ParsingError::InvalidCharacter);
     }
 
     let mut words = content.split_whitespace().peekable();
@@ -36,9 +36,9 @@ pub fn parse(content: &str) -> Result<IrcMessageParse, Error> {
 }
 
 /// If next iter item is a prefix, it consumes it and returns its value
-fn get_prefix(split: &mut Peekable<SplitWhitespace>) -> Result<Prefix, Error> {
+fn get_prefix(split: &mut Peekable<SplitWhitespace>) -> Result<Prefix, ParsingError> {
     let possible_prefix = match split.peek() {
-        None => return Err(Error::EmptyMessage),
+        None => return Err(ParsingError::EmptyMessage),
         Some(possible_prefix) => possible_prefix,
     };
 
@@ -51,7 +51,7 @@ fn get_prefix(split: &mut Peekable<SplitWhitespace>) -> Result<Prefix, Error> {
         let prefix = split.next().expect("Existance was verified on peek");
 
         if prefix.len() == 1 {
-            return Err(Error::EmptyPrefix);
+            return Err(ParsingError::EmptyPrefix);
         }
 
         let prefix = &prefix[1..];
@@ -63,9 +63,9 @@ fn get_prefix(split: &mut Peekable<SplitWhitespace>) -> Result<Prefix, Error> {
 }
 
 /// If next iter item is a command, it consumes it and returns its value
-fn get_command(split: &mut Peekable<SplitWhitespace>) -> Result<Command, Error> {
+fn get_command(split: &mut Peekable<SplitWhitespace>) -> Result<Command, ParsingError> {
     let possible_command = match split.next() {
-        None => return Err(Error::NoCommand),
+        None => return Err(ParsingError::NoCommand),
         Some(possible_command) => possible_command,
     };
 
@@ -73,7 +73,7 @@ fn get_command(split: &mut Peekable<SplitWhitespace>) -> Result<Command, Error> 
 }
 
 /// Consumes parameters from iterator and returns them
-fn get_parameters(split: &mut Peekable<SplitWhitespace>) -> Result<Parameters, Error> {
+fn get_parameters(split: &mut Peekable<SplitWhitespace>) -> Result<Parameters, ParsingError> {
     let mut parameters = Vec::new();
 
     while let Some(possible_parameter) = split.peek() {
@@ -91,14 +91,14 @@ fn get_parameters(split: &mut Peekable<SplitWhitespace>) -> Result<Parameters, E
     }
 
     if parameters.len() > 15 {
-        return Err(Error::TooManyParameters);
+        return Err(ParsingError::TooManyParameters);
     }
 
     Ok(parameters)
 }
 
 /// If next iter item is a trailing parameter, it consumes it and returns its value
-fn get_trailing(split: &mut Peekable<SplitWhitespace>) -> Result<Trailing, Error> {
+fn get_trailing(split: &mut Peekable<SplitWhitespace>) -> Result<Trailing, ParsingError> {
     if split.peek().is_none() {
         return Ok(None);
     }

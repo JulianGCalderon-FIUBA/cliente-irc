@@ -1,7 +1,8 @@
 #[derive(Debug)]
-pub enum Error {
+pub enum ParsingError {
     EmptyMessage,
     EmptyPrefix,
+    MissingPrefix,
     NoCommand,
     InvalidCharacter,
     TooManyParameters,

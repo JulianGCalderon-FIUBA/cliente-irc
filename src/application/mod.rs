@@ -8,12 +8,12 @@ use async_std::net::ToSocketAddrs;
 use async_std::task::block_on;
 use gtk::gio::ApplicationFlags;
 use gtk::glib::{clone, closure_local, Object};
-use gtk::prelude::{ApplicationExt, ObjectExt};
+use gtk::prelude::ObjectExt;
 use gtk::subclass::prelude::*;
 use gtk::traits::GtkWindowExt;
 use gtk::{gio, glib};
 
-use crate::message::IrcMessage;
+use crate::message::{IrcCommand, IrcMessage, IrcResponse};
 use crate::server::IrcClient;
 
 use main_window::MainWindow;
@@ -98,7 +98,7 @@ impl Application {
         glib::MainContext::default().spawn_local(
             clone!(@strong self as application => async move {
                     while let Ok(message) = application.server().receive().await {
-                        match IrcMessage::new(&message) {
+                        match IrcMessage::parse(&message) {
                             Ok(message) => application.handle_message(message),
                             Err(error) => eprintln!("Error while parsing server message, {error:?}"),
                         }
@@ -112,13 +112,16 @@ impl Application {
 impl Application {
     fn handle_message(&self, message: IrcMessage) {
         match message {
-            IrcMessage::Welcome { .. } => self.handle_welcome(),
-            IrcMessage::Quit { .. } => self.handle_quit(),
-            IrcMessage::Privmsg {
-                sender,
-                target,
-                message,
-            } => self.handle_privmsg(sender, target, message),
+            IrcMessage::IrcCommand(sender, command) => match command {
+                IrcCommand::Privmsg { target, message } => {
+                    self.handle_privmsg(sender, target, message);
+                }
+            },
+            IrcMessage::IrcResponse(response) => match response {
+                IrcResponse::Welcome { .. } => {
+                    self.handle_welcome();
+                }
+            },
         }
     }
 
@@ -127,10 +130,6 @@ impl Application {
 
         self.registration_window().close();
         self.main_window().present();
-    }
-
-    fn handle_quit(&self) {
-        self.quit();
     }
 
     fn handle_privmsg(&self, sender: String, _target: String, message: String) {
