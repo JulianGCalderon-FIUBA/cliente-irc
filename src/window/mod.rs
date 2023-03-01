@@ -1,5 +1,6 @@
 mod imp;
 mod registration;
+mod session;
 
 use glib::Object;
 use gtk::gio;
