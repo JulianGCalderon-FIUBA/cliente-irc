@@ -3,8 +3,9 @@ mod imp;
 use glib::Object;
 use gtk::gio;
 use gtk::glib;
+use gtk::Application;
 
-use crate::application::Application;
+// use crate::application::Application;
 
 glib::wrapper! {
     pub struct Window(ObjectSubclass<imp::Window>)
