@@ -1,7 +1,10 @@
-use gtk::prelude::*;
+mod application;
+mod message;
+mod server;
+
 use gtk::{gio, glib};
 
-use irc_client::application::Application;
+use application::Application;
 
 fn main() -> glib::ExitCode {
     gio::resources_register_include!("compiled.gresource").expect("Failed to register resources");
