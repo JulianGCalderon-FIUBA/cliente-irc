@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <template class="Window" parent="ApplicationWindow">
+  <template class="Window" parent="GtkApplicationWindow">
+    <child>
+      <object class="GtkLabel">
+        <property name="label">hola!</property>
+      </object>
+    </child>
   </template>
 </interface>
