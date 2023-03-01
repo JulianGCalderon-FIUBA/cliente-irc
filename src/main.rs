@@ -1,6 +1,7 @@
 mod application;
 mod message;
 mod server;
+mod window;
 
 use gtk::{gio, glib};
 
