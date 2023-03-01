@@ -4,7 +4,6 @@ pub enum ParsingError {
     EmptyPrefix,
     MissingPrefix,
     NoCommand,
-    InvalidCharacter,
     TooManyParameters,
     MissingParameter,
     InvalidParameter,

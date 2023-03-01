@@ -9,7 +9,7 @@ pub use response::IrcResponse;
 
 pub enum IrcMessage {
     IrcCommand(String, IrcCommand),
-    IrcResponse(response::IrcResponse),
+    IrcResponse(IrcResponse),
 }
 
 impl IrcMessage {
@@ -18,11 +18,11 @@ impl IrcMessage {
 
         if command::IrcCommand::is_command(&command) {
             let prefix = prefix.ok_or(ParsingError::MissingPrefix)?;
-            let command = command::IrcCommand::parse(command, arguments, trailing)?;
+            let command = IrcCommand::new(command, arguments, trailing)?;
             return Ok(IrcMessage::IrcCommand(prefix, command));
         }
 
-        let response = response::IrcResponse::parse(command, arguments, trailing)?;
+        let response = IrcResponse::new(command, arguments, trailing)?;
 
         Ok(Self::IrcResponse(response))
     }

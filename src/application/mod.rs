@@ -116,6 +116,9 @@ impl Application {
                 IrcCommand::Privmsg { target, message } => {
                     self.handle_privmsg(sender, target, message);
                 }
+                unimplemented => {
+                    self.handle_unimplemented(sender, unimplemented);
+                }
             },
             IrcMessage::IrcResponse(response) => match response {
                 IrcResponse::Welcome { .. } => {
@@ -136,6 +139,10 @@ impl Application {
         let chat = self.main_window().get_or_add_chat(&sender);
         chat.add_external_message(message);
     }
+
+    fn handle_unimplemented(&self, sender: String, command: IrcCommand) {
+        println!("unimplemented: :{sender} {command:?}");
+    }
 }
 
 // LOGIC
@@ -154,9 +161,9 @@ impl Application {
             let username: String = registration_window.property("username");
             let realname: String = registration_window.property("realname");
 
-            let pass_command = format!("PASS {password}");
-            let nick_command = format!("NICK {nickname}");
-            let user_command = format!("USER {username} :{realname}");
+            let pass_command = IrcCommand::Pass { password };
+            let nick_command = IrcCommand::Nick { nickname };
+            let user_command = IrcCommand::User { username, realname };
 
             glib::MainContext::default().spawn_local(
                 clone!(@strong self as application => async move {
@@ -169,13 +176,15 @@ impl Application {
     }
 
     fn send_quit(&self) {
-        let quit_command = format!("QUIT :{QUIT_MESSAGE}");
+        let quit_command = IrcCommand::Quit {
+            message: QUIT_MESSAGE.to_string(),
+        };
 
         block_on(self.server().send(quit_command)).unwrap();
     }
 
     fn send_privmsg(&self, target: String, message: String) {
-        let privmsg_command = format!("PRIVMSG {target} :{message}");
+        let privmsg_command = IrcCommand::Privmsg { target, message };
 
         glib::MainContext::default().spawn_local(
             clone!(@strong self as application => async move {

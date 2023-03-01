@@ -1,6 +1,5 @@
 const PREFIX_CHARACTER: u8 = b':';
 const MAX_LENGTH: usize = 510;
-const INVALID_CHARACTERS: [char; 3] = ['\r', '\n', '\0'];
 
 use std::iter::Peekable;
 use std::str::SplitWhitespace;
@@ -20,9 +19,6 @@ pub fn parse(content: &str) -> Result<IrcMessageParse, ParsingError> {
     }
     if content.len() > MAX_LENGTH {
         return Err(ParsingError::TooManyParameters);
-    }
-    if content.contains(INVALID_CHARACTERS) {
-        return Err(ParsingError::InvalidCharacter);
     }
 
     let mut words = content.split_whitespace().peekable();

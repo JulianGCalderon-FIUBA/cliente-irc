@@ -10,10 +10,11 @@ pub enum IrcResponse {
         username: String,
         hostname: String,
     },
+
 }
 
 impl IrcResponse {
-    pub fn parse(
+    pub fn new(
         response: String,
         arguments: Vec<String>,
         trailing: Option<String>,
@@ -24,13 +25,10 @@ impl IrcResponse {
         }
     }
 
-    pub fn new_welcome(
-        mut parameters: Vec<String>,
-        trailing: Option<String>,
-    ) -> Result<Self, ParsingError> {
-        let realname = parameters.pop().ok_or(ParsingError::MissingParameter)?;
+    pub fn new_welcome(mut args: Vec<String>, trail: Option<String>) -> Result<Self, ParsingError> {
+        let realname = args.pop().ok_or(ParsingError::MissingParameter)?;
 
-        let trailing = trailing.ok_or(ParsingError::MissingParameter)?;
+        let trailing = trail.ok_or(ParsingError::MissingParameter)?;
         let mut split_trailing = trailing.split_whitespace().map(str::to_owned);
 
         let servername = split_trailing
