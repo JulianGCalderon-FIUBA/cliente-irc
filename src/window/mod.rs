@@ -7,8 +7,6 @@ use gtk::gio;
 use gtk::glib;
 use gtk::Application;
 
-// use crate::application::Application;
-
 glib::wrapper! {
     pub struct Window(ObjectSubclass<imp::Window>)
     @extends gtk::Widget, gtk::Window, gtk::ApplicationWindow,
