@@ -1,5 +1,5 @@
-mod message;
 mod client;
+mod message;
 mod window;
 
 use gtk::gio;
