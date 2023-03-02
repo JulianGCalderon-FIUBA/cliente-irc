@@ -5,6 +5,7 @@ use std::io::ErrorKind;
 use async_std::channel::{Receiver, Sender};
 use async_std::io;
 use async_std::net::{TcpStream, ToSocketAddrs};
+use async_std::task::block_on;
 
 use crate::message::{IrcCommand, IrcMessage};
 
@@ -17,8 +18,8 @@ pub struct IrcClient {
 }
 
 impl IrcClient {
-    pub async fn connect<A: ToSocketAddrs>(address: A) -> io::Result<Self> {
-        let stream = TcpStream::connect(address).await?;
+    pub fn connect<A: ToSocketAddrs>(address: A) -> io::Result<Self> {
+        let stream = block_on(TcpStream::connect(address))?;
 
         let sender = spawn_writer(stream.clone());
         let receiver = spawn_reader(stream);

@@ -1,7 +1,10 @@
 use glib::subclass::InitializingObject;
+use gtk::glib::once_cell::sync::OnceCell;
 use gtk::subclass::prelude::*;
 use gtk::Button;
 use gtk::{glib, template_callbacks, CompositeTemplate};
+
+use crate::client::IrcClient;
 
 use super::field::Field;
 
@@ -9,17 +12,18 @@ use super::field::Field;
 #[template(resource = "/com/jgcalderon/irc-client/registration.ui")]
 pub struct Registration {
     #[template_child]
-    address: TemplateChild<Field>,
+    pub address: TemplateChild<Field>,
     #[template_child]
-    nickname: TemplateChild<Field>,
+    pub nickname: TemplateChild<Field>,
     #[template_child]
-    password: TemplateChild<Field>,
+    pub password: TemplateChild<Field>,
     #[template_child]
-    username: TemplateChild<Field>,
+    pub username: TemplateChild<Field>,
     #[template_child]
-    realname: TemplateChild<Field>,
+    pub realname: TemplateChild<Field>,
     #[template_child]
     connect: TemplateChild<Button>,
+    pub client: OnceCell<IrcClient>,
 }
 
 #[glib::object_subclass]
@@ -50,20 +54,12 @@ impl BoxImpl for Registration {}
 impl Registration {
     #[template_callback]
     pub fn register(&self) {
-        let address = self.address.text();
-        let nickname = self.nickname.text();
-        let password = self.password.text();
-        let username = self.username.text();
-        let realname = self.realname.text();
+        let registration = self.obj();
 
-        println!("REGISTERING");
+        if !registration.connected() && registration.setup_client().is_err() {
+            return;
+        }
 
-        println!("address: {address}");
-        println!("nickname: {nickname}");
-        println!("password: {password}");
-        println!("username: {username}");
-        println!("realname: {realname}");
-
-        println!();
+        registration.register();
     }
 }

@@ -1,8 +1,14 @@
-mod imp;
 mod field;
+mod handle;
+mod imp;
+mod registerer;
+
+use std::io;
 
 use glib::Object;
-use gtk::glib;
+use gtk::{glib, prelude::ObjectExt, subclass::prelude::ObjectSubclassIsExt};
+
+use crate::client::IrcClient;
 
 glib::wrapper! {
     pub struct Registration(ObjectSubclass<imp::Registration>)
@@ -14,6 +20,33 @@ glib::wrapper! {
 impl Registration {
     pub fn new() -> Self {
         Object::builder().build()
+    }
+
+    pub fn setup_client(&self) -> io::Result<()> {
+        self.connect_client()?;
+
+        self.imp().address.set_property("enabled", false);
+
+        self.start_client_handler();
+
+        Ok(())
+    }
+
+    fn connect_client(&self) -> io::Result<()> {
+        let address = self.imp().address.text();
+
+        let client = IrcClient::connect(address)?;
+        self.imp().client.set(client).unwrap();
+
+        Ok(())
+    }
+
+    fn connected(&self) -> bool {
+        self.imp().client.get().is_some()
+    }
+
+    fn client(&self) -> IrcClient {
+        self.imp().client.get().unwrap().clone()
     }
 }
 

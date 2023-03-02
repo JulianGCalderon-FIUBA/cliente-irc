@@ -19,6 +19,14 @@ impl Field {
     pub fn text(&self) -> String {
         self.property("text")
     }
+
+    pub fn enabled(&self) -> bool {
+        self.property("enabled")
+    }
+
+    pub fn disable(&self) {
+        self.set_property("enabled", false)
+    }
 }
 
 impl Default for Field {

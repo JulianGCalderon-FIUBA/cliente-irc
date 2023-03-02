@@ -2,7 +2,7 @@ use std::cell::RefCell;
 
 use glib::subclass::InitializingObject;
 use gtk::glib::once_cell::sync::Lazy;
-use gtk::glib::{ParamSpec, ParamSpecString};
+use gtk::glib::{ParamSpec, ParamSpecBoolean, ParamSpecString};
 use gtk::prelude::ToValue;
 use gtk::subclass::prelude::*;
 use gtk::{glib, CompositeTemplate};
@@ -12,6 +12,7 @@ use gtk::{glib, CompositeTemplate};
 pub struct Field {
     label: RefCell<String>,
     text: RefCell<String>,
+    enabled: RefCell<bool>,
 }
 
 #[glib::object_subclass]
@@ -35,6 +36,7 @@ impl ObjectImpl for Field {
             vec![
                 ParamSpecString::builder("label").build(),
                 ParamSpecString::builder("text").build(),
+                ParamSpecBoolean::builder("enabled").build(),
             ]
         });
         PROPERTIES.as_ref()
@@ -50,6 +52,10 @@ impl ObjectImpl for Field {
                 let value = value.get().unwrap();
                 self.text.replace(value);
             }
+            "enabled" => {
+                let value = value.get().unwrap();
+                self.enabled.replace(value);
+            }
             _ => unimplemented!(),
         };
     }
@@ -58,6 +64,7 @@ impl ObjectImpl for Field {
         match pspec.name() {
             "label" => self.label.borrow().to_value(),
             "text" => self.text.borrow().to_value(),
+            "enabled" => self.enabled.borrow().to_value(),
             _ => unimplemented!(),
         }
     }

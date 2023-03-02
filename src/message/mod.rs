@@ -16,14 +16,17 @@ impl IrcMessage {
     pub fn parse(message: &str) -> Result<Self, ParsingError> {
         let (prefix, command, arguments, trailing) = parser::parse(message)?;
 
-        if command::IrcCommand::is_command(&command) {
+        if IrcCommand::is_command(&command) {
             let prefix = prefix.ok_or(ParsingError::MissingPrefix)?;
             let command = IrcCommand::new(command, arguments, trailing)?;
             return Ok(IrcMessage::IrcCommand(prefix, command));
         }
 
-        let response = IrcResponse::new(command, arguments, trailing)?;
+        if IrcResponse::is_response(&command) {
+            let response = IrcResponse::new(command, arguments, trailing)?;
+            return Ok(IrcMessage::IrcResponse(response));
+        }
 
-        Ok(Self::IrcResponse(response))
+        Err(ParsingError::UnknownCommand(message.to_string()))
     }
 }

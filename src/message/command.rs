@@ -18,14 +18,6 @@ pub enum IrcCommand {
 }
 
 impl IrcCommand {
-    pub fn is_command(command: &str) -> bool {
-        command == PRIVMSG
-            || command == PASS
-            || command == NICK
-            || command == USER
-            || command == QUIT
-    }
-
     pub fn new(
         command: String,
         arguments: Vec<String>,
@@ -39,6 +31,14 @@ impl IrcCommand {
             QUIT => Self::new_quit(arguments, trailing),
             _ => Err(ParsingError::UnknownCommand(command)),
         }
+    }
+
+    pub fn is_command(command: &str) -> bool {
+        command == PRIVMSG
+            || command == PASS
+            || command == NICK
+            || command == USER
+            || command == QUIT
     }
 
     pub fn new_privmsg(

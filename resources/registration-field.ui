@@ -2,7 +2,8 @@
 <interface>
   <template class="Field" parent="GtkBox">
     <property name="orientation">horizontal</property>
-    <property name="text" bind-source="entry" bind-property="text"></property>
+    <property name="enabled">true</property>
+    <property name="text" bind-source="entry"></property>
     <child>
       <object class="GtkLabel" id="label">
         <property name="label" bind-source="Field"></property>
@@ -10,6 +11,7 @@
     </child>
     <child>
       <object class="GtkEntry" id="entry">
+        <property name="can-focus" bind-source="Field" bind-property="enabled"></property>
       </object>
     </child>
   </template>

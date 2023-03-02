@@ -1,6 +1,7 @@
 use super::ParsingError;
 
 const WELCOME: &str = "001";
+const NICK_COLLISION: &str = "436";
 
 pub enum IrcResponse {
     Welcome {
@@ -10,22 +11,28 @@ pub enum IrcResponse {
         username: String,
         hostname: String,
     },
-
+    NickCollision {
+        nickname: String,
+    },
 }
 
+type Trail = Option<String>;
+type Args = Vec<String>;
+
 impl IrcResponse {
-    pub fn new(
-        response: String,
-        arguments: Vec<String>,
-        trailing: Option<String>,
-    ) -> Result<Self, ParsingError> {
+    pub fn new(response: String, arguments: Args, trailing: Trail) -> Result<Self, ParsingError> {
         match &response[..] {
             WELCOME => Self::new_welcome(arguments, trailing),
+            NICK_COLLISION => Self::new_nick_collision(arguments, trailing),
             _ => Err(ParsingError::UnknownCommand(response)),
         }
     }
 
-    pub fn new_welcome(mut args: Vec<String>, trail: Option<String>) -> Result<Self, ParsingError> {
+    pub fn is_response(response: &str) -> bool {
+        response == WELCOME || response == NICK_COLLISION
+    }
+
+    pub fn new_welcome(mut args: Args, trail: Trail) -> Result<Self, ParsingError> {
         let realname = args.pop().ok_or(ParsingError::MissingParameter)?;
 
         let trailing = trail.ok_or(ParsingError::MissingParameter)?;
@@ -58,5 +65,11 @@ impl IrcResponse {
             username,
             hostname,
         })
+    }
+
+    fn new_nick_collision(mut args: Args, _trail: Trail) -> Result<Self, ParsingError> {
+        let nickname = args.pop().ok_or(ParsingError::MissingParameter)?;
+
+        Ok(Self::NickCollision { nickname })
     }
 }
