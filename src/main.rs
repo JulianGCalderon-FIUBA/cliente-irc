@@ -1,3 +1,7 @@
+//! A Rust IRC-Client built in Gtk4
+
+#![warn(missing_docs)]
+
 mod client;
 mod message;
 mod window;
