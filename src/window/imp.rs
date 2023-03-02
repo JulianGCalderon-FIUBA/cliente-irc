@@ -1,6 +1,8 @@
 use glib::subclass::InitializingObject;
 use gtk::subclass::prelude::*;
-use gtk::{glib, CompositeTemplate};
+use gtk::{glib, template_callbacks, CompositeTemplate};
+
+use crate::client::IrcClient;
 
 use super::registration::Registration;
 
@@ -19,6 +21,7 @@ impl ObjectSubclass for Window {
 
     fn class_init(klass: &mut Self::Class) {
         klass.bind_template();
+        klass.bind_template_callbacks();
     }
 
     fn instance_init(obj: &InitializingObject<Self>) {
@@ -30,3 +33,11 @@ impl ObjectImpl for Window {}
 impl WidgetImpl for Window {}
 impl WindowImpl for Window {}
 impl ApplicationWindowImpl for Window {}
+
+#[template_callbacks]
+impl Window {
+    #[template_callback]
+    pub fn registered(&self, client: IrcClient) {
+        println!("registered");
+    }
+}

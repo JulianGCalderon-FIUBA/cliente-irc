@@ -5,10 +5,9 @@ mod registerer;
 
 use std::io;
 
+use crate::client::IrcClient;
 use glib::Object;
 use gtk::{glib, subclass::prelude::*};
-
-use crate::client::IrcClient;
 
 glib::wrapper! {
     pub struct Registration(ObjectSubclass<imp::Registration>)
@@ -33,7 +32,7 @@ impl Registration {
     fn connect_client(&self) -> io::Result<()> {
         let address = self.imp().address.text();
 
-        let client = IrcClient::connect(address)?;
+        let client = IrcClient::new(address)?;
         self.imp().client.set(client).unwrap();
 
         Ok(())

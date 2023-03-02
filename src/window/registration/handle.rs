@@ -1,5 +1,8 @@
 use glib::{clone, MainContext};
-use gtk::glib;
+use gtk::{
+    glib,
+    prelude::{ObjectExt, ToValue},
+};
 
 use crate::message::{IrcMessage, IrcResponse};
 
@@ -28,7 +31,7 @@ impl Registration {
     }
 
     fn handle_welcome(&self) -> bool {
-        println!("welcome");
+        self.emit_by_name::<()>("registered", &[&self.client().to_value()]);
 
         true
     }

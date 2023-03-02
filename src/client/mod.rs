@@ -1,4 +1,5 @@
-mod inner;
+mod r#async;
+mod imp;
 
 use std::io::ErrorKind;
 
@@ -6,34 +7,53 @@ use async_std::channel::{Receiver, Sender};
 use async_std::io;
 use async_std::net::{TcpStream, ToSocketAddrs};
 use async_std::task::block_on;
+use gtk::glib::{self, Object};
+use gtk::subclass::prelude::ObjectSubclassIsExt;
 
 use crate::message::{IrcCommand, IrcMessage};
 
-use inner::{spawn_reader, spawn_writer};
+use r#async::{spawn_reader, spawn_writer};
 
-#[derive(Debug, Clone)]
-pub struct IrcClient {
-    sender: Sender<IrcCommand>,
-    receiver: Receiver<IrcMessage>,
+glib::wrapper! {
+    pub struct IrcClient(ObjectSubclass<imp::IrcClient>);
 }
 
 impl IrcClient {
-    pub fn connect<A: ToSocketAddrs>(address: A) -> io::Result<Self> {
+    pub fn new<A: ToSocketAddrs>(address: A) -> io::Result<Self> {
+        let client: Self = Object::builder().build();
+
+        client.connect(address)?;
+
+        Ok(client)
+    }
+
+    fn connect<A: ToSocketAddrs>(&self, address: A) -> io::Result<()> {
         let stream = block_on(TcpStream::connect(address))?;
 
         let sender = spawn_writer(stream.clone());
         let receiver = spawn_reader(stream);
 
-        Ok(Self { sender, receiver })
+        self.imp().sender.set(sender).unwrap();
+        self.imp().receiver.set(receiver).unwrap();
+
+        Ok(())
+    }
+
+    fn sender(&self) -> Sender<IrcCommand> {
+        self.imp().sender.get().unwrap().clone()
+    }
+
+    fn receiver(&self) -> Receiver<IrcMessage> {
+        self.imp().receiver.get().unwrap().clone()
     }
 
     pub async fn send(&mut self, command: IrcCommand) -> io::Result<()> {
-        let result = self.sender.send(command).await;
+        let result = self.sender().send(command).await;
         result.map_err(|_| unexpected_eof())
     }
 
     pub async fn receive(&mut self) -> io::Result<IrcMessage> {
-        let result = self.receiver.recv().await;
+        let result = self.receiver().recv().await;
         result.map_err(|_| unexpected_eof())
     }
 }

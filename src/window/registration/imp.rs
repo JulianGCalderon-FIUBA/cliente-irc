@@ -1,5 +1,7 @@
 use glib::subclass::InitializingObject;
-use gtk::glib::once_cell::sync::OnceCell;
+use gtk::glib::once_cell::sync::{Lazy, OnceCell};
+use gtk::glib::subclass::Signal;
+use gtk::prelude::*;
 use gtk::subclass::prelude::*;
 use gtk::Button;
 use gtk::{glib, template_callbacks, CompositeTemplate};
@@ -45,6 +47,15 @@ impl ObjectSubclass for Registration {
 impl ObjectImpl for Registration {
     fn constructed(&self) {
         self.parent_constructed();
+    }
+
+    fn signals() -> &'static [glib::subclass::Signal] {
+        static PROPERTIES: Lazy<Vec<Signal>> = Lazy::new(|| {
+            vec![Signal::builder("registered")
+                .param_types([IrcClient::static_type()])
+                .build()]
+        });
+        PROPERTIES.as_ref()
     }
 }
 impl WidgetImpl for Registration {}
