@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <template class="Registration" parent="GtkBox">
+  <template class="Session" parent="GtkBox">
+    <child>
+      <object class="GtkLabel">
+        <property name="label">HOLA</property>
+      </object>
+    </child>
   </template>
 </interface>
