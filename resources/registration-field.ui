@@ -2,7 +2,6 @@
 <interface>
   <template class="Field" parent="GtkBox">
     <property name="orientation">horizontal</property>
-    <property name="enabled">true</property>
     <property name="text" bind-source="entry"></property>
     <child>
       <object class="GtkLabel" id="label">

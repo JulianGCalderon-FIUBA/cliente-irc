@@ -29,6 +29,7 @@
     </child>
     <child>
       <object class="GtkButton" id="connect">
+        <property name="label">connect</property>
         <signal name="clicked" handler="register" swapped="true"></signal>
       </object>
     </child>
