@@ -8,6 +8,7 @@ const NICK: &str = "NICK";
 const USER: &str = "USER";
 const QUIT: &str = "QUIT";
 
+/// [IrcCommand] are all client commands that can be sent to or received from a server
 #[derive(Debug)]
 pub enum IrcCommand {
     Privmsg { target: String, message: String },
@@ -18,6 +19,9 @@ pub enum IrcCommand {
 }
 
 impl IrcCommand {
+    /// Creates the corresponding variation from the given parameters,
+    ///
+    /// Fails on invalid `response` or on an invalid argument
     pub fn new(
         command: String,
         arguments: Vec<String>,
@@ -41,6 +45,9 @@ impl IrcCommand {
             || command == QUIT
     }
 
+    /// Creates a [IrcCommand::Privmsg] from the message arguments.
+    ///
+    /// Fails on invalid arguments
     pub fn new_privmsg(
         mut parameters: Vec<String>,
         trailing: Option<String>,
@@ -53,16 +60,25 @@ impl IrcCommand {
         Ok(Self::Privmsg { target, message })
     }
 
+    /// Creates a [IrcCommand::Pass] from the message arguments.
+    ///
+    /// Fails on invalid arguments
     fn new_pass(mut args: Vec<String>, _trail: Option<String>) -> Result<IrcCommand, ParsingError> {
         let password = args.pop().ok_or(ParsingError::MissingParameter)?;
         Ok(Self::Pass { password })
     }
 
+    /// Creates a [IrcCommand::Nick] from the message arguments.
+    ///
+    /// Fails on invalid arguments
     fn new_nick(mut args: Vec<String>, _trail: Option<String>) -> Result<IrcCommand, ParsingError> {
         let nickname = args.pop().ok_or(ParsingError::MissingParameter)?;
         Ok(Self::Nick { nickname })
     }
 
+    /// Creates a [IrcCommand::User] from the message arguments.
+    ///
+    /// Fails on invalid arguments
     fn new_user(mut args: Vec<String>, trail: Option<String>) -> Result<IrcCommand, ParsingError> {
         let username = args.pop().ok_or(ParsingError::MissingParameter)?;
         let realname = trail.ok_or(ParsingError::MissingParameter)?;
@@ -70,6 +86,9 @@ impl IrcCommand {
         Ok(Self::User { username, realname })
     }
 
+    /// Creates a [IrcCommand::Quit] from the message arguments.
+    ///
+    /// Fails on invalid arguments
     fn new_quit(_args: Vec<String>, trail: Option<String>) -> Result<IrcCommand, ParsingError> {
         let message = trail.ok_or(ParsingError::MissingParameter)?;
 

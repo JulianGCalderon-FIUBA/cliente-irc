@@ -3,6 +3,7 @@ use super::ParsingError;
 const WELCOME: &str = "001";
 const NICK_COLLISION: &str = "436";
 
+/// [IrcResponse] are all messages sent by the server in response to a client's command
 pub enum IrcResponse {
     Welcome {
         realname: String,
@@ -20,6 +21,9 @@ type Trail = Option<String>;
 type Args = Vec<String>;
 
 impl IrcResponse {
+    /// Creates the corresponding variation from the given parameters,
+    ///
+    /// Fails on invalid `response` or on an invalid argument
     pub fn new(response: String, arguments: Args, trailing: Trail) -> Result<Self, ParsingError> {
         match &response[..] {
             WELCOME => Self::new_welcome(arguments, trailing),
@@ -32,6 +36,9 @@ impl IrcResponse {
         response == WELCOME || response == NICK_COLLISION
     }
 
+    /// Creates a [IrcResponse::Welcome] from the message arguments.
+    ///
+    /// Fails on invalid arguments
     pub fn new_welcome(mut args: Args, trail: Trail) -> Result<Self, ParsingError> {
         let realname = args.pop().ok_or(ParsingError::MissingParameter)?;
 
@@ -67,6 +74,9 @@ impl IrcResponse {
         })
     }
 
+    /// Creates a [IrcResponse::NickCollision] from the message arguments.
+    ///
+    /// Fails on invalid arguments
     fn new_nick_collision(mut args: Args, _trail: Trail) -> Result<Self, ParsingError> {
         let nickname = args.pop().ok_or(ParsingError::MissingParameter)?;
 

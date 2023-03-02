@@ -33,6 +33,7 @@ pub fn spawn_reader(stream: TcpStream) -> Receiver<IrcMessage> {
 
     receiver
 }
+
 /// Spawns a future in glib main context that reads messages from 'sender' and sends it to the server
 /// Future ends on a connection error or after droppping all senders
 pub fn spawn_writer(mut stream: TcpStream) -> Sender<IrcCommand> {

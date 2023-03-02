@@ -12,7 +12,12 @@ pub type Parameters = Vec<String>;
 pub type Trailing = Option<String>;
 type IrcMessageParse = (Prefix, Command, Parameters, Trailing);
 
-/// Parses string into prefix, command, parameters and trailing
+/// Parses string into `prefix`, `command`, `parameters` and `trailing`.
+///
+/// - `prefix` is an optional argument prefixed by ':' that can be found at the start of the string
+/// - `command` is mandatory and is found after the prefix
+/// - `arguments` are all whitespace separated parameters found after the command
+/// - `trailing` is optional and found at the end of the string, prefixed by a ':'. Can contain whitespace
 pub fn parse(content: &str) -> Result<IrcMessageParse, ParsingError> {
     if content.is_empty() {
         return Err(ParsingError::EmptyMessage);
