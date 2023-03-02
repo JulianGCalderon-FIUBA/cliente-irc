@@ -25,8 +25,6 @@ impl Registration {
     pub fn setup_client(&self) -> io::Result<()> {
         self.connect_client()?;
 
-        self.imp().address.set_property("enabled", false);
-
         self.start_client_handler();
 
         Ok(())
