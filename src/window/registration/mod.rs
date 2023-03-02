@@ -6,7 +6,7 @@ mod registerer;
 use std::io;
 
 use glib::Object;
-use gtk::{glib, prelude::ObjectExt, subclass::prelude::ObjectSubclassIsExt};
+use gtk::{glib, subclass::prelude::*};
 
 use crate::client::IrcClient;
 

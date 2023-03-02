@@ -2,7 +2,7 @@ use std::cell::RefCell;
 
 use glib::subclass::InitializingObject;
 use gtk::glib::once_cell::sync::Lazy;
-use gtk::glib::{ParamSpec, ParamSpecBoolean, ParamSpecString};
+use gtk::glib::{ParamSpec, ParamSpecString};
 use gtk::prelude::ToValue;
 use gtk::subclass::prelude::*;
 use gtk::{glib, CompositeTemplate};
@@ -12,7 +12,6 @@ use gtk::{glib, CompositeTemplate};
 pub struct Field {
     label: RefCell<String>,
     text: RefCell<String>,
-    enabled: RefCell<bool>,
 }
 
 #[glib::object_subclass]

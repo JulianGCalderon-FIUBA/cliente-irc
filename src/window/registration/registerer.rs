@@ -1,9 +1,8 @@
 use std::io;
 
-use gtk::{
-    glib::{self, clone, MainContext},
-    subclass::prelude::ObjectSubclassIsExt,
-};
+use gtk::glib;
+use gtk::glib::{clone, MainContext};
+use gtk::subclass::prelude::*;
 
 use crate::message::IrcCommand;
 
