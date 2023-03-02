@@ -17,8 +17,6 @@ use gtk::StyleContext;
 
 use window::Window;
 
-// use application::Application;
-
 const APPLICATION_ID: &str = "com.jgcalderon.irc-client";
 
 fn main() -> glib::ExitCode {
