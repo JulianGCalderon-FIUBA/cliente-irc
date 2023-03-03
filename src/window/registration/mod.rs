@@ -36,6 +36,8 @@ impl Registration {
 
         self.imp().client.set(client).unwrap();
 
+        self.imp().address.lock();
+
         Ok(())
     }
 

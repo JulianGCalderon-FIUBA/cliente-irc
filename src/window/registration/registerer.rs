@@ -17,6 +17,10 @@ impl Registration {
 
     fn send_pass(&self) -> io::Result<()> {
         let password = self.imp().password.input();
+        if password.is_empty() {
+            return Ok(());
+        }
+
         let pass_command = IrcCommand::Pass { password };
 
         self.client().send(pass_command)
@@ -24,6 +28,7 @@ impl Registration {
 
     fn send_nick(&self) -> io::Result<()> {
         let nickname = self.imp().nickname.input();
+
         let nick_command = IrcCommand::Nick { nickname };
 
         self.client().send(nick_command)

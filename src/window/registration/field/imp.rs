@@ -17,6 +17,7 @@ pub struct Field {
     input: RefCell<String>,
     default: RefCell<String>,
     password: RefCell<bool>,
+    locked: RefCell<bool>,
 }
 
 #[glib::object_subclass]
@@ -42,6 +43,7 @@ impl ObjectImpl for Field {
                 ParamSpecString::builder(&FieldProperty::Input).build(),
                 ParamSpecString::builder(&FieldProperty::Default).build(),
                 ParamSpecBoolean::builder(&FieldProperty::Password).build(),
+                ParamSpecBoolean::builder(&FieldProperty::Locked).build(),
             ]
         });
         PROPERTIES.as_ref()
@@ -65,6 +67,10 @@ impl ObjectImpl for Field {
                 let value = value.get().unwrap();
                 self.password.replace(value);
             }
+            FieldProperty::Locked => {
+                let value = value.get().unwrap();
+                self.locked.replace(value);
+            }
         };
     }
 
@@ -74,6 +80,7 @@ impl ObjectImpl for Field {
             FieldProperty::Input => self.input.borrow().to_value(),
             FieldProperty::Default => self.default.borrow().to_value(),
             FieldProperty::Password => self.password.borrow().to_value(),
+            FieldProperty::Locked => self.locked.borrow().to_value(),
         }
     }
 }

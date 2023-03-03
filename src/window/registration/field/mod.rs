@@ -1,10 +1,10 @@
 mod imp;
-mod property;
+mod constant;
 
 use glib::Object;
 use gtk::{glib, prelude::ObjectExt};
 
-pub use property::FieldProperty;
+pub use constant::FieldProperty;
 
 glib::wrapper! {
     pub struct Field(ObjectSubclass<imp::Field>)
@@ -26,6 +26,16 @@ impl Field {
         }
 
         input
+    }
+
+    pub fn lock(&self) {
+        let input: String = self.property(&FieldProperty::Input);
+        if input.is_empty() {
+            let default: String = self.property(&FieldProperty::Default);
+            self.set_property(&FieldProperty::Input, default);
+        }
+
+        self.set_property(&FieldProperty::Locked, true);
     }
 }
 

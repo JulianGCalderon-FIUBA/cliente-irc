@@ -2,7 +2,7 @@
 <interface>
   <template class="Field" parent="GtkBox">
     <property name="orientation">horizontal</property>
-    <property name="input" bind-source="entry" bind-property="text"></property>
+    <property name="input" bind-source="entry" bind-property="text" bind-flags="bidirectional"></property>
     <child>
       <object class="GtkLabel" id="label">
         <property name="label" bind-source="Field" bind-property="name"></property>
@@ -12,6 +12,7 @@
       <object class="GtkEntry" id="entry">
         <property name="placeholder-text" bind-source="Field" bind-property="default"></property>
         <property name="visibility" bind-source="Field" bind-property="password" bind-flags="invert-boolean">true</property>
+        <property name="can-focus" bind-source="Field" bind-property="locked" bind-flags="invert-boolean">true</property>
       </object>
     </child>
   </template>

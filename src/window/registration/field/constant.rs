@@ -5,6 +5,7 @@ pub enum FieldProperty {
     Input,
     Default,
     Password,
+    Locked,
 }
 
 impl Deref for FieldProperty {
@@ -15,6 +16,7 @@ impl Deref for FieldProperty {
             FieldProperty::Input => "input",
             FieldProperty::Default => "default",
             FieldProperty::Password => "password",
+            FieldProperty::Locked => "locked",
         }
     }
 }
@@ -26,6 +28,7 @@ impl From<&str> for FieldProperty {
             "input" => FieldProperty::Input,
             "default" => FieldProperty::Default,
             "password" => FieldProperty::Password,
+            "locked" => FieldProperty::Locked,
             _ => unimplemented!(),
         }
     }
