@@ -33,6 +33,7 @@ impl Registration {
         let address = self.imp().address.text();
 
         let client = IrcClient::connect(address)?;
+
         self.imp().client.set(client).unwrap();
 
         Ok(())

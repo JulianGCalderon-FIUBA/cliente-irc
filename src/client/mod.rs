@@ -45,8 +45,8 @@ impl IrcClient {
     /// Sends `command` to the server
     ///
     /// Fails if connections with the server was drop
-    pub async fn send(&mut self, command: IrcCommand) -> io::Result<()> {
-        let result = self.sender.send(command).await;
+    pub fn send(&mut self, command: IrcCommand) -> io::Result<()> {
+        let result = self.sender.send_blocking(command);
         result.map_err(|_| unexpected_eof())
     }
 

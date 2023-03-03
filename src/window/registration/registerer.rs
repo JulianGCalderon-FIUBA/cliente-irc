@@ -1,7 +1,5 @@
 use std::io;
 
-use gtk::glib;
-use gtk::glib::{clone, MainContext};
 use gtk::subclass::prelude::*;
 
 use crate::message::IrcCommand;
@@ -9,41 +7,33 @@ use crate::message::IrcCommand;
 use super::Registration;
 
 impl Registration {
-    pub(super) fn register(&self) {
-        MainContext::default().spawn_local(clone!(@weak self as registration => async move {
-            if registration.try_register().await.is_err() {
-                eprintln!("error while sending message to client");
-            }
-        }));
+    pub(super) fn register_client(&self) -> io::Result<()> {
+        self.send_pass()?;
+
+        self.send_nick()?;
+
+        self.send_user()
     }
 
-    async fn try_register(&self) -> io::Result<()> {
-        self.send_pass().await?;
-
-        self.send_nick().await?;
-
-        self.send_user().await
-    }
-
-    async fn send_pass(&self) -> io::Result<()> {
+    fn send_pass(&self) -> io::Result<()> {
         let password = self.imp().password.text();
         let pass_command = IrcCommand::Pass { password };
 
-        self.client().send(pass_command).await
+        self.client().send(pass_command)
     }
 
-    async fn send_nick(&self) -> io::Result<()> {
+    fn send_nick(&self) -> io::Result<()> {
         let nickname = self.imp().nickname.text();
         let nick_command = IrcCommand::Nick { nickname };
 
-        self.client().send(nick_command).await
+        self.client().send(nick_command)
     }
 
-    async fn send_user(&self) -> io::Result<()> {
+    fn send_user(&self) -> io::Result<()> {
         let username = self.imp().username.text();
         let realname = self.imp().realname.text();
         let user_command = IrcCommand::User { username, realname };
 
-        self.client().send(user_command).await
+        self.client().send(user_command)
     }
 }

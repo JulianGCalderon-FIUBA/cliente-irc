@@ -52,7 +52,7 @@ impl ObjectImpl for Registration {
     fn signals() -> &'static [glib::subclass::Signal] {
         static PROPERTIES: Lazy<Vec<Signal>> = Lazy::new(|| {
             vec![Signal::builder("registered")
-                .param_types([IrcClient::static_type()])
+                .param_types([IrcClient::static_type(), super::Registration::static_type()])
                 .build()]
         });
         PROPERTIES.as_ref()
@@ -64,13 +64,15 @@ impl BoxImpl for Registration {}
 #[template_callbacks]
 impl Registration {
     #[template_callback]
-    pub fn register(&self) {
+    pub fn connect_clicked(&self) {
         let registration = self.obj();
 
         if !registration.connected() && registration.setup_client().is_err() {
             return;
         }
 
-        registration.register();
+        if registration.register_client().is_err() {
+            todo!("connection closed")
+        };
     }
 }

@@ -1,3 +1,5 @@
+use std::ops::ControlFlow;
+
 use glib::{clone, MainContext};
 use gtk::{
     glib,
@@ -13,32 +15,33 @@ impl Registration {
         MainContext::default().spawn_local(clone!(@weak self as registration => async move {
             let mut client = registration.client();
             while let Ok(message) = client.receive().await {
-                if registration.handle_message(message) {
+                if let ControlFlow::Break(()) = registration.handle_message(message)  {
                     return
                 }
             }
         }));
     }
 
-    fn handle_message(&self, message: IrcMessage) -> bool {
-        match message {
-            IrcMessage::IrcResponse(response) => match response {
-                IrcResponse::Welcome { .. } => self.handle_welcome(),
-                IrcResponse::NickCollision { .. } => self.handle_nick_collision(),
-            },
-            _ => false,
+    fn handle_message(&self, message: IrcMessage) -> ControlFlow<()> {
+        if let IrcMessage::IrcResponse(response) = message {
+            match response {
+                IrcResponse::Welcome { .. } => self.handle_welcome()?,
+                IrcResponse::NickCollision { .. } => self.handle_nick_collision()?,
+            }
         }
+
+        ControlFlow::Continue(())
     }
 
-    fn handle_welcome(&self) -> bool {
-        self.emit_by_name::<()>("registered", &[&self.client().to_value()]);
+    fn handle_welcome(&self) -> ControlFlow<()> {
+        self.emit_by_name::<()>("registered", &[self, &self.client().to_value()]);
 
-        true
+        ControlFlow::Break(())
     }
 
-    fn handle_nick_collision(&self) -> bool {
+    fn handle_nick_collision(&self) -> ControlFlow<()> {
         println!("nick collision");
 
-        false
+        ControlFlow::Continue(())
     }
 }

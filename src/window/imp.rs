@@ -41,9 +41,10 @@ impl ApplicationWindowImpl for Window {}
 #[template_callbacks]
 impl Window {
     #[template_callback]
-    pub fn registered(&self, client: IrcClient) {
+    pub fn registered(&self, registration: Registration, client: IrcClient) {
         let session = Session::new(client);
         self.stack.add_named(&session, Some("session"));
         self.stack.set_visible_child_name("session");
+        self.stack.remove(&registration)
     }
 }
