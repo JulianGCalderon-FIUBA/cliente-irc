@@ -4,27 +4,35 @@
     <property name="orientation">vertical</property>
     <child>
       <object class="Field" id="address">
-        <property name="label">address</property>
+        <property name="name">address</property>
+        <property name="default">127.0.0.1:9000</property>
       </object>
     </child>
     <child>
       <object class="Field" id="nickname">
-        <property name="label">nickname</property>
+        <property name="name">nickname</property>
       </object>
     </child>
     <child>
       <object class="Field" id="password">
-        <property name="label">password</property>
+        <property name="name">password</property>
+        <child internal-child="entry">
+          <object class="GtkEntry">
+            <property name="visibility">false</property>
+          </object>
+        </child>
       </object>
     </child>
     <child>
       <object class="Field" id="username">
-        <property name="label">username</property>
+        <property name="name">username</property>
+        <property name="default">username</property>
       </object>
     </child>
     <child>
       <object class="Field" id="realname">
-        <property name="label">realname</property>
+        <property name="name">realname</property>
+        <property name="default">realname</property>
       </object>
     </child>
     <child>

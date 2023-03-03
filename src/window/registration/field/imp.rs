@@ -5,13 +5,22 @@ use gtk::glib::once_cell::sync::Lazy;
 use gtk::glib::{ParamSpec, ParamSpecString};
 use gtk::prelude::ToValue;
 use gtk::subclass::prelude::*;
-use gtk::{glib, CompositeTemplate};
+use gtk::{glib, CompositeTemplate, Entry};
+
+use super::FieldProperty;
+
+pub const NAME_PROPERTY: &str = "name";
+pub const INPUT_PROPERTY: &str = "input";
+pub const DEFAULT_PROPERTY: &str = "default";
 
 #[derive(CompositeTemplate, Default)]
 #[template(resource = "/com/jgcalderon/irc-client/registration-field.ui")]
 pub struct Field {
-    label: RefCell<String>,
-    text: RefCell<String>,
+    #[template_child(internal = true)]
+    pub entry: TemplateChild<Entry>,
+    name: RefCell<String>,
+    input: RefCell<String>,
+    default: RefCell<String>,
 }
 
 #[glib::object_subclass]
@@ -33,8 +42,9 @@ impl ObjectImpl for Field {
     fn properties() -> &'static [glib::ParamSpec] {
         static PROPERTIES: Lazy<Vec<ParamSpec>> = Lazy::new(|| {
             vec![
-                ParamSpecString::builder("label").build(),
-                ParamSpecString::builder("text").build(),
+                ParamSpecString::builder(NAME_PROPERTY).build(),
+                ParamSpecString::builder(INPUT_PROPERTY).build(),
+                ParamSpecString::builder(DEFAULT_PROPERTY).build(),
             ]
         });
         PROPERTIES.as_ref()
@@ -42,23 +52,28 @@ impl ObjectImpl for Field {
 
     fn set_property(&self, _id: usize, value: &glib::Value, pspec: &glib::ParamSpec) {
         match pspec.name() {
-            "label" => {
+            NAME_PROPERTY => {
                 let value = value.get().unwrap();
-                self.label.replace(value);
+                self.name.replace(value);
             }
-            "text" => {
+            INPUT_PROPERTY => {
                 let value = value.get().unwrap();
-                self.text.replace(value);
+                self.input.replace(value);
             }
-
+            DEFAULT_PROPERTY => {
+                let value = value.get().unwrap();
+                self.default.replace(value);
+            }
             _ => unimplemented!(),
         };
     }
 
     fn property(&self, _id: usize, pspec: &glib::ParamSpec) -> glib::Value {
         match pspec.name() {
-            "label" => self.label.borrow().to_value(),
-            "text" => self.text.borrow().to_value(),
+            NAME_PROPERTY => self.name.borrow().to_value(),
+            INPUT_PROPERTY => self.input.borrow().to_value(),
+            DEFAULT_PROPERTY => self.default.borrow().to_value(),
+
             _ => unimplemented!(),
         }
     }

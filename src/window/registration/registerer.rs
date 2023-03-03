@@ -16,22 +16,22 @@ impl Registration {
     }
 
     fn send_pass(&self) -> io::Result<()> {
-        let password = self.imp().password.text();
+        let password = self.imp().password.input();
         let pass_command = IrcCommand::Pass { password };
 
         self.client().send(pass_command)
     }
 
     fn send_nick(&self) -> io::Result<()> {
-        let nickname = self.imp().nickname.text();
+        let nickname = self.imp().nickname.input();
         let nick_command = IrcCommand::Nick { nickname };
 
         self.client().send(nick_command)
     }
 
     fn send_user(&self) -> io::Result<()> {
-        let username = self.imp().username.text();
-        let realname = self.imp().realname.text();
+        let username = self.imp().username.input();
+        let realname = self.imp().realname.input();
         let user_command = IrcCommand::User { username, realname };
 
         self.client().send(user_command)

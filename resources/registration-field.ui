@@ -2,14 +2,15 @@
 <interface>
   <template class="Field" parent="GtkBox">
     <property name="orientation">horizontal</property>
-    <property name="text" bind-source="entry"></property>
+    <property name="input" bind-source="entry" bind-property="text"></property>
     <child>
       <object class="GtkLabel" id="label">
-        <property name="label" bind-source="Field"></property>
+        <property name="label" bind-source="Field" bind-property="name"></property>
       </object>
     </child>
     <child>
       <object class="GtkEntry" id="entry">
+        <property name="placeholder-text" bind-source="Field" bind-property="default"></property>
       </object>
     </child>
   </template>
