@@ -1,15 +1,28 @@
+use gtk::glib::{self, clone, MainContext};
+
 use crate::message::{IrcCommand, IrcMessage, IrcResponse};
 
 use super::Session;
 
 impl Session {
-    pub(super) fn handle_message(&self, message: IrcMessage) {
+    pub(super) fn start_client_handler(&self) {
+        MainContext::default().spawn_local(clone!(@weak self as session => async move {
+            let mut client = session.client();
+            while let Ok(message) = client.receive().await {
+                session.handle_message(message)
+            }
+        }));
+    }
+
+    pub fn handle_message(&self, message: IrcMessage) {
         match message {
             IrcMessage::IrcCommand(sender, command) => match command {
                 IrcCommand::Privmsg { target, message } => {
                     self.handle_privmsg(sender, target, message)
                 }
-                IrcCommand::Quit { message } => self.handle_quit(sender, message),
+                IrcCommand::Quit { message } => {
+                    self.handle_quit(sender, message);
+                }
                 IrcCommand::Pass { .. } | IrcCommand::Nick { .. } | IrcCommand::User { .. } => (),
             },
             IrcMessage::IrcResponse(response) => match response {

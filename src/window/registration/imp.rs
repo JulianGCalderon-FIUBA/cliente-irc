@@ -24,7 +24,7 @@ pub struct Registration {
     #[template_child]
     pub realname: TemplateChild<Field>,
     #[template_child]
-    connect: TemplateChild<Button>,
+    pub connect: TemplateChild<Button>,
     pub client: OnceCell<IrcClient>,
 }
 
