@@ -1,4 +1,6 @@
-/// Parsing errors that can be encountered while parsing [IrcMessage]
+//! This module contains error that can be encountered while parsing a server message
+
+/// Parsing errors that can be encountered while parsing a server message
 #[derive(Debug)]
 pub enum ParsingError {
     EmptyMessage,

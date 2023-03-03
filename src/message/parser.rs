@@ -1,3 +1,6 @@
+//! This module contains parsing logic por separating a message into:
+//! `prefix`, `command`, `parameters`, `trailing`
+
 const PREFIX_CHARACTER: u8 = b':';
 const MAX_LENGTH: usize = 510;
 

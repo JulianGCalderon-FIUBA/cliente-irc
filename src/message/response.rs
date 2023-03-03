@@ -1,9 +1,11 @@
-use super::ParsingError;
+//! This module define [`IrcResponse`]
+
+use super::{Args, ParsingError, Trail};
 
 const WELCOME: &str = "001";
 const NICK_COLLISION: &str = "436";
 
-/// Responses sent by the server in response to a client's command
+/// Messages sent by the server in response to a client's command
 pub enum IrcResponse {
     Welcome {
         realname: String,
@@ -16,9 +18,6 @@ pub enum IrcResponse {
         nickname: String,
     },
 }
-
-type Trail = Option<String>;
-type Args = Vec<String>;
 
 impl IrcResponse {
     /// Creates the corresponding variation from the given parameters,

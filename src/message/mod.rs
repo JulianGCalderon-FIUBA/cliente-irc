@@ -21,7 +21,10 @@ pub use command::IrcCommand;
 pub use error::ParsingError;
 pub use response::IrcResponse;
 
-/// parses messages coming from the server
+type Trail = Option<String>;
+type Args = Vec<String>;
+
+/// Parses messages coming from the server
 pub enum IrcMessage {
     /// If a command comes from a server, it must always have a sender
     IrcCommand(String, IrcCommand),

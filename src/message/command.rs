@@ -1,6 +1,8 @@
+//! This module define [`IrcCommmand`]
+
 use std::fmt::Display;
 
-use super::ParsingError;
+use super::{Args, ParsingError, Trail};
 
 const PRIVMSG: &str = "PRIVMSG";
 const PASS: &str = "PASS";
@@ -22,20 +24,16 @@ pub enum IrcCommand {
 }
 
 impl IrcCommand {
-    /// Creates the corresponding variation from the given parameters,
+    /// Creates the corresponding variation from the given components,
     ///
     /// Fails on invalid `response` or on an invalid argument
-    pub fn new(
-        command: String,
-        arguments: Vec<String>,
-        trailing: Option<String>,
-    ) -> Result<Self, ParsingError> {
+    pub fn new(command: String, args: Args, trail: Trail) -> Result<Self, ParsingError> {
         match &command[..] {
-            PRIVMSG => Self::new_privmsg(arguments, trailing),
-            PASS => Self::new_pass(arguments, trailing),
-            NICK => Self::new_nick(arguments, trailing),
-            USER => Self::new_user(arguments, trailing),
-            QUIT => Self::new_quit(arguments, trailing),
+            PRIVMSG => Self::new_privmsg(args, trail),
+            PASS => Self::new_pass(args, trail),
+            NICK => Self::new_nick(args, trail),
+            USER => Self::new_user(args, trail),
+            QUIT => Self::new_quit(args, trail),
             _ => Err(ParsingError::UnknownCommand(command)),
         }
     }
@@ -48,51 +46,48 @@ impl IrcCommand {
             || command == QUIT
     }
 
-    /// Creates a [IrcCommand::Privmsg] from the message arguments.
+    /// Creates a [`IrcCommand::Privmsg`] from the given components.
     ///
     /// Fails on invalid arguments
-    pub fn new_privmsg(
-        mut parameters: Vec<String>,
-        trailing: Option<String>,
-    ) -> Result<Self, ParsingError> {
-        parameters.reverse();
+    pub fn new_privmsg(mut args: Args, trail: Trail) -> Result<Self, ParsingError> {
+        args.reverse();
 
-        let message = trailing.ok_or(ParsingError::MissingParameter)?;
-        let target = parameters.pop().ok_or(ParsingError::MissingParameter)?;
+        let message = trail.ok_or(ParsingError::MissingParameter)?;
+        let target = args.pop().ok_or(ParsingError::MissingParameter)?;
 
         Ok(Self::Privmsg { target, message })
     }
 
-    /// Creates a [IrcCommand::Pass] from the message arguments.
+    /// Creates a [`IrcCommand::Pass`] from the given components.
     ///
     /// Fails on invalid arguments
-    fn new_pass(mut args: Vec<String>, _trail: Option<String>) -> Result<IrcCommand, ParsingError> {
+    fn new_pass(mut args: Args, _trail: Trail) -> Result<IrcCommand, ParsingError> {
         let password = args.pop().ok_or(ParsingError::MissingParameter)?;
         Ok(Self::Pass { password })
     }
 
-    /// Creates a [IrcCommand::Nick] from the message arguments.
+    /// Creates a [`IrcCommand::Nick`] from the given components.
     ///
     /// Fails on invalid arguments
-    fn new_nick(mut args: Vec<String>, _trail: Option<String>) -> Result<IrcCommand, ParsingError> {
+    fn new_nick(mut args: Args, _trail: Trail) -> Result<IrcCommand, ParsingError> {
         let nickname = args.pop().ok_or(ParsingError::MissingParameter)?;
         Ok(Self::Nick { nickname })
     }
 
-    /// Creates a [IrcCommand::User] from the message arguments.
+    /// Creates a [`IrcCommand::User`] from the given components.
     ///
     /// Fails on invalid arguments
-    fn new_user(mut args: Vec<String>, trail: Option<String>) -> Result<IrcCommand, ParsingError> {
+    fn new_user(mut args: Args, trail: Trail) -> Result<IrcCommand, ParsingError> {
         let username = args.pop().ok_or(ParsingError::MissingParameter)?;
         let realname = trail.ok_or(ParsingError::MissingParameter)?;
 
         Ok(Self::User { username, realname })
     }
 
-    /// Creates a [IrcCommand::Quit] from the message arguments.
+    /// Creates a [ IrcCommand::Quit`] from the given components.
     ///
     /// Fails on invalid arguments
-    fn new_quit(_args: Vec<String>, trail: Option<String>) -> Result<IrcCommand, ParsingError> {
+    fn new_quit(_args: Args, trail: Trail) -> Result<IrcCommand, ParsingError> {
         let message = trail.ok_or(ParsingError::MissingParameter)?;
 
         Ok(Self::Quit { message })
