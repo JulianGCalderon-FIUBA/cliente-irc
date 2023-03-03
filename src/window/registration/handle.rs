@@ -40,7 +40,7 @@ impl Registration {
     }
 
     fn handle_nick_collision(&self) -> ControlFlow<()> {
-        println!("nick collision");
+        eprintln!("NICK COLLISION");
 
         ControlFlow::Continue(())
     }

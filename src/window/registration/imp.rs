@@ -52,7 +52,7 @@ impl ObjectImpl for Registration {
     fn signals() -> &'static [glib::subclass::Signal] {
         static PROPERTIES: Lazy<Vec<Signal>> = Lazy::new(|| {
             vec![Signal::builder("registered")
-                .param_types([IrcClient::static_type(), super::Registration::static_type()])
+                .param_types([super::Registration::static_type(), IrcClient::static_type()])
                 .build()]
         });
         PROPERTIES.as_ref()

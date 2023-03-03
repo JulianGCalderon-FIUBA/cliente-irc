@@ -23,7 +23,7 @@ use self::utils::{spawn_reader, spawn_writer};
 ///
 /// Uses async functions to ease the spawning of futures, as Gtk4 objects are not thread safe.
 #[derive(glib::Boxed, Clone, Debug)]
-#[boxed_type(name = "IrcClientBox")]
+#[boxed_type(name = "IrcClient")]
 pub struct IrcClient {
     sender: Sender<IrcCommand>,
     receiver: Receiver<IrcMessage>,
