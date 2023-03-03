@@ -32,7 +32,7 @@ impl Registration {
     fn connect_client(&self) -> io::Result<()> {
         let address = self.imp().address.text();
 
-        let client = IrcClient::new(address)?;
+        let client = IrcClient::connect(address)?;
         self.imp().client.set(client).unwrap();
 
         Ok(())
