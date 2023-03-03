@@ -7,8 +7,6 @@ use gtk::prelude::ToValue;
 use gtk::subclass::prelude::*;
 use gtk::{glib, CompositeTemplate, Entry};
 
-use super::FieldProperty;
-
 pub const NAME_PROPERTY: &str = "name";
 pub const INPUT_PROPERTY: &str = "input";
 pub const DEFAULT_PROPERTY: &str = "default";

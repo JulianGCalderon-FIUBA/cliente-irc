@@ -1,12 +1,9 @@
 mod imp;
-mod properties;
 
 use glib::Object;
 use gtk::{glib, prelude::ObjectExt};
 
 pub use imp::{INPUT_PROPERTY, NAME_PROPERTY};
-
-pub use properties::FieldProperty;
 
 use self::imp::DEFAULT_PROPERTY;
 
