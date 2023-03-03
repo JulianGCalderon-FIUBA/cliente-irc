@@ -11,6 +11,7 @@
     <child>
       <object class="GtkEntry" id="entry">
         <property name="placeholder-text" bind-source="Field" bind-property="default"></property>
+        <property name="visibility" bind-source="Field" bind-property="password" bind-flags="invert-boolean">true</property>
       </object>
     </child>
   </template>

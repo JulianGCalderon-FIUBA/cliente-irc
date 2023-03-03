@@ -1,11 +1,10 @@
 mod imp;
+mod property;
 
 use glib::Object;
 use gtk::{glib, prelude::ObjectExt};
 
-pub use imp::{INPUT_PROPERTY, NAME_PROPERTY};
-
-use self::imp::DEFAULT_PROPERTY;
+pub use property::FieldProperty;
 
 glib::wrapper! {
     pub struct Field(ObjectSubclass<imp::Field>)
@@ -20,10 +19,10 @@ impl Field {
     }
 
     pub fn input(&self) -> String {
-        let input: String = self.property(INPUT_PROPERTY);
+        let input: String = self.property(&FieldProperty::Input);
 
         if input.is_empty() {
-            return self.property(DEFAULT_PROPERTY);
+            return self.property(&FieldProperty::Default);
         }
 
         input

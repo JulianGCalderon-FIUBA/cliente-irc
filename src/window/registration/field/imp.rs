@@ -1,15 +1,12 @@
-use std::cell::RefCell;
-
 use glib::subclass::InitializingObject;
 use gtk::glib::once_cell::sync::Lazy;
-use gtk::glib::{ParamSpec, ParamSpecString};
+use gtk::glib::{ParamSpec, ParamSpecBoolean, ParamSpecString};
 use gtk::prelude::ToValue;
 use gtk::subclass::prelude::*;
 use gtk::{glib, CompositeTemplate, Entry};
+use std::cell::RefCell;
 
-pub const NAME_PROPERTY: &str = "name";
-pub const INPUT_PROPERTY: &str = "input";
-pub const DEFAULT_PROPERTY: &str = "default";
+use crate::window::registration::field::FieldProperty;
 
 #[derive(CompositeTemplate, Default)]
 #[template(resource = "/com/jgcalderon/irc-client/registration-field.ui")]
@@ -19,6 +16,7 @@ pub struct Field {
     name: RefCell<String>,
     input: RefCell<String>,
     default: RefCell<String>,
+    password: RefCell<bool>,
 }
 
 #[glib::object_subclass]
@@ -40,39 +38,42 @@ impl ObjectImpl for Field {
     fn properties() -> &'static [glib::ParamSpec] {
         static PROPERTIES: Lazy<Vec<ParamSpec>> = Lazy::new(|| {
             vec![
-                ParamSpecString::builder(NAME_PROPERTY).build(),
-                ParamSpecString::builder(INPUT_PROPERTY).build(),
-                ParamSpecString::builder(DEFAULT_PROPERTY).build(),
+                ParamSpecString::builder(&FieldProperty::Name).build(),
+                ParamSpecString::builder(&FieldProperty::Input).build(),
+                ParamSpecString::builder(&FieldProperty::Default).build(),
+                ParamSpecBoolean::builder(&FieldProperty::Password).build(),
             ]
         });
         PROPERTIES.as_ref()
     }
 
     fn set_property(&self, _id: usize, value: &glib::Value, pspec: &glib::ParamSpec) {
-        match pspec.name() {
-            NAME_PROPERTY => {
+        match FieldProperty::from(pspec.name()) {
+            FieldProperty::Name => {
                 let value = value.get().unwrap();
                 self.name.replace(value);
             }
-            INPUT_PROPERTY => {
+            FieldProperty::Input => {
                 let value = value.get().unwrap();
                 self.input.replace(value);
             }
-            DEFAULT_PROPERTY => {
+            FieldProperty::Default => {
                 let value = value.get().unwrap();
                 self.default.replace(value);
             }
-            _ => unimplemented!(),
+            FieldProperty::Password => {
+                let value = value.get().unwrap();
+                self.password.replace(value);
+            }
         };
     }
 
     fn property(&self, _id: usize, pspec: &glib::ParamSpec) -> glib::Value {
-        match pspec.name() {
-            NAME_PROPERTY => self.name.borrow().to_value(),
-            INPUT_PROPERTY => self.input.borrow().to_value(),
-            DEFAULT_PROPERTY => self.default.borrow().to_value(),
-
-            _ => unimplemented!(),
+        match FieldProperty::from(pspec.name()) {
+            FieldProperty::Name => self.name.borrow().to_value(),
+            FieldProperty::Input => self.input.borrow().to_value(),
+            FieldProperty::Default => self.default.borrow().to_value(),
+            FieldProperty::Password => self.password.borrow().to_value(),
         }
     }
 }
