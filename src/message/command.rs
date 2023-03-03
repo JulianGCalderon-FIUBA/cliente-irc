@@ -8,7 +8,10 @@ const NICK: &str = "NICK";
 const USER: &str = "USER";
 const QUIT: &str = "QUIT";
 
-/// [IrcCommand] are all client commands that can be sent to or received from a server
+/// Commands that can be sent to or received from a server
+///
+/// They are asynchronous messages that are not generated as a response,
+///  but rather notify of a new status or notification.
 #[derive(Debug)]
 pub enum IrcCommand {
     Privmsg { target: String, message: String },

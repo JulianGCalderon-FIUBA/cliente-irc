@@ -10,7 +10,7 @@ use super::unexpected_eof;
 
 const MESSAGE_SEPARATOR: &[u8] = b"\r\n";
 
-/// Spawns a future in glib main context that reads messages from 'stream' and sends it to the returned receiver
+/// Spawns a future in [glib] [MainContext] that reads messages from 'stream' and sends it to the returned receiver
 /// Future ends on a connection error or after droppping all receivers
 pub fn spawn_reader(stream: TcpStream) -> Receiver<IrcMessage> {
     let (sender, receiver) = async_std::channel::unbounded();
@@ -34,7 +34,7 @@ pub fn spawn_reader(stream: TcpStream) -> Receiver<IrcMessage> {
     receiver
 }
 
-/// Spawns a future in glib main context that reads messages from 'sender' and sends it to the server
+/// Spawns a future in [glib] [MainContext] that reads messages from 'sender' and sends it to the server
 /// Future ends on a connection error or after droppping all senders
 pub fn spawn_writer(mut stream: TcpStream) -> Sender<IrcCommand> {
     let (sender, receiver) = async_std::channel::unbounded();

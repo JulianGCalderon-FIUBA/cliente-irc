@@ -6,7 +6,7 @@ use gtk::subclass::prelude::*;
 use crate::message::{IrcCommand, IrcMessage};
 
 /// IrcClient internal struct.
-/// Fields wrapped in [OnceCell] as they are declared after construction
+/// Fields wrapped in [OnceCell] are declared after construction
 #[derive(Default)]
 pub struct IrcClient {
     pub sender: OnceCell<Sender<IrcCommand>>,

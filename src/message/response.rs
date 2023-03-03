@@ -3,7 +3,7 @@ use super::ParsingError;
 const WELCOME: &str = "001";
 const NICK_COLLISION: &str = "436";
 
-/// [IrcResponse] are all messages sent by the server in response to a client's command
+/// Responses sent by the server in response to a client's command
 pub enum IrcResponse {
     Welcome {
         realname: String,
