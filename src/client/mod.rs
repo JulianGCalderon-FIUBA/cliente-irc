@@ -25,8 +25,8 @@ use self::utils::{spawn_reader, spawn_writer};
 #[derive(glib::Boxed, Clone, Debug)]
 #[boxed_type(name = "IrcClientBox")]
 pub struct IrcClient {
-    pub sender: Sender<IrcCommand>,
-    pub receiver: Receiver<IrcMessage>,
+    sender: Sender<IrcCommand>,
+    receiver: Receiver<IrcMessage>,
 }
 
 impl IrcClient {
