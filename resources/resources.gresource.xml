@@ -4,6 +4,7 @@
     <file compressed="true" preprocess="xml-stripblanks">ui/window.ui</file>
     <file compressed="true" preprocess="xml-stripblanks">ui/session.ui</file>
     <file compressed="true" preprocess="xml-stripblanks">ui/registration.ui</file>
-    <file compressed="true" preprocess="xml-stripblanks">ui/registration-field.ui</file>
+    <file compressed="true" preprocess="xml-stripblanks">ui/field.ui</file>
+    <file compressed="true" preprocess="xml-stripblanks">ui/password-field.ui</file>
   </gresource>
 </gresources>

@@ -16,12 +16,6 @@
       </object>
     </child>
     <child>
-      <object class="Field" id="password">
-        <property name="name">Password:</property>
-        <property name="password">true</property>
-      </object>
-    </child>
-    <child>
       <object class="Field" id="username">
         <property name="name">Username:</property>
         <property name="default">username</property>
@@ -31,6 +25,11 @@
       <object class="Field" id="realname">
         <property name="name">Realname:</property>
         <property name="default">realname</property>
+      </object>
+    </child>
+    <child>
+      <object class="PasswordField" id="password">
+        <property name="name">Password:</property>
       </object>
     </child>
     <child>

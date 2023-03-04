@@ -10,16 +10,15 @@ use std::cell::RefCell;
 use crate::window::registration::field::FieldProperty;
 
 #[derive(CompositeTemplate, Default)]
-#[template(resource = "/com/jgcalderon/irc-client/ui/registration-field.ui")]
+#[template(resource = "/com/jgcalderon/irc-client/ui/field.ui")]
 pub struct Field {
-    #[template_child(internal = true)]
+    #[template_child]
     pub entry: TemplateChild<Entry>,
     #[template_child]
     pub error_label: TemplateChild<Label>,
     name: RefCell<String>,
     input: RefCell<String>,
     default: RefCell<String>,
-    password: RefCell<bool>,
     locked: RefCell<bool>,
     error: RefCell<String>,
 }
@@ -32,7 +31,7 @@ impl ObjectSubclass for Field {
 
     fn class_init(klass: &mut Self::Class) {
         klass.bind_template();
-        klass.set_css_name("registration_field")
+        klass.set_css_name("field")
     }
 
     fn instance_init(obj: &InitializingObject<Self>) {
@@ -47,9 +46,8 @@ impl ObjectImpl for Field {
                 ParamSpecString::builder(&FieldProperty::Name).build(),
                 ParamSpecString::builder(&FieldProperty::Input).build(),
                 ParamSpecString::builder(&FieldProperty::Default).build(),
-                ParamSpecBoolean::builder(&FieldProperty::Password).build(),
-                ParamSpecBoolean::builder(&FieldProperty::Locked).build(),
                 ParamSpecString::builder(&FieldProperty::Error).build(),
+                ParamSpecBoolean::builder(&FieldProperty::Locked).build(),
             ]
         });
         PROPERTIES.as_ref()
@@ -69,10 +67,7 @@ impl ObjectImpl for Field {
                 let value = value.get().unwrap();
                 self.default.replace(value);
             }
-            FieldProperty::Password => {
-                let value = value.get().unwrap();
-                self.password.replace(value);
-            }
+
             FieldProperty::Locked => {
                 let value = value.get().unwrap();
                 self.locked.replace(value);
@@ -89,7 +84,6 @@ impl ObjectImpl for Field {
             FieldProperty::Name => self.name.borrow().to_value(),
             FieldProperty::Input => self.input.borrow().to_value(),
             FieldProperty::Default => self.default.borrow().to_value(),
-            FieldProperty::Password => self.password.borrow().to_value(),
             FieldProperty::Locked => self.locked.borrow().to_value(),
             FieldProperty::Error => self.error.borrow().to_value(),
         }

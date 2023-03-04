@@ -2,6 +2,7 @@ mod field;
 mod handle;
 mod imp;
 mod registerer;
+mod password_field;
 
 use std::io;
 

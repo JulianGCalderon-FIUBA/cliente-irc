@@ -9,6 +9,7 @@ use gtk::{glib, template_callbacks, CompositeTemplate};
 use crate::client::IrcClient;
 
 use super::field::Field;
+use super::password_field::PasswordField;
 
 #[derive(CompositeTemplate, Default)]
 #[template(resource = "/com/jgcalderon/irc-client/ui/registration.ui")]
@@ -18,7 +19,7 @@ pub struct Registration {
     #[template_child]
     pub nickname: TemplateChild<Field>,
     #[template_child]
-    pub password: TemplateChild<Field>,
+    pub password: TemplateChild<PasswordField>,
     #[template_child]
     pub username: TemplateChild<Field>,
     #[template_child]

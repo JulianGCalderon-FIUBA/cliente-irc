@@ -1,12 +1,11 @@
 @define-color error-text Red;
 @define-color error-border Red;
 
-
-registration_field #error_label {
+field #error_label {
     color: @error-text;
     font-size: 12px;
 }
 
-registration_field.invalid entry {
+field.invalid entry {
     border-color: @error-border;
 }
