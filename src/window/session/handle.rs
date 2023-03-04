@@ -26,8 +26,9 @@ impl Session {
                 IrcCommand::Pass { .. } | IrcCommand::Nick { .. } | IrcCommand::User { .. } => (),
             },
             IrcMessage::IrcResponse(response) => match response {
-                IrcResponse::Welcome { .. } => (),
-                IrcResponse::NickCollision { .. } => (),
+                IrcResponse::Welcome { .. }
+                | IrcResponse::NickCollision { .. }
+                | IrcResponse::NoNickname => (),
             },
         }
     }

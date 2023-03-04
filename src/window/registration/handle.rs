@@ -25,9 +25,10 @@ impl Registration {
 
     fn handle_message(&self, message: IrcMessage) -> ControlFlow<()> {
         if let IrcMessage::IrcResponse(response) = message {
-            match response {
-                IrcResponse::Welcome { .. } => self.handle_welcome()?,
-                IrcResponse::NickCollision { .. } => self.handle_nick_collision()?,
+            if let IrcResponse::Welcome { .. } = response {
+                self.handle_welcome()?
+            } else if let IrcResponse::NickCollision { .. } = response {
+                self.handle_nick_collision()?
             }
         }
 
