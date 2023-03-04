@@ -6,7 +6,7 @@ use gtk::{glib, CompositeTemplate};
 use crate::client::IrcClient;
 
 #[derive(CompositeTemplate, Default)]
-#[template(resource = "/com/jgcalderon/irc-client/session.ui")]
+#[template(resource = "/com/jgcalderon/irc-client/ui/session.ui")]
 pub struct Session {
     pub client: OnceCell<IrcClient>,
 }

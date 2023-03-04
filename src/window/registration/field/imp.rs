@@ -3,14 +3,14 @@ use gtk::glib::once_cell::sync::Lazy;
 use gtk::glib::{ParamSpec, ParamSpecBoolean, ParamSpecString};
 use gtk::prelude::{ObjectExt, ToValue};
 use gtk::subclass::prelude::*;
-use gtk::traits::WidgetExt;
-use gtk::{glib, CompositeTemplate, Entry, Label};
+use gtk::traits::{EntryExt, WidgetExt};
+use gtk::{glib, template_callbacks, CompositeTemplate, Entry, Label};
 use std::cell::RefCell;
 
 use crate::window::registration::field::FieldProperty;
 
 #[derive(CompositeTemplate, Default)]
-#[template(resource = "/com/jgcalderon/irc-client/registration-field.ui")]
+#[template(resource = "/com/jgcalderon/irc-client/ui/registration-field.ui")]
 pub struct Field {
     #[template_child(internal = true)]
     pub entry: TemplateChild<Entry>,
@@ -22,6 +22,7 @@ pub struct Field {
     password: RefCell<bool>,
     locked: RefCell<bool>,
     error: RefCell<String>,
+    password_show: RefCell<bool>,
 }
 
 #[glib::object_subclass]
@@ -98,12 +99,14 @@ impl ObjectImpl for Field {
     fn constructed(&self) {
         self.parent_constructed();
 
-        self.obj()
+        let field = self.obj();
+
+        field
             .bind_property::<Label>(&FieldProperty::Error, &self.error_label, "visible")
             .transform_to(|_, error: String| Some(!error.is_empty()))
             .build();
 
-        self.obj()
+        field
             .bind_property::<Entry>(&FieldProperty::Locked, &self.entry, "secondary-icon-name")
             .transform_to(|_, locked: bool| {
                 if locked {
@@ -114,7 +117,7 @@ impl ObjectImpl for Field {
             })
             .build();
 
-        self.obj().connect_notify(Some("error"), |field, _| {
+        field.connect_notify(Some("error"), |field, _| {
             let error: String = field.property("error");
             if error.is_empty() {
                 field.remove_css_class("invalid");

@@ -11,7 +11,7 @@ use crate::client::IrcClient;
 use super::field::Field;
 
 #[derive(CompositeTemplate, Default)]
-#[template(resource = "/com/jgcalderon/irc-client/registration.ui")]
+#[template(resource = "/com/jgcalderon/irc-client/ui/registration.ui")]
 pub struct Registration {
     #[template_child]
     pub address: TemplateChild<Field>,

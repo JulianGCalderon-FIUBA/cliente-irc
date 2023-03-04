@@ -9,7 +9,7 @@ use super::registration::Registration;
 use super::session::Session;
 
 #[derive(CompositeTemplate, Default)]
-#[template(resource = "/com/jgcalderon/irc-client/window.ui")]
+#[template(resource = "/com/jgcalderon/irc-client/ui/window.ui")]
 pub struct Window {
     #[template_child]
     stack: TemplateChild<Stack>,

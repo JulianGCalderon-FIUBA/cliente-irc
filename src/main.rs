@@ -13,6 +13,7 @@ use gtk::prelude::*;
 use gtk::traits::GtkWindowExt;
 use gtk::Application;
 use gtk::CssProvider;
+use gtk::IconTheme;
 use gtk::StyleContext;
 
 use window::Window;
@@ -27,7 +28,7 @@ fn main() -> glib::ExitCode {
         .flags(gio::ApplicationFlags::NON_UNIQUE)
         .build();
 
-    application.connect_startup(|_| load_css());
+    application.connect_startup(|_| load());
     application.connect_activate(build);
 
     application.run()
@@ -38,7 +39,7 @@ fn build(application: &Application) {
     window.present();
 }
 
-fn load_css() {
+fn load() {
     let provider = CssProvider::new();
     provider.load_from_data(include_str!("../resources/style.css"));
 
@@ -47,4 +48,6 @@ fn load_css() {
         &provider,
         gtk::STYLE_PROVIDER_PRIORITY_APPLICATION,
     );
+
+    IconTheme::default().add_resource_path("/com/jgcalderon/irc-client");
 }

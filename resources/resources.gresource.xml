@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
   <gresource prefix="/com/jgcalderon/irc-client">
-    <file compressed="true" preprocess="xml-stripblanks">window.ui</file>
-    <file compressed="true" preprocess="xml-stripblanks">session.ui</file>
-    <file compressed="true" preprocess="xml-stripblanks">registration.ui</file>
-    <file compressed="true" preprocess="xml-stripblanks">registration-field.ui</file>
+    <file compressed="true" preprocess="xml-stripblanks">ui/window.ui</file>
+    <file compressed="true" preprocess="xml-stripblanks">ui/session.ui</file>
+    <file compressed="true" preprocess="xml-stripblanks">ui/registration.ui</file>
+    <file compressed="true" preprocess="xml-stripblanks">ui/registration-field.ui</file>
+    <file compressed="true" preprocess="xml-stripblanks">icons/eye.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks">icons/eye-crossed.svg</file>
   </gresource>
 </gresources>
