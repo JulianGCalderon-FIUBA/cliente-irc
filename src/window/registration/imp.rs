@@ -48,6 +48,10 @@ impl ObjectSubclass for Registration {
 impl ObjectImpl for Registration {
     fn constructed(&self) {
         self.parent_constructed();
+
+        // AUTOMATIC LOGIN: ONLY FOR TESTING PURPOSES
+        self.nickname.set_input("guest");
+        self.connect_clicked();
     }
 
     fn signals() -> &'static [glib::subclass::Signal] {
@@ -59,6 +63,7 @@ impl ObjectImpl for Registration {
         PROPERTIES.as_ref()
     }
 }
+
 impl WidgetImpl for Registration {}
 impl BoxImpl for Registration {}
 

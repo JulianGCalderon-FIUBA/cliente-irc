@@ -28,11 +28,15 @@ impl Field {
         input
     }
 
+    pub fn set_input(&self, value: &str) {
+        self.set_property(&FieldProperty::Input, value);
+    }
+
     pub fn lock(&self) {
         let input: String = self.property(&FieldProperty::Input);
         if input.is_empty() {
             let default: String = self.property(&FieldProperty::Default);
-            self.set_property(&FieldProperty::Input, default);
+            self.set_input(&default);
         }
 
         self.set_property(&FieldProperty::Locked, true);
