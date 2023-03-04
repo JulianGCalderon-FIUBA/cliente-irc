@@ -5,6 +5,7 @@ use gtk::prelude::*;
 use gtk::subclass::prelude::*;
 use gtk::Button;
 use gtk::{glib, template_callbacks, CompositeTemplate};
+use rnglib::{Language, RNG};
 
 use crate::client::IrcClient;
 
@@ -51,7 +52,9 @@ impl ObjectImpl for Registration {
         self.parent_constructed();
 
         // AUTOMATIC LOGIN: ONLY FOR TESTING PURPOSES
-        self.nickname.set_input("guest");
+        let generator = RNG::try_from(&Language::Roman).unwrap();
+        let nickname = generator.generate_short();
+        self.nickname.set_input(&nickname);
         self.connect_clicked();
     }
 
