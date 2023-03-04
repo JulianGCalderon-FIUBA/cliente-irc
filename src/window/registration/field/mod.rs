@@ -38,7 +38,8 @@ impl Field {
         self.set_property(&FieldProperty::Locked, true);
     }
 
-    pub fn set_error(&self, message: &str) {
+    pub fn set_input_error(&self, message: Option<&str>) {
+        let message = message.unwrap_or_default();
         self.set_property(&FieldProperty::Error, message);
     }
 }

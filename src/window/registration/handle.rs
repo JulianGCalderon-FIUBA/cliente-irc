@@ -41,7 +41,9 @@ impl Registration {
     }
 
     fn handle_nick_collision(&self) -> ControlFlow<()> {
-        self.imp().nickname.set_error("Nickname already in use");
+        self.imp()
+            .nickname
+            .set_input_error(Some("Nickname already in use"));
 
         ControlFlow::Continue(())
     }

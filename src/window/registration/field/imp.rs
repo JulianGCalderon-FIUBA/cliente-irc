@@ -1,6 +1,6 @@
 use glib::subclass::InitializingObject;
 use gtk::glib::once_cell::sync::Lazy;
-use gtk::glib::{ParamSpec, ParamSpecBoolean, ParamSpecString};
+use gtk::glib::{ParamSpec, ParamSpecBoolean, ParamSpecString, ParamSpecVariant, VariantTy};
 use gtk::prelude::{ObjectExt, ToValue};
 use gtk::subclass::prelude::*;
 use gtk::{glib, CompositeTemplate, Entry, Label};
@@ -47,7 +47,7 @@ impl ObjectImpl for Field {
                 ParamSpecString::builder(&FieldProperty::Default).build(),
                 ParamSpecBoolean::builder(&FieldProperty::Password).build(),
                 ParamSpecBoolean::builder(&FieldProperty::Locked).build(),
-                ParamSpecString::builder(&FieldProperty::Error).build(),
+                ParamSpecVariant::builder(&FieldProperty::Error, VariantTy::MAYBE).build(),
             ]
         });
         PROPERTIES.as_ref()
@@ -97,7 +97,7 @@ impl ObjectImpl for Field {
         self.parent_constructed();
 
         self.obj()
-            .bind_property::<Label>("error", &self.error_label, "visible")
+            .bind_property::<Label>(&FieldProperty::Error, &self.error_label, "visible")
             .transform_to(|_, error: String| Some(!error.is_empty()))
             .build();
     }

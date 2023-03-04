@@ -30,11 +30,13 @@ impl Registration {
         let nickname = self.imp().nickname.input();
 
         if nickname.is_empty() {
-            self.imp().nickname.set_error("This field is mandatory");
+            self.imp()
+                .nickname
+                .set_input_error(Some("This field is mandatory"));
             return Ok(());
         }
 
-        self.imp().nickname.set_error("");
+        self.imp().nickname.set_input_error(None);
 
         let nick_command = IrcCommand::Nick { nickname };
 
