@@ -1,5 +1,5 @@
-mod imp;
 mod constant;
+mod imp;
 
 use glib::Object;
 use gtk::{glib, prelude::ObjectExt};
@@ -36,6 +36,10 @@ impl Field {
         }
 
         self.set_property(&FieldProperty::Locked, true);
+    }
+
+    pub fn set_error(&self, message: &str) {
+        self.set_property(&FieldProperty::Error, message);
     }
 }
 

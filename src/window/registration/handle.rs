@@ -4,6 +4,7 @@ use glib::{clone, MainContext};
 use gtk::{
     glib,
     prelude::{ObjectExt, ToValue},
+    subclass::prelude::ObjectSubclassIsExt,
 };
 
 use crate::message::{IrcMessage, IrcResponse};
@@ -40,7 +41,7 @@ impl Registration {
     }
 
     fn handle_nick_collision(&self) -> ControlFlow<()> {
-        eprintln!("NICK COLLISION");
+        self.imp().nickname.set_error("Nickname already in use");
 
         ControlFlow::Continue(())
     }

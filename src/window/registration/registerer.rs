@@ -1,10 +1,10 @@
 use std::io;
 
-use gtk::subclass::prelude::*;
+use gtk::{prelude::ObjectExt, subclass::prelude::*};
 
 use crate::message::IrcCommand;
 
-use super::Registration;
+use super::{field::FieldProperty, Registration};
 
 impl Registration {
     pub(super) fn register_client(&self) -> io::Result<()> {
@@ -28,6 +28,13 @@ impl Registration {
 
     fn send_nick(&self) -> io::Result<()> {
         let nickname = self.imp().nickname.input();
+
+        if nickname.is_empty() {
+            self.imp().nickname.set_error("This field is mandatory");
+            return Ok(());
+        }
+
+        self.imp().nickname.set_error("");
 
         let nick_command = IrcCommand::Nick { nickname };
 

@@ -1,9 +1,9 @@
 use glib::subclass::InitializingObject;
 use gtk::glib::once_cell::sync::Lazy;
 use gtk::glib::{ParamSpec, ParamSpecBoolean, ParamSpecString};
-use gtk::prelude::ToValue;
+use gtk::prelude::{ObjectExt, ToValue};
 use gtk::subclass::prelude::*;
-use gtk::{glib, CompositeTemplate, Entry};
+use gtk::{glib, CompositeTemplate, Entry, Label};
 use std::cell::RefCell;
 
 use crate::window::registration::field::FieldProperty;
@@ -13,11 +13,14 @@ use crate::window::registration::field::FieldProperty;
 pub struct Field {
     #[template_child(internal = true)]
     pub entry: TemplateChild<Entry>,
+    #[template_child]
+    pub error_label: TemplateChild<Label>,
     name: RefCell<String>,
     input: RefCell<String>,
     default: RefCell<String>,
     password: RefCell<bool>,
     locked: RefCell<bool>,
+    error: RefCell<String>,
 }
 
 #[glib::object_subclass]
@@ -44,6 +47,7 @@ impl ObjectImpl for Field {
                 ParamSpecString::builder(&FieldProperty::Default).build(),
                 ParamSpecBoolean::builder(&FieldProperty::Password).build(),
                 ParamSpecBoolean::builder(&FieldProperty::Locked).build(),
+                ParamSpecString::builder(&FieldProperty::Error).build(),
             ]
         });
         PROPERTIES.as_ref()
@@ -71,6 +75,10 @@ impl ObjectImpl for Field {
                 let value = value.get().unwrap();
                 self.locked.replace(value);
             }
+            FieldProperty::Error => {
+                let value = value.get().unwrap();
+                self.error.replace(value);
+            }
         };
     }
 
@@ -81,7 +89,17 @@ impl ObjectImpl for Field {
             FieldProperty::Default => self.default.borrow().to_value(),
             FieldProperty::Password => self.password.borrow().to_value(),
             FieldProperty::Locked => self.locked.borrow().to_value(),
+            FieldProperty::Error => self.error.borrow().to_value(),
         }
+    }
+
+    fn constructed(&self) {
+        self.parent_constructed();
+
+        self.obj()
+            .bind_property::<Label>("error", &self.error_label, "visible")
+            .transform_to(|_, error: String| Some(!error.is_empty()))
+            .build();
     }
 }
 impl WidgetImpl for Field {}

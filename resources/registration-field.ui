@@ -9,10 +9,21 @@
       </object>
     </child>
     <child>
-      <object class="GtkEntry" id="entry">
-        <property name="placeholder-text" bind-source="Field" bind-property="default"></property>
-        <property name="visibility" bind-source="Field" bind-property="password" bind-flags="invert-boolean">true</property>
-        <property name="can-focus" bind-source="Field" bind-property="locked" bind-flags="invert-boolean">true</property>
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="GtkEntry" id="entry">
+            <property name="placeholder-text" bind-source="Field" bind-property="default"></property>
+            <property name="visibility" bind-source="Field" bind-property="password" bind-flags="invert-boolean">true</property>
+            <property name="can-focus" bind-source="Field" bind-property="locked" bind-flags="invert-boolean">true</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel" id="error_label">
+            <property name="visible">false</property>
+            <property name="label" bind-source="Field" bind-property="error"></property>
+          </object>
+        </child>
       </object>
     </child>
   </template>
