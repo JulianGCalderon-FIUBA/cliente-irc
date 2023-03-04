@@ -1,6 +1,6 @@
 use glib::subclass::InitializingObject;
 use gtk::glib::once_cell::sync::Lazy;
-use gtk::glib::{ParamSpec, ParamSpecBoolean, ParamSpecString, ParamSpecVariant, VariantTy};
+use gtk::glib::{ParamSpec, ParamSpecBoolean, ParamSpecString};
 use gtk::prelude::{ObjectExt, ToValue};
 use gtk::subclass::prelude::*;
 use gtk::{glib, CompositeTemplate, Entry, Label};
@@ -31,6 +31,7 @@ impl ObjectSubclass for Field {
 
     fn class_init(klass: &mut Self::Class) {
         klass.bind_template();
+        klass.set_css_name("registration_field")
     }
 
     fn instance_init(obj: &InitializingObject<Self>) {
@@ -47,7 +48,7 @@ impl ObjectImpl for Field {
                 ParamSpecString::builder(&FieldProperty::Default).build(),
                 ParamSpecBoolean::builder(&FieldProperty::Password).build(),
                 ParamSpecBoolean::builder(&FieldProperty::Locked).build(),
-                ParamSpecVariant::builder(&FieldProperty::Error, VariantTy::MAYBE).build(),
+                ParamSpecString::builder(&FieldProperty::Error).build(),
             ]
         });
         PROPERTIES.as_ref()

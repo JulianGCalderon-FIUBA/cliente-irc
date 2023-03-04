@@ -1,1 +1,13 @@
+@define-color background #588157;
+@define-color field-background #344E41;
+@define-color error-text Red;
 
+registration_field {
+    margin: 10px 10px 10px 10px;
+}
+
+registration_field label#error_label {
+    color: @error-text;
+}
+
+registration {}
