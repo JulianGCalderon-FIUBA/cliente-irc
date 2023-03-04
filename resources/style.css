@@ -1,8 +1,5 @@
-@define-color background #588157;
-@define-color field-background #344E41;
 @define-color error-text Red;
 @define-color error-border Red;
-
 
 
 registration_field #error_label {
