@@ -68,8 +68,12 @@ impl Registration {
     pub fn connect_clicked(&self) {
         let registration = self.obj();
 
-        if !registration.connected() && registration.setup_client().is_err() {
-            return;
+        if !registration.connected() {
+            if registration.setup_client().is_err() {
+                return self.address.set_error("Could not connect to server");
+            } else {
+                self.address.unset_error()
+            }
         }
 
         if registration.register_client().is_err() {

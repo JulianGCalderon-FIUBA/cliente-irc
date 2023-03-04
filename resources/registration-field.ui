@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <template class="Field" parent="GtkBox">
-    <property name="height-request">80</property>
-    <property name="orientation">horizontal</property>
+    <property name="height-request">60</property>
+    <property name="margin-top">5</property>
+    <property name="margin-bottom">5</property>
+    <property name="margin-start">5</property>
+    <property name="margin-end">5</property>
     <property name="input" bind-source="entry" bind-property="text" bind-flags="bidirectional"></property>
     <child>
       <object class="GtkLabel" id="label">
         <property name="valign">start</property>
+        <property name="xalign">0</property>
         <property name="height-request">40</property>
         <property name="width-request">100</property>
         <property name="label" bind-source="Field" bind-property="name"></property>
@@ -19,10 +23,11 @@
           <object class="GtkEntry" id="entry">
             <property name="height-request">40</property>
             <property name="valign">start</property>
-
             <property name="placeholder-text" bind-source="Field" bind-property="default"></property>
             <property name="visibility" bind-source="Field" bind-property="password" bind-flags="invert-boolean">true</property>
             <property name="can-focus" bind-source="Field" bind-property="locked" bind-flags="invert-boolean">true</property>
+            <property name="secondary-icon-sensitive">false</property>
+            
           </object>
         </child>
         <child>
@@ -30,8 +35,10 @@
             <property name="name">error_label</property>
             <property name="visible">false</property>
             <property name="valign">start</property>
+            <property name="wrap">true</property>
             <property name="xalign">0</property>
             <property name="label" bind-source="Field" bind-property="error"></property>
+
           </object>
         </child>
       </object>

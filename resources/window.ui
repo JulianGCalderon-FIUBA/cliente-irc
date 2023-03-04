@@ -3,6 +3,8 @@
   <template class="Window" parent="GtkApplicationWindow">
     <child>
       <object class="GtkStack" id="stack">
+        <property name="width-request">1080</property>
+        <property name="height-request">720</property>
         <child>
           <object class="GtkStackPage">
             <property name="name">registration</property>

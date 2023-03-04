@@ -3,6 +3,7 @@ use gtk::glib::once_cell::sync::Lazy;
 use gtk::glib::{ParamSpec, ParamSpecBoolean, ParamSpecString};
 use gtk::prelude::{ObjectExt, ToValue};
 use gtk::subclass::prelude::*;
+use gtk::traits::WidgetExt;
 use gtk::{glib, CompositeTemplate, Entry, Label};
 use std::cell::RefCell;
 
@@ -101,6 +102,26 @@ impl ObjectImpl for Field {
             .bind_property::<Label>(&FieldProperty::Error, &self.error_label, "visible")
             .transform_to(|_, error: String| Some(!error.is_empty()))
             .build();
+
+        self.obj()
+            .bind_property::<Entry>(&FieldProperty::Locked, &self.entry, "secondary-icon-name")
+            .transform_to(|_, locked: bool| {
+                if locked {
+                    Some("system-lock-screen-symbolic")
+                } else {
+                    Some("")
+                }
+            })
+            .build();
+
+        self.obj().connect_notify(Some("error"), |field, _| {
+            let error: String = field.property("error");
+            if error.is_empty() {
+                field.remove_css_class("invalid");
+            } else {
+                field.add_css_class("invalid");
+            };
+        });
     }
 }
 impl WidgetImpl for Field {}
