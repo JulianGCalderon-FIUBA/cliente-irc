@@ -3,8 +3,8 @@ use gtk::glib::once_cell::sync::Lazy;
 use gtk::glib::{ParamSpec, ParamSpecBoolean, ParamSpecString};
 use gtk::prelude::{ObjectExt, ToValue};
 use gtk::subclass::prelude::*;
-use gtk::traits::{EntryExt, WidgetExt};
-use gtk::{glib, template_callbacks, CompositeTemplate, Entry, Label};
+use gtk::traits::WidgetExt;
+use gtk::{glib, CompositeTemplate, Entry, Label};
 use std::cell::RefCell;
 
 use crate::window::registration::field::FieldProperty;
@@ -22,7 +22,6 @@ pub struct Field {
     password: RefCell<bool>,
     locked: RefCell<bool>,
     error: RefCell<String>,
-    password_show: RefCell<bool>,
 }
 
 #[glib::object_subclass]
