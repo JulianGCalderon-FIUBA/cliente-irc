@@ -1,10 +1,10 @@
 use std::io;
 
-use gtk::{prelude::ObjectExt, subclass::prelude::*};
+use gtk::subclass::prelude::*;
 
 use crate::message::IrcCommand;
 
-use super::{field::FieldProperty, Registration};
+use super::Registration;
 
 impl Registration {
     pub(super) fn register_client(&self) -> io::Result<()> {
