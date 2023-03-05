@@ -9,3 +9,18 @@ field #error_label {
 field.invalid entry {
     border-color: @error-border;
 }
+
+levelbar block.low {
+    background-color: red;
+    border-color: red;
+}
+
+levelbar block.high {
+    background-color: orange;
+    border-color: orange;
+}
+
+levelbar block.full {
+    background-color: green;
+    border-color: green;
+}

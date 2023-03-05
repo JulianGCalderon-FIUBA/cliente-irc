@@ -15,8 +15,8 @@ impl Deref for FieldProperty {
             FieldProperty::Name => "name",
             FieldProperty::Input => "input",
             FieldProperty::Default => "default",
-            FieldProperty::Locked => "locked",
             FieldProperty::Error => "error",
+            FieldProperty::Locked => "locked",
         }
     }
 }
