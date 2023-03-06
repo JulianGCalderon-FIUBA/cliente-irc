@@ -34,28 +34,6 @@
     </child>
     <child>
       <object class="GtkStack" id="chats">
-        <child>
-          <object class="GtkStackPage">
-            <property name="name">chat1 NAME</property>
-            <property name="title">Chat1 TITLE</property>
-            <property name="child">
-              <object class="Chat">
-                <property name="name">CHAT1</property>
-              </object>
-            </property>
-          </object>
-        </child>
-        <child>
-          <object class="GtkStackPage">
-            <property name="name">chat2 NAME</property>
-            <property name="title">Chat2 TITLE</property>
-            <property name="child">
-              <object class="Chat">
-                <property name="name">CHAT2</property>
-              </object>
-            </property>
-          </object>
-        </child>
       </object>
     </child>
   </template>

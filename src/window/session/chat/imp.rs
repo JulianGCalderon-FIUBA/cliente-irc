@@ -2,11 +2,14 @@ use std::cell::RefCell;
 
 use glib::subclass::InitializingObject;
 use gtk::glib::once_cell::sync::Lazy;
-use gtk::glib::{ParamSpec, ParamSpecString};
-use gtk::prelude::{EntryBufferExtManual, ToValue};
+use gtk::glib::subclass::Signal;
+use gtk::glib::ParamSpec;
+use gtk::prelude::{ObjectExt, ToValue};
 use gtk::subclass::prelude::*;
-use gtk::traits::EntryExt;
 use gtk::{glib, template_callbacks, CompositeTemplate, Entry};
+
+use crate::utils::get_and_clear_entry;
+use crate::window::session::chat::constant::ChatSignal;
 
 use super::ChatProperty;
 
@@ -36,8 +39,7 @@ impl ObjectSubclass for Chat {
 
 impl ObjectImpl for Chat {
     fn properties() -> &'static [glib::ParamSpec] {
-        static PROPERTIES: Lazy<Vec<ParamSpec>> =
-            Lazy::new(|| vec![ParamSpecString::builder(&ChatProperty::Name).build()]);
+        static PROPERTIES: Lazy<Vec<ParamSpec>> = Lazy::new(ChatProperty::vec);
         PROPERTIES.as_ref()
     }
 
@@ -59,6 +61,13 @@ impl ObjectImpl for Chat {
     fn constructed(&self) {
         self.parent_constructed();
     }
+
+    fn signals() -> &'static [Signal] {
+        static SIGNALS: Lazy<Vec<Signal>> = Lazy::new(ChatSignal::vec);
+        SIGNALS.as_ref()
+    }
+
+    fn dispose(&self) {}
 }
 impl WidgetImpl for Chat {}
 impl BoxImpl for Chat {}
@@ -67,19 +76,14 @@ impl BoxImpl for Chat {}
 impl Chat {
     #[template_callback]
     pub fn send_message(&self, entry: Entry) {
-        let buffer = entry.buffer();
-        let message = buffer.text().to_string();
-
-        if message.is_empty() {
-            return;
+        if let Some(message) = get_and_clear_entry(entry) {
+            self.obj()
+                .emit_by_name(&ChatSignal::Send, &[&message.to_value()])
         }
-
-        buffer.set_text("");
-        println!("todo! send message: {message}");
     }
 
     #[template_callback]
     pub fn close_chat(&self) {
-        println!("todo! close chat");
+        self.obj().emit_by_name(&ChatSignal::Close, &[])
     }
 }

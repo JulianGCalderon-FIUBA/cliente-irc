@@ -8,6 +8,8 @@ use gtk::subclass::prelude::*;
 
 use crate::client::IrcClient;
 
+use self::chat::Chat;
+
 glib::wrapper! {
     pub struct Session(ObjectSubclass<imp::Session>)
     @extends gtk::Widget, gtk::Box,
@@ -32,5 +34,14 @@ impl Session {
 
     fn client(&self) -> IrcClient {
         self.imp().client.get().unwrap().clone()
+    }
+
+    fn add_chat(&self, name: String) {
+        let chat = Chat::new(name.clone());
+
+        chat.connect_close(|_| println!("close"));
+        chat.connect_send(|_, _| println!("send"));
+
+        self.imp().chats.add_titled(&chat, Some(&name), &name);
     }
 }

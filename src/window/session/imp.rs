@@ -1,17 +1,19 @@
 use glib::subclass::InitializingObject;
 use gtk::glib::once_cell::sync::OnceCell;
-use gtk::prelude::{EntryBufferExtManual, StaticTypeExt};
+use gtk::prelude::StaticTypeExt;
 use gtk::subclass::prelude::*;
-use gtk::traits::EntryExt;
-use gtk::{glib, template_callbacks, CompositeTemplate, Entry};
+use gtk::{glib, template_callbacks, CompositeTemplate, Entry, Stack};
 
 use crate::client::IrcClient;
+use crate::utils::get_and_clear_entry;
 
 use super::chat::Chat;
 
 #[derive(CompositeTemplate, Default)]
 #[template(resource = "/com/jgcalderon/irc-client/ui/session.ui")]
 pub struct Session {
+    #[template_child]
+    pub chats: TemplateChild<Stack>,
     pub client: OnceCell<IrcClient>,
 }
 
@@ -45,14 +47,8 @@ impl BoxImpl for Session {}
 impl Session {
     #[template_callback]
     pub fn add_chat(&self, entry: Entry) {
-        let buffer = entry.buffer();
-        let client = buffer.text().to_string();
-
-        if client.is_empty() {
-            return;
+        if let Some(name) = get_and_clear_entry(entry) {
+            self.obj().add_chat(name);
         }
-
-        buffer.set_text("");
-        println!("todo! add chat: {client}");
     }
 }
