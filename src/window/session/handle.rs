@@ -42,7 +42,7 @@ impl Session {
             chat.add_message(message);
         } else if !self.is_own_message(&sender) {
             let chat = self.get_or_insert_chat(target);
-            chat.add_message(message);
+            chat.add_message_with_sender(message, sender);
         }
     }
 

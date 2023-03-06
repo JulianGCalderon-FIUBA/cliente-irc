@@ -48,10 +48,22 @@ impl Chat {
     }
 
     pub fn add_message(&self, message: String) {
-        let message = Message::new(message);
-        message.set_halign(Align::Start);
-        message.add_css_class("external");
+        let message = create_external_message(message);
 
         self.imp().messages.append(&message);
     }
+
+    pub fn add_message_with_sender(&self, message: String, sender: String) {
+        let message = create_external_message(message);
+        message.set_sender(sender);
+
+        self.imp().messages.append(&message);
+    }
+}
+
+fn create_external_message(message: String) -> Message {
+    let message = Message::new(message);
+    message.set_halign(Align::Start);
+    message.add_css_class("external");
+    message
 }

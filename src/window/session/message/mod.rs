@@ -2,7 +2,7 @@ mod constant;
 mod imp;
 
 use glib::Object;
-use gtk::glib;
+use gtk::{glib, prelude::ObjectExt};
 
 pub use constant::MessageProperty;
 
@@ -18,5 +18,9 @@ impl Message {
         Object::builder()
             .property(&MessageProperty::Message, message)
             .build()
+    }
+
+    pub fn set_sender(&self, sender: String) {
+        self.set_property(&MessageProperty::Sender, sender);
     }
 }
