@@ -41,6 +41,9 @@ impl ApplicationWindowImpl for Window {}
 #[template_callbacks]
 impl Window {
     #[template_callback]
+    /// Called after registration is finished.
+    ///
+    /// Changes view to Session
     pub fn registered(&self, registration: Registration, client: IrcClient, data: UserData) {
         let session = Session::new(client, data);
         self.stack.add_named(&session, Some("session"));

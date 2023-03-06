@@ -1,3 +1,5 @@
+//! This modules encapsulates the receiving and handling of server messages
+
 use std::ops::ControlFlow;
 
 use glib::{clone, MainContext};
@@ -15,6 +17,7 @@ use crate::{
 use super::{Registration, RegistrationSignal};
 
 impl Registration {
+    /// Starts an asynchronous read of server messages until registration is complete
     pub(super) fn start_client_handler(&self) {
         MainContext::default().spawn_local(clone!(@weak self as registration => async move {
             let mut client = registration.client();
@@ -26,6 +29,7 @@ impl Registration {
         }));
     }
 
+    /// Handles the message with the corresponding action
     fn handle_message(&self, message: IrcMessage) -> ControlFlow<()> {
         if let IrcMessage::IrcResponse(response) = message {
             if let IrcResponse::Welcome {
@@ -45,6 +49,7 @@ impl Registration {
         ControlFlow::Continue(())
     }
 
+    /// After receiving a [´IrcResponse::Welcome´], the asynchronous read is finished
     fn handle_welcome(
         &self,
         nickname: String,

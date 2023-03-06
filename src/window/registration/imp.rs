@@ -70,6 +70,9 @@ impl BoxImpl for Registration {}
 #[template_callbacks]
 impl Registration {
     #[template_callback]
+    /// Called after ´connect` button is clicked.
+    ///
+    /// Attempts to connect and register to the server
     pub fn connect_clicked(&self) {
         let registration = self.obj();
 

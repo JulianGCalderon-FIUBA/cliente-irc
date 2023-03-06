@@ -1,3 +1,4 @@
+//! This module encapsulates the sending of messages to the server
 use std::io;
 
 use gtk::subclass::prelude::*;
@@ -7,6 +8,7 @@ use crate::message::IrcCommand;
 use super::Registration;
 
 impl Registration {
+    /// Sends registration commands to the client
     pub(super) fn register_client(&self) -> io::Result<()> {
         self.send_pass()?;
 
@@ -15,6 +17,7 @@ impl Registration {
         self.send_user()
     }
 
+    /// Sends pass command to the server, if a password is provided
     fn send_pass(&self) -> io::Result<()> {
         let password = self.imp().password.input();
         if password.is_empty() {
@@ -26,6 +29,9 @@ impl Registration {
         self.client().send(pass_command)
     }
 
+    /// Sends nick command to the server.
+    ///
+    /// An error message is shown if nickname field is empty
     fn send_nick(&self) -> io::Result<()> {
         let nickname = self.imp().nickname.input();
 

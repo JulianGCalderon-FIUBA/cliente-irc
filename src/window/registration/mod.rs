@@ -1,3 +1,4 @@
+//! This modules defines [`Registration`]
 mod constant;
 mod field;
 mod handle;
@@ -14,6 +15,11 @@ use gtk::{glib, subclass::prelude::*};
 pub use constant::RegistrationSignal;
 
 glib::wrapper! {
+    /// This windows manages the registration process
+    ///
+    /// Asks for user information and establishes connection with an IrcServer
+    ///
+    /// Derives GtkBox
     pub struct Registration(ObjectSubclass<imp::Registration>)
     @extends gtk::Widget, gtk::Box,
     @implements gtk::Accessible, gtk::Buildable,
@@ -25,7 +31,10 @@ impl Registration {
         Object::builder().build()
     }
 
-    pub fn setup_client(&self) -> io::Result<()> {
+    /// Attempts to connect with the server.
+    ///
+    /// if successfull, starts an asynchronous read of server messages until registration is complete
+    fn setup_client(&self) -> io::Result<()> {
         self.connect_client()?;
 
         self.start_client_handler();
@@ -33,6 +42,7 @@ impl Registration {
         Ok(())
     }
 
+    /// Attempts to connect with the server
     fn connect_client(&self) -> io::Result<()> {
         let address = self.imp().address.input();
 
