@@ -1,17 +1,20 @@
 mod chat;
+pub mod constant;
 mod handle;
 mod imp;
 mod message;
+mod user_page;
 
 use glib::Object;
 use gtk::glib::{self, clone};
 use gtk::prelude::{Cast, ObjectExt};
 use gtk::subclass::prelude::*;
 
-use crate::client::{ClientData, IrcClient};
+use crate::client::{IrcClient, UserData};
 use crate::message::IrcCommand;
 
 use self::chat::Chat;
+use self::constant::SessionProperty;
 
 const CHANNEL_INDICATOR: char = '#';
 
@@ -23,11 +26,12 @@ glib::wrapper! {
 }
 
 impl Session {
-    pub fn new(client: IrcClient, data: ClientData) -> Self {
-        let session: Self = Object::builder().build();
+    pub fn new(client: IrcClient, data: UserData) -> Self {
+        let session: Self = Object::builder()
+            .property(&SessionProperty::Data, data)
+            .build();
 
         session.setup_client(client);
-        session.setup_data(data);
 
         session
     }
@@ -38,18 +42,8 @@ impl Session {
         self.start_client_handler();
     }
 
-    fn setup_data(&self, data: ClientData) {
-        self.imp().info.set_label(&data.nickname);
-
-        self.imp().client_data.replace(data);
-    }
-
     fn client(&self) -> IrcClient {
         self.imp().client.get().unwrap().clone()
-    }
-
-    fn client_data(&self) -> ClientData {
-        self.imp().client_data.borrow().clone()
     }
 
     fn add_chat(&self, name: String) -> Chat {
@@ -82,10 +76,14 @@ impl Session {
     }
 
     fn is_private_chat(&self, target: &str) -> bool {
-        *target == self.client_data().nickname
+        *target == self.nickname()
     }
 
     fn is_own_message(&self, sender: &str) -> bool {
-        *sender == self.client_data().nickname
+        *sender == self.nickname()
+    }
+
+    fn nickname(&self) -> String {
+        self.property::<UserData>(&SessionProperty::Data).nickname()
     }
 }

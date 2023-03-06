@@ -17,7 +17,7 @@ use gtk::glib;
 use std::io::ErrorKind;
 
 use crate::message::{IrcCommand, IrcMessage};
-pub use data::ClientData;
+pub use data::UserData;
 
 use self::utils::{spawn_reader, spawn_writer};
 

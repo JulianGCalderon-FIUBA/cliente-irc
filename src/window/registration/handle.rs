@@ -8,7 +8,7 @@ use gtk::{
 };
 
 use crate::{
-    client::ClientData,
+    client::UserData,
     message::{IrcMessage, IrcResponse},
 };
 
@@ -53,13 +53,7 @@ impl Registration {
         hostname: String,
         servername: String,
     ) -> ControlFlow<()> {
-        let data = ClientData {
-            nickname,
-            realname,
-            username,
-            hostname,
-            servername,
-        };
+        let data = UserData::new(nickname, realname, username, hostname, servername);
 
         self.emit_by_name::<()>(
             &RegistrationSignal::Registered,

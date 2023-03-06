@@ -2,7 +2,7 @@ use std::ops::Deref;
 
 use gtk::{glib::subclass::Signal, prelude::StaticType};
 
-use crate::client::{ClientData, IrcClient};
+use crate::client::{IrcClient, UserData};
 
 use super::Registration;
 
@@ -16,7 +16,7 @@ impl RegistrationSignal {
             .param_types([
                 Registration::static_type(),
                 IrcClient::static_type(),
-                ClientData::static_type(),
+                UserData::static_type(),
             ])
             .build()]
     }

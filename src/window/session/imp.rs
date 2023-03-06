@@ -1,16 +1,19 @@
 use std::cell::RefCell;
 
 use glib::subclass::InitializingObject;
-use gtk::glib::once_cell::sync::OnceCell;
-use gtk::prelude::StaticTypeExt;
+use gtk::glib::once_cell::sync::{Lazy, OnceCell};
+use gtk::glib::ParamSpec;
+use gtk::prelude::{StaticTypeExt, ToValue};
 use gtk::subclass::prelude::*;
-use gtk::{glib, template_callbacks, CompositeTemplate, Entry, Label, Stack};
+use gtk::{glib, template_callbacks, CompositeTemplate, Entry, Stack};
 
-use crate::client::{ClientData, IrcClient};
+use crate::client::{IrcClient, UserData};
 use crate::message::IrcCommand;
 use crate::utils::get_and_clear_entry;
 
 use super::chat::Chat;
+use super::constant::SessionProperty;
+use super::user_page::UserPage;
 use super::CHANNEL_INDICATOR;
 
 #[derive(CompositeTemplate, Default)]
@@ -18,10 +21,8 @@ use super::CHANNEL_INDICATOR;
 pub struct Session {
     #[template_child]
     pub chats: TemplateChild<Stack>,
-    #[template_child]
-    pub info: TemplateChild<Label>,
     pub client: OnceCell<IrcClient>,
-    pub client_data: RefCell<ClientData>,
+    pub data: RefCell<UserData>,
 }
 
 #[glib::object_subclass]
@@ -35,6 +36,7 @@ impl ObjectSubclass for Session {
         klass.bind_template_callbacks();
 
         Chat::ensure_type();
+        UserPage::ensure_type();
     }
 
     fn instance_init(obj: &InitializingObject<Self>) {
@@ -43,8 +45,24 @@ impl ObjectSubclass for Session {
 }
 
 impl ObjectImpl for Session {
-    fn constructed(&self) {
-        self.parent_constructed();
+    fn properties() -> &'static [glib::ParamSpec] {
+        static PROPERTIES: Lazy<Vec<ParamSpec>> = Lazy::new(SessionProperty::vec);
+        PROPERTIES.as_ref()
+    }
+
+    fn set_property(&self, _id: usize, value: &glib::Value, pspec: &glib::ParamSpec) {
+        match SessionProperty::from(pspec.name()) {
+            SessionProperty::Data => {
+                let data = value.get().unwrap();
+                self.data.replace(data);
+            }
+        };
+    }
+
+    fn property(&self, _id: usize, pspec: &glib::ParamSpec) -> glib::Value {
+        match SessionProperty::from(pspec.name()) {
+            SessionProperty::Data => self.data.borrow().to_value(),
+        }
     }
 }
 impl WidgetImpl for Session {}

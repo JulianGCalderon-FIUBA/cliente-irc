@@ -3,7 +3,7 @@ use gtk::prelude::StaticTypeExt;
 use gtk::subclass::prelude::*;
 use gtk::{glib, template_callbacks, CompositeTemplate, Stack};
 
-use crate::client::{ClientData, IrcClient};
+use crate::client::{IrcClient, UserData};
 
 use super::registration::Registration;
 use super::session::Session;
@@ -41,7 +41,7 @@ impl ApplicationWindowImpl for Window {}
 #[template_callbacks]
 impl Window {
     #[template_callback]
-    pub fn registered(&self, registration: Registration, client: IrcClient, data: ClientData) {
+    pub fn registered(&self, registration: Registration, client: IrcClient, data: UserData) {
         let session = Session::new(client, data);
         self.stack.add_named(&session, Some("session"));
         self.stack.set_visible_child_name("session");
