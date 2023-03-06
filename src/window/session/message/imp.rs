@@ -3,7 +3,7 @@ use std::cell::RefCell;
 use glib::subclass::InitializingObject;
 use gtk::glib::once_cell::sync::Lazy;
 use gtk::glib::ParamSpec;
-use gtk::prelude::{ObjectExt, ToValue};
+use gtk::prelude::ToValue;
 use gtk::subclass::prelude::*;
 use gtk::{glib, CompositeTemplate, Label};
 
@@ -13,7 +13,7 @@ use super::MessageProperty;
 #[template(resource = "/com/jgcalderon/irc-client/ui/message.ui")]
 pub struct Message {
     #[template_child]
-    sender_label: TemplateChild<Label>,
+    pub sender_label: TemplateChild<Label>,
     message: RefCell<String>,
     sender: RefCell<String>,
 }
@@ -63,11 +63,9 @@ impl ObjectImpl for Message {
     fn constructed(&self) {
         self.parent_constructed();
 
-        self.obj()
-            .bind_property::<Label>(&MessageProperty::Sender, &self.sender_label, "visible")
-            .transform_to(|_, sender: String| Some(!sender.is_empty()))
-            .sync_create()
-            .build();
+        let message = self.obj();
+
+        message.bind_sender_to_label_visibility();
     }
 
     fn dispose(&self) {}
