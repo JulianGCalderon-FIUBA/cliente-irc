@@ -9,11 +9,11 @@ const NO_NICKNAME: &str = "200";
 /// Messages sent by the server in response to a client's command
 pub enum IrcResponse {
     Welcome {
-        realname: String,
-        servername: String,
         nickname: String,
+        realname: String,
         username: String,
         hostname: String,
+        servername: String,
     },
     NickCollision {
         nickname: String,

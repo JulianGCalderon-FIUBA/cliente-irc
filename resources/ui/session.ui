@@ -29,6 +29,14 @@
             <signal name="activate" handler="add_chat" swapped="true" />
           </object>
         </child>
+        <child>
+          <object class="GtkLabel" id="info">
+            <property name="margin-top">5</property>
+            <property name="margin-bottom">5</property>
+            <property name="margin-start">5</property>
+            <property name="margin-end">5</property>
+          </object>
+        </child>
       </object>
     </child>
     <child>

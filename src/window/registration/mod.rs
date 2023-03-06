@@ -1,14 +1,17 @@
+mod constant;
 mod field;
 mod handle;
 mod imp;
-mod registerer;
 mod password_field;
+mod registerer;
 
 use std::io;
 
 use crate::client::IrcClient;
 use glib::Object;
 use gtk::{glib, subclass::prelude::*};
+
+pub use constant::RegistrationSignal;
 
 glib::wrapper! {
     pub struct Registration(ObjectSubclass<imp::Registration>)

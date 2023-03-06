@@ -1,10 +1,12 @@
+use std::cell::RefCell;
+
 use glib::subclass::InitializingObject;
 use gtk::glib::once_cell::sync::OnceCell;
 use gtk::prelude::StaticTypeExt;
 use gtk::subclass::prelude::*;
-use gtk::{glib, template_callbacks, CompositeTemplate, Entry, Stack};
+use gtk::{glib, template_callbacks, CompositeTemplate, Entry, Label, Stack};
 
-use crate::client::IrcClient;
+use crate::client::{ClientData, IrcClient};
 use crate::utils::get_and_clear_entry;
 
 use super::chat::Chat;
@@ -14,7 +16,10 @@ use super::chat::Chat;
 pub struct Session {
     #[template_child]
     pub chats: TemplateChild<Stack>,
+    #[template_child]
+    pub info: TemplateChild<Label>,
     pub client: OnceCell<IrcClient>,
+    pub client_data: RefCell<ClientData>,
 }
 
 #[glib::object_subclass]

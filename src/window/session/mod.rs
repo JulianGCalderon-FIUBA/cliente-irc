@@ -8,7 +8,7 @@ use gtk::glib::{self, clone};
 use gtk::prelude::ObjectExt;
 use gtk::subclass::prelude::*;
 
-use crate::client::IrcClient;
+use crate::client::{ClientData, IrcClient};
 use crate::message::IrcCommand;
 
 use self::chat::Chat;
@@ -21,10 +21,11 @@ glib::wrapper! {
 }
 
 impl Session {
-    pub fn new(client: IrcClient) -> Self {
+    pub fn new(client: IrcClient, data: ClientData) -> Self {
         let session: Self = Object::builder().build();
 
         session.setup_client(client);
+        session.setup_data(data);
 
         session
     }
@@ -33,6 +34,12 @@ impl Session {
         self.imp().client.set(client).unwrap();
 
         self.start_client_handler();
+    }
+
+    fn setup_data(&self, data: ClientData) {
+        self.imp().info.set_label(&data.nickname);
+
+        self.imp().client_data.replace(data);
     }
 
     fn client(&self) -> IrcClient {

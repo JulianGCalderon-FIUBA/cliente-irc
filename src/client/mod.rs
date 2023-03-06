@@ -4,6 +4,7 @@
 //! - Connecting to said server
 //! - Sending IrcCommands
 //! - Receiving IrcMessages
+mod data;
 mod utils;
 
 use async_std::{
@@ -16,6 +17,7 @@ use gtk::glib;
 use std::io::ErrorKind;
 
 use crate::message::{IrcCommand, IrcMessage};
+pub use data::ClientData;
 
 use self::utils::{spawn_reader, spawn_writer};
 
