@@ -1,6 +1,6 @@
+mod chat;
 mod handle;
 mod imp;
-mod chat;
 
 use glib::Object;
 use gtk::glib;
