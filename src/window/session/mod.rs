@@ -5,13 +5,15 @@ mod message;
 
 use glib::Object;
 use gtk::glib::{self, clone};
-use gtk::prelude::ObjectExt;
+use gtk::prelude::{Cast, ObjectExt};
 use gtk::subclass::prelude::*;
 
 use crate::client::{ClientData, IrcClient};
 use crate::message::IrcCommand;
 
 use self::chat::Chat;
+
+const CHANNEL_INDICATOR: char = '#';
 
 glib::wrapper! {
     pub struct Session(ObjectSubclass<imp::Session>)
@@ -46,6 +48,10 @@ impl Session {
         self.imp().client.get().unwrap().clone()
     }
 
+    fn client_data(&self) -> ClientData {
+        self.imp().client_data.borrow().clone()
+    }
+
     fn add_chat(&self, name: String) -> Chat {
         let chat = Chat::new(name.clone());
 
@@ -65,5 +71,21 @@ impl Session {
         if self.client().send(privmsg_command).is_err() {
             println!("todo! connection error");
         };
+    }
+
+    fn get_or_insert_chat(&self, chat_name: String) -> Chat {
+        self.imp()
+            .chats
+            .child_by_name(&chat_name)
+            .map(|widget| widget.downcast().unwrap())
+            .unwrap_or_else(|| self.add_chat(chat_name))
+    }
+
+    fn is_private_chat(&self, target: &str) -> bool {
+        *target == self.client_data().nickname
+    }
+
+    fn is_own_message(&self, sender: &str) -> bool {
+        *sender == self.client_data().nickname
     }
 }

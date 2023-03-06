@@ -7,9 +7,11 @@ use gtk::subclass::prelude::*;
 use gtk::{glib, template_callbacks, CompositeTemplate, Entry, Label, Stack};
 
 use crate::client::{ClientData, IrcClient};
+use crate::message::IrcCommand;
 use crate::utils::get_and_clear_entry;
 
 use super::chat::Chat;
+use super::CHANNEL_INDICATOR;
 
 #[derive(CompositeTemplate, Default)]
 #[template(resource = "/com/jgcalderon/irc-client/ui/session.ui")]
@@ -53,7 +55,14 @@ impl Session {
     #[template_callback]
     pub fn add_chat(&self, entry: Entry) {
         if let Some(name) = get_and_clear_entry(entry) {
-            self.obj().add_chat(name);
+            self.obj().add_chat(name.clone());
+
+            if name.starts_with(CHANNEL_INDICATOR) {
+                let join_command = IrcCommand::Join { name };
+                if self.obj().client().send(join_command).is_err() {
+                    println!("todo! connection error");
+                }
+            }
         }
     }
 }

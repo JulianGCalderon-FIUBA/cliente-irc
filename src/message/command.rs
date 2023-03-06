@@ -9,6 +9,7 @@ const PASS: &str = "PASS";
 const NICK: &str = "NICK";
 const USER: &str = "USER";
 const QUIT: &str = "QUIT";
+const JOIN: &str = "JOIN";
 
 /// Commands that can be sent to or received from a server
 ///
@@ -21,6 +22,7 @@ pub enum IrcCommand {
     Nick { nickname: String },
     User { username: String, realname: String },
     Quit { message: String },
+    Join { name: String },
 }
 
 impl IrcCommand {
@@ -111,6 +113,9 @@ impl Display for IrcCommand {
             }
             IrcCommand::Quit { message } => {
                 write!(f, "{QUIT} :{message}")
+            }
+            IrcCommand::Join { name } => {
+                write!(f, "{JOIN} {name}")
             }
         }
     }

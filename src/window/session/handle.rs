@@ -1,8 +1,4 @@
-use gtk::{
-    glib::{self, clone, MainContext},
-    prelude::Cast,
-    subclass::prelude::ObjectSubclassIsExt,
-};
+use gtk::glib::{self, clone, MainContext};
 
 use crate::message::{IrcCommand, IrcMessage, IrcResponse};
 
@@ -27,6 +23,9 @@ impl Session {
                 IrcCommand::Quit { message } => {
                     self.handle_quit(sender, message);
                 }
+                IrcCommand::Join { name } => {
+                    self.handle_join(sender, name);
+                }
                 IrcCommand::Pass { .. } | IrcCommand::Nick { .. } | IrcCommand::User { .. } => (),
             },
             IrcMessage::IrcResponse(response) => match response {
@@ -37,18 +36,21 @@ impl Session {
         }
     }
 
-    fn handle_privmsg(&self, sender: String, _target: String, message: String) {
-        let chat = self
-            .imp()
-            .chats
-            .child_by_name(&sender)
-            .map(|widget| widget.downcast().unwrap())
-            .unwrap_or_else(|| self.add_chat(sender));
-
-        chat.add_message(message);
+    fn handle_privmsg(&self, sender: String, target: String, message: String) {
+        if self.is_private_chat(&target) {
+            let chat = self.get_or_insert_chat(sender);
+            chat.add_message(message);
+        } else if !self.is_own_message(&sender) {
+            let chat = self.get_or_insert_chat(target);
+            chat.add_message(message);
+        }
     }
 
     fn handle_quit(&self, _sender: String, _message: String) {
+        todo!()
+    }
+
+    fn handle_join(&self, _sender: String, _name: String) {
         todo!()
     }
 }
