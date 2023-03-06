@@ -7,5 +7,6 @@
     <file compressed="true" preprocess="xml-stripblanks">ui/password-field.ui</file>
     <file compressed="true" preprocess="xml-stripblanks">ui/session.ui</file>
     <file compressed="true" preprocess="xml-stripblanks">ui/chat.ui</file>
+    <file compressed="true" preprocess="xml-stripblanks">ui/message.ui</file>
   </gresource>
 </gresources>

@@ -1,12 +1,15 @@
 mod chat;
 mod handle;
 mod imp;
+mod message;
 
 use glib::Object;
-use gtk::glib;
+use gtk::glib::{self, clone};
+use gtk::prelude::ObjectExt;
 use gtk::subclass::prelude::*;
 
 use crate::client::IrcClient;
+use crate::message::IrcCommand;
 
 use self::chat::Chat;
 
@@ -36,12 +39,24 @@ impl Session {
         self.imp().client.get().unwrap().clone()
     }
 
-    fn add_chat(&self, name: String) {
+    fn add_chat(&self, name: String) -> Chat {
         let chat = Chat::new(name.clone());
 
         chat.connect_close(|_| println!("close"));
-        chat.connect_send(|_, _| println!("send"));
+        chat.connect_send(clone!(@weak self as session => move |chat, message| {
+            session.send_message(chat, message);
+        }));
 
         self.imp().chats.add_titled(&chat, Some(&name), &name);
+
+        chat
+    }
+
+    fn send_message(&self, chat: &Chat, message: String) {
+        let target = chat.property("name");
+        let privmsg_command = IrcCommand::Privmsg { target, message };
+        if self.client().send(privmsg_command).is_err() {
+            println!("todo! connection error");
+        };
     }
 }

@@ -1,4 +1,8 @@
-use gtk::glib::{self, clone, MainContext};
+use gtk::{
+    glib::{self, clone, MainContext},
+    prelude::Cast,
+    subclass::prelude::ObjectSubclassIsExt,
+};
 
 use crate::message::{IrcCommand, IrcMessage, IrcResponse};
 
@@ -33,8 +37,15 @@ impl Session {
         }
     }
 
-    fn handle_privmsg(&self, _sender: String, _target: String, _message: String) {
-        todo!()
+    fn handle_privmsg(&self, sender: String, _target: String, message: String) {
+        let chat = self
+            .imp()
+            .chats
+            .child_by_name(&sender)
+            .map(|widget| widget.downcast().unwrap())
+            .unwrap_or_else(|| self.add_chat(sender));
+
+        chat.add_message(message);
     }
 
     fn handle_quit(&self, _sender: String, _message: String) {

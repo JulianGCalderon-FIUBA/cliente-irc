@@ -2,9 +2,13 @@ mod constant;
 mod imp;
 
 use glib::Object;
-use gtk::{glib, prelude::ObjectExt};
+use gtk::{
+    glib, prelude::ObjectExt, subclass::prelude::ObjectSubclassIsExt, traits::WidgetExt, Align,
+};
 
 pub use constant::{ChatProperty, ChatSignal};
+
+use super::message::Message;
 
 glib::wrapper! {
     pub struct Chat(ObjectSubclass<imp::Chat>)
@@ -41,5 +45,13 @@ impl Chat {
             f(&chat, message);
             None
         });
+    }
+
+    pub fn add_message(&self, message: String) {
+        let message = Message::new(message);
+        message.set_halign(Align::Start);
+        message.add_css_class("external");
+
+        self.imp().messages.append(&message);
     }
 }

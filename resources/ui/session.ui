@@ -29,11 +29,11 @@
             <signal name="activate" handler="add_chat" swapped="true" />
           </object>
         </child>
-
       </object>
     </child>
     <child>
       <object class="GtkStack" id="chats">
+        <property name="name">chats</property>
       </object>
     </child>
   </template>
