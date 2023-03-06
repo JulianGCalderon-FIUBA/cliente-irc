@@ -1,9 +1,13 @@
 use glib::subclass::InitializingObject;
 use gtk::glib::once_cell::sync::OnceCell;
+use gtk::prelude::{EntryBufferExtManual, StaticTypeExt};
 use gtk::subclass::prelude::*;
-use gtk::{glib, CompositeTemplate};
+use gtk::traits::EntryExt;
+use gtk::{glib, template_callbacks, CompositeTemplate, Entry};
 
 use crate::client::IrcClient;
+
+use super::chat::Chat;
 
 #[derive(CompositeTemplate, Default)]
 #[template(resource = "/com/jgcalderon/irc-client/ui/session.ui")]
@@ -19,7 +23,9 @@ impl ObjectSubclass for Session {
 
     fn class_init(klass: &mut Self::Class) {
         klass.bind_template();
-        // klass.bind_template_callbacks();
+        klass.bind_template_callbacks();
+
+        Chat::ensure_type();
     }
 
     fn instance_init(obj: &InitializingObject<Self>) {
@@ -35,10 +41,18 @@ impl ObjectImpl for Session {
 impl WidgetImpl for Session {}
 impl BoxImpl for Session {}
 
-// #[template_callbacks]
-// impl Session {
-//     #[template_callback]
-//     pub fn handler(&self) {
+#[template_callbacks]
+impl Session {
+    #[template_callback]
+    pub fn add_chat(&self, entry: Entry) {
+        let buffer = entry.buffer();
+        let client = buffer.text().to_string();
 
-//     }
-// }
+        if client.is_empty() {
+            return;
+        }
+
+        buffer.set_text("");
+        println!("todo! add chat: {client}");
+    }
+}

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="Chat" parent="GtkBox">
+    <child>
+      <object class="GtkLabel" id="label">
+        <property name="label" bind-source="Chat" bind-property="name" />
+      </object>
+    </child>
+  </template>
+
+</interface>
