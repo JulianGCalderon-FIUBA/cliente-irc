@@ -3,9 +3,10 @@ use std::cell::RefCell;
 use glib::subclass::InitializingObject;
 use gtk::glib::once_cell::sync::Lazy;
 use gtk::glib::{ParamSpec, ParamSpecString};
-use gtk::prelude::ToValue;
+use gtk::prelude::{EntryBufferExtManual, ToValue};
 use gtk::subclass::prelude::*;
-use gtk::{glib, CompositeTemplate};
+use gtk::traits::EntryExt;
+use gtk::{glib, template_callbacks, CompositeTemplate, Entry};
 
 use super::ChatProperty;
 
@@ -23,6 +24,8 @@ impl ObjectSubclass for Chat {
 
     fn class_init(klass: &mut Self::Class) {
         klass.bind_template();
+        klass.bind_template_callbacks();
+
         klass.set_css_name("chat")
     }
 
@@ -59,3 +62,24 @@ impl ObjectImpl for Chat {
 }
 impl WidgetImpl for Chat {}
 impl BoxImpl for Chat {}
+
+#[template_callbacks]
+impl Chat {
+    #[template_callback]
+    pub fn send_message(&self, entry: Entry) {
+        let buffer = entry.buffer();
+        let message = buffer.text().to_string();
+
+        if message.is_empty() {
+            return;
+        }
+
+        buffer.set_text("");
+        println!("todo! send message: {message}");
+    }
+
+    #[template_callback]
+    pub fn close_chat(&self) {
+        println!("todo! close chat");
+    }
+}

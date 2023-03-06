@@ -1,9 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <template class="Chat" parent="GtkBox">
+    <property name="orientation">vertical</property>
     <child>
-      <object class="GtkLabel" id="label">
-        <property name="label" bind-source="Chat" bind-property="name" />
+      <object class="GtkBox">
+        <child>
+          <object class="GtkLabel">
+            <property name="margin-top">5</property>
+            <property name="margin-bottom">5</property>
+            <property name="margin-start">15</property>
+            <property name="margin-end">5</property>
+            <property name="label" bind-source="Chat" bind-property="name" />
+            <property name="halign">start</property>
+            <property name="hexpand">true</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton">
+            <property name="margin-top">5</property>
+            <property name="margin-bottom">5</property>
+            <property name="margin-start">5</property>
+            <property name="margin-end">5</property>
+            <property name="icon-name">window-close-symbolic</property>
+            <signal name="clicked" handler="close_chat" swapped="true" />
+            <style>
+              <class name="circular"></class>
+            </style>
+            <property name="halign">end</property>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkListBox" id="messages">
+        <property name="vexpand">true</property>
+        <property name="hexpand">true</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkEntry">
+        <property name="margin-top">5</property>
+        <property name="margin-bottom">5</property>
+        <property name="margin-start">5</property>
+        <property name="margin-end">5</property>
+        <property name="secondary-icon-name">mail-send-symbolic</property>
+        <property name="hexpand">true</property>
+        <signal name="activate" handler="send_message" swapped="true" />
       </object>
     </child>
   </template>

@@ -24,3 +24,29 @@ levelbar block.full {
     background-color: green;
     border-color: green;
 }
+
+chat entry {
+    border-radius: 50px;
+}
+
+chat {
+    border-left: 1px solid lightgray;
+}
+
+stacksidebar {
+    border-width: 0px;
+}
+
+stacksidebar row {
+    border-radius: 0px;
+    min-height: 44px;
+    margin: 0px;
+}
+
+stacksidebar list {
+    padding: 0px;
+}
+
+/* * {
+    border: 1px solid black;
+} */
