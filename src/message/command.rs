@@ -1,4 +1,4 @@
-//! This module define [`IrcCommmand`]
+//! This module define [`IrcCommand`]
 
 use std::fmt::Display;
 

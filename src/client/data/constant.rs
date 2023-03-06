@@ -1,12 +1,22 @@
+//! This module defines usefull constants for dealing with `UserData`
+
 use std::ops::Deref;
 
 use gtk::glib::{ParamSpec, ParamSpecString};
 
+/// All `UserData` custom properties
+///
+/// Can be easily converted to or from `&str` to use with `GOBject::property`
 pub enum UserDataProperty {
+    /// Type: String
     Nickname,
+    /// Type: String
     Realname,
+    /// Type: String
     Username,
+    /// Type: String
     Hostname,
+    /// Type: String
     Servername,
 }
 

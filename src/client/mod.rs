@@ -1,4 +1,5 @@
 //! This module defines an [`IrcClient`]
+//! 
 //! This struct can be used to comunicate with an IRC Server
 //!
 //! - Connecting to said server
