@@ -20,7 +20,7 @@ use crate::widgets::user_page::UserPage;
 #[template(resource = "/com/jgcalderon/irc-client/ui/session.ui")]
 pub struct Session {
     #[template_child]
-    pub chats: TemplateChild<Stack>,
+    pub pages: TemplateChild<Stack>,
     pub client: OnceCell<IrcClient>,
     pub data: RefCell<UserData>,
 }
@@ -76,6 +76,7 @@ impl Session {
     #[template_callback]
     pub fn add_chat(&self, name: String) {
         self.obj().add_chat(name.clone());
+        self.pages.set_visible_child_name(&name);
 
         if name.starts_with(CHANNEL_INDICATOR) {
             let join_command = IrcCommand::Join { name };

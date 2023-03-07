@@ -7,16 +7,17 @@
         <property name="vexpand">true</property>
         <child>
           <object class="GtkStackSwitcher">
+            <property name="width-request">160</property>
             <property name="vexpand">false</property>
             <property name="orientation">vertical</property>
-            <property name="stack">chats</property>
+            <property name="stack">pages</property>
           </object>
         </child>
       </object>
     </child>
     <child>
-      <object class="GtkStack" id="chats">
-        <property name="name">chats</property>
+      <object class="GtkStack" id="pages">
+        <property name="name">pages</property>
         <child>
           <object class="GtkStackPage">
             <property name="name">config-userinfo</property>

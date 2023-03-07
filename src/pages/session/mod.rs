@@ -66,7 +66,7 @@ impl Session {
             session.send_message(chat, message);
         }));
 
-        self.imp().chats.add_titled(&chat, Some(&name), &name);
+        self.imp().pages.add_titled(&chat, Some(&name), &name);
 
         chat
     }
@@ -87,7 +87,7 @@ impl Session {
     /// Returns the specified [´Chat´]
     fn get_or_insert_chat(&self, chat_name: String) -> ChatPage {
         self.imp()
-            .chats
+            .pages
             .child_by_name(&chat_name)
             .map(|widget| widget.downcast().unwrap())
             .unwrap_or_else(|| self.add_chat(chat_name))
