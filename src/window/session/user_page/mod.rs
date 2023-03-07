@@ -1,3 +1,5 @@
+//! This module defines all [`UserPage`] related structures
+
 mod constant;
 mod imp;
 
@@ -9,6 +11,9 @@ use crate::client::UserData;
 pub use constant::UserPageProperty;
 
 glib::wrapper! {
+    /// Page to display the user information
+    /// 
+    /// Subclassifies [´gtk::Box´]
     pub struct UserPage(ObjectSubclass<imp::UserPage>)
     @extends gtk::Widget, gtk::Box,
     @implements gtk::Accessible, gtk::Buildable,
@@ -16,6 +21,7 @@ glib::wrapper! {
 }
 
 impl UserPage {
+    /// Creates a [`UserPage`] with an associated [´UserData`]
     pub fn new(data: UserData) -> Self {
         Object::builder()
             .property(&UserPageProperty::Data, data)
