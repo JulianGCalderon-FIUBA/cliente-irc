@@ -1,5 +1,4 @@
-//! Contains utils for comunicating with the server spawning futures
-//! for either reading or writing to said server
+//! Contains utils for comunicating with the server,
 
 use async_std::channel::{Receiver, Sender};
 use async_std::io::prelude::BufReadExt;

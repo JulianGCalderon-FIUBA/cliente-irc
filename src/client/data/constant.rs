@@ -6,7 +6,7 @@ use gtk::glib::{ParamSpec, ParamSpecString};
 
 /// All `UserData` custom properties
 ///
-/// Can be easily converted to or from `&str` to use with `GOBject::property`
+/// Can be easily converted between `&str` to access properties
 pub enum UserDataProperty {
     /// Type: String
     Nickname,

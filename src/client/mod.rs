@@ -1,10 +1,11 @@
-//! This module defines an [`IrcClient`]
+//! This module defines [`IrcClient`] and other related structures
 //!
-//! This struct can be used to comunicate with an IRC Server
+//! A client is connected to a server using a socket address.
+//! After connection is established, the user must register to the network.
+//! Once registered, user may send commands to the server and await for responses asynchronously
 //!
-//! - Connecting to said server
-//! - Sending IrcCommands
-//! - Receiving IrcMessages
+//! This is indicated by RFC 1459
+
 mod data;
 mod utils;
 
@@ -22,8 +23,13 @@ pub use data::UserData;
 
 use self::utils::{spawn_reader, spawn_writer};
 
-/// Struct for comunicating with server
-/// Derives Boxed, therefore it can comunicate well with Gtk4 rust bindings.
+/// This struct can be used to comunicate with an IRC Server
+///
+/// - Establishing a connection
+/// - Sending IrcCommands
+/// - Receiving IrcMessages
+///
+/// Derives glib::Boxed, therefore it can comunicate well with Gtk4 rust bindings.
 #[derive(glib::Boxed, Clone, Debug)]
 #[boxed_type(name = "IrcClient")]
 pub struct IrcClient {
@@ -44,17 +50,19 @@ impl IrcClient {
         Ok(Self { sender, receiver })
     }
 
-    /// Sends `IrcCommand` to the server
+    /// Sends an [`IrcCommand`] to the server
     ///
-    /// Fails if connections with the server was drop
+    /// Fails if connection with the server was finalized
     pub fn send(&mut self, command: IrcCommand) -> io::Result<()> {
         let result = self.sender.send_blocking(command);
         result.map_err(|_| unexpected_eof())
     }
 
-    /// Returns the next incoming server `IrcMessage`
+    /// Returns the next incoming server [`IrcMessage`]
     ///
     /// Can be called from multiple clones of the same instance, although it is advised otherwise.
+    ///
+    /// Fails if connection with the server was finalized
     pub async fn receive(&mut self) -> io::Result<IrcMessage> {
         let result = self.receiver.recv().await;
         result.map_err(|_| unexpected_eof())

@@ -35,7 +35,7 @@ impl IrcResponse {
     }
 
     pub fn is_response(response: &str) -> bool {
-        response == WELCOME || response == NICK_COLLISION
+        response == WELCOME || response == NICK_COLLISION || response == NO_NICKNAME
     }
 
     /// Creates a [IrcResponse::Welcome] from the message arguments.

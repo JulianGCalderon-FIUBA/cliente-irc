@@ -36,6 +36,7 @@ impl IrcCommand {
             NICK => Self::new_nick(args, trail),
             USER => Self::new_user(args, trail),
             QUIT => Self::new_quit(args, trail),
+            JOIN => Self::new_join(args, trail),
             _ => Err(ParsingError::UnknownCommand(command)),
         }
     }
@@ -46,6 +47,7 @@ impl IrcCommand {
             || command == NICK
             || command == USER
             || command == QUIT
+            || command == JOIN
     }
 
     /// Creates a [`IrcCommand::Privmsg`] from the given components.
@@ -93,6 +95,15 @@ impl IrcCommand {
         let message = trail.ok_or(ParsingError::MissingParameter)?;
 
         Ok(Self::Quit { message })
+    }
+
+    /// Creates a [ IrcCommand::Join`] from the given components.
+    ///
+    /// Fails on invalid arguments
+    fn new_join(mut args: Args, _trail: Trail) -> Result<IrcCommand, ParsingError> {
+        let name = args.pop().ok_or(ParsingError::MissingParameter)?;
+
+        Ok(Self::Join { name })
     }
 }
 
