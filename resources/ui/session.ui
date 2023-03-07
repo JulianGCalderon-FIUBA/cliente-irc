@@ -6,10 +6,7 @@
         <property name="orientation">vertical</property>
         <property name="vexpand">true</property>
         <child>
-          <object class="GtkStackSwitcher">
-            <property name="width-request">160</property>
-            <property name="vexpand">false</property>
-            <property name="orientation">vertical</property>
+          <object class="Sidebar">
             <property name="stack">pages</property>
           </object>
         </child>

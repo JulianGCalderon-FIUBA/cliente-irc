@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="Sidebar" parent="GtkBox">
+    <property name="orientation">vertical</property>
+    <child>
+      <object class="GtkListBox" id="chats">
+        <property name="vexpand">true</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparator">
+        <property name="orientation">horizontal</property>
+        <property name="margin-top">10</property>
+        <property name="margin-bottom">10</property>
+        <property name="margin-start">10</property>
+        <property name="margin-end">10</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkListBox" id="configs">
+      </object>
+    </child>
+  </template>
+</interface>

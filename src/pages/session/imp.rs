@@ -9,7 +9,7 @@ use gtk::{glib, template_callbacks, CompositeTemplate, Stack};
 
 use crate::client::{IrcClient, UserData};
 use crate::message::IrcCommand;
-use crate::widgets::AddChatPage;
+use crate::widgets::{AddChatPage, Sidebar};
 
 use super::CHANNEL_INDICATOR;
 use crate::pages::session::SessionProperty;
@@ -38,6 +38,7 @@ impl ObjectSubclass for Session {
         ChatPage::ensure_type();
         AddChatPage::ensure_type();
         UserPage::ensure_type();
+        Sidebar::ensure_type();
     }
 
     fn instance_init(obj: &InitializingObject<Self>) {
