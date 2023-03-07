@@ -2,14 +2,9 @@
 <interface>
   <template class="Session" parent="GtkBox">
     <child>
-      <object class="GtkBox">
-        <property name="orientation">vertical</property>
+      <object class="Sidebar">
         <property name="vexpand">true</property>
-        <child>
-          <object class="Sidebar">
-            <property name="stack">pages</property>
-          </object>
-        </child>
+        <property name="stack">pages</property>
       </object>
     </child>
     <child>

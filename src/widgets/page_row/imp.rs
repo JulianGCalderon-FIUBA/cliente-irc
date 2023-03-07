@@ -13,6 +13,7 @@ use super::PageRowProperty;
 #[template(resource = "/com/jgcalderon/irc-client/ui/page-row.ui")]
 pub struct PageRow {
     icon: RefCell<String>,
+    title: RefCell<String>,
     name: RefCell<String>,
 }
 
@@ -40,21 +41,26 @@ impl ObjectImpl for PageRow {
 
     fn set_property(&self, _id: usize, value: &glib::Value, pspec: &glib::ParamSpec) {
         match PageRowProperty::from(pspec.name()) {
-            PageRowProperty::Name => {
-                let name = value.get().unwrap();
-                self.name.replace(name);
+            PageRowProperty::Title => {
+                let title = value.get().unwrap();
+                self.title.replace(title);
             }
             PageRowProperty::Icon => {
                 let icon = value.get().unwrap();
                 self.icon.replace(icon);
+            }
+            PageRowProperty::Name => {
+                let name = value.get().unwrap();
+                self.name.replace(name);
             }
         };
     }
 
     fn property(&self, _id: usize, pspec: &glib::ParamSpec) -> glib::Value {
         match PageRowProperty::from(pspec.name()) {
-            PageRowProperty::Name => self.name.borrow().to_value(),
+            PageRowProperty::Title => self.title.borrow().to_value(),
             PageRowProperty::Icon => self.icon.borrow().to_value(),
+            PageRowProperty::Name => self.name.borrow().to_value(),
         }
     }
 }

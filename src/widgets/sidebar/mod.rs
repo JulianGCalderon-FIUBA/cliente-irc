@@ -40,28 +40,34 @@ impl Sidebar {
     }
 
     fn with_each_added_page(&self, page: StackPage) {
-        let row = PageRow::new(page);
+        let row = PageRow::new(page.clone());
 
-        self.imp().configs.append(&row);
+        if let Some(name) = page.name() {
+            if name.starts_with("config") {
+                return self.imp().configs.append(&row);
+            }
+        }
+
+        self.imp().chats.append(&row);
     }
 
     fn setup_stack(&self) {
         let pages = self.property::<Stack>(&SidebarProperty::Stack).pages();
+        self.imp().model.borrow_mut().replace(pages.clone());
+
         for page_number in 0..pages.n_items() {
             let page = pages.item(page_number).and_downcast().unwrap();
             self.with_each_added_page(page);
         }
 
         pages.connect_items_changed(
-            clone!(@weak self as sidebar => move |_model, position, added, deleted| {
-                let _added_position = position..position + added;
+            clone!(@weak self as sidebar => move |model, position, _deleted, added| {
+                let new_indexes = position..position + added;
 
-                println!("position: {position}, added: {added}, deleted: {deleted}");
-
-                // added_position
-                //     .map(|i| model.item(i))
-                //     .map(|widget| widget.and_downcast().unwrap())
-                //     .for_each(|page: StackPage| sidebar.with_each_added_page(page));
+                new_indexes
+                    .map(|i| model.item(i))
+                    .map(|object| object.and_downcast().unwrap())
+                    .for_each(|page| sidebar.with_each_added_page(page))
             }),
         );
     }

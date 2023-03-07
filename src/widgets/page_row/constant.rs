@@ -11,15 +11,17 @@ use gtk::glib::{self, ParamSpecString};
 pub enum PageRowProperty {
     /// Stack associated to the sidebar
     /// Type: [´gtk::Stack´]
-    Name,
+    Title,
     Icon,
+    Name,
 }
 
 impl PageRowProperty {
     pub fn vec() -> Vec<ParamSpec> {
         vec![
-            ParamSpecString::builder(&PageRowProperty::Name).build(),
+            ParamSpecString::builder(&PageRowProperty::Title).build(),
             ParamSpecString::builder(&PageRowProperty::Icon).build(),
+            ParamSpecString::builder(&PageRowProperty::Name).build(),
         ]
     }
 }
@@ -28,8 +30,9 @@ impl Deref for PageRowProperty {
     type Target = str;
     fn deref(&self) -> &str {
         match self {
-            Self::Name => "name",
+            Self::Title => "title",
             Self::Icon => "icon",
+            Self::Name => "name",
         }
     }
 }
@@ -37,8 +40,9 @@ impl Deref for PageRowProperty {
 impl From<&str> for PageRowProperty {
     fn from(value: &str) -> Self {
         match value {
-            "name" => Self::Name,
+            "title" => Self::Title,
             "icon" => Self::Icon,
+            "name" => Self::Name,
             _ => unimplemented!(),
         }
     }

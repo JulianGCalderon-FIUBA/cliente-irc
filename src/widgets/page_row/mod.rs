@@ -33,15 +33,23 @@ impl PageRow {
     pub fn new(page: StackPage) -> Self {
         let row = Object::builder().build();
 
-        page.bind_property("title", &row, &PageRowProperty::Name)
+        page.bind_property("title", &row, &PageRowProperty::Title)
             .sync_create()
             .transform_to(|_, title: Option<String>| title)
             .build();
         page.bind_property("icon-name", &row, &PageRowProperty::Icon)
             .sync_create()
-            .transform_to(|_, icon: Option<String>| icon)
+            .transform_to(|_, icon_name: Option<String>| icon_name)
+            .build();
+        page.bind_property("name", &row, &PageRowProperty::Name)
+            .sync_create()
+            .transform_to(|_, name: Option<String>| name)
             .build();
 
         row
+    }
+
+    pub fn name(&self) -> String {
+        self.property(&PageRowProperty::Name)
     }
 }

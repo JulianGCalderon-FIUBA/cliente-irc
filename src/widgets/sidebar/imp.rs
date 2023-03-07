@@ -2,19 +2,25 @@ use std::cell::RefCell;
 
 use glib::subclass::InitializingObject;
 use gtk::glib::once_cell::sync::Lazy;
-use gtk::glib::ParamSpec;
-use gtk::prelude::{ObjectExt, ToValue};
+use gtk::glib::{clone, ParamSpec};
+use gtk::prelude::{CastNone, ObjectExt, ToValue};
 use gtk::subclass::prelude::*;
-use gtk::{glib, CompositeTemplate, Label, ListBox, Stack};
+use gtk::traits::ListBoxRowExt;
+use gtk::{glib, CompositeTemplate, ListBox, SelectionModel, Stack};
+
+use crate::widgets::PageRow;
 
 use super::SidebarProperty;
 
 #[derive(CompositeTemplate, Default)]
 #[template(resource = "/com/jgcalderon/irc-client/ui/sidebar.ui")]
 pub struct Sidebar {
-    stack: RefCell<Stack>,
     #[template_child]
     pub configs: TemplateChild<ListBox>,
+    #[template_child]
+    pub chats: TemplateChild<ListBox>,
+    stack: RefCell<Stack>,
+    pub model: RefCell<Option<SelectionModel>>,
 }
 
 #[glib::object_subclass]
@@ -50,7 +56,7 @@ impl ObjectImpl for Sidebar {
 
     fn property(&self, _id: usize, pspec: &glib::ParamSpec) -> glib::Value {
         match SidebarProperty::from(pspec.name()) {
-            SidebarProperty::Stack => self.stack.borrow().clone().to_value(),
+            SidebarProperty::Stack => self.stack.borrow().to_value(),
         }
     }
 
@@ -62,6 +68,13 @@ impl ObjectImpl for Sidebar {
         sidebar.connect_notify_local(Some(&SidebarProperty::Stack), |sidebar, _| {
             sidebar.setup_stack();
         });
+
+        self.configs
+            .connect_row_selected(clone!(@weak sidebar => move |_, row| {
+                let page_row: PageRow = row.unwrap().child().and_downcast().unwrap();
+                let name = page_row.name();
+                sidebar.imp().stack.borrow().set_visible_child_name(&name);
+            }));
     }
 }
 impl WidgetImpl for Sidebar {}
