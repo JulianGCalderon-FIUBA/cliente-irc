@@ -58,8 +58,8 @@ impl Session {
     /// Adds a new ´Chat´ with given name to stack.
     ///
     /// Chats are stored in the chat section of the sidebar for easy openning.
-    fn add_chat(&self, name: String) -> ChatPage {
-        let chat = ChatPage::new(name.clone());
+    fn add_chat(&self, title: String) -> ChatPage {
+        let chat = ChatPage::new(title.clone());
 
         chat.connect_close(clone!(@weak self as session => move |chat| {
             session.imp().pages.remove(chat);
@@ -68,7 +68,8 @@ impl Session {
             session.send_message(chat, message);
         }));
 
-        self.imp().pages.add_titled(&chat, Some(&name), &name);
+        let name = format!("chat-{title}");
+        self.imp().pages.add_titled(&chat, Some(&name), &title);
 
         chat
     }

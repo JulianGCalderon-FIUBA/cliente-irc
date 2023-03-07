@@ -11,6 +11,5 @@
     <file compressed="true" preprocess="xml-stripblanks">ui/user-page.ui</file>
     <file compressed="true" preprocess="xml-stripblanks">ui/add-chat-page.ui</file>
     <file compressed="true" preprocess="xml-stripblanks">ui/sidebar.ui</file>
-    <file compressed="true" preprocess="xml-stripblanks">ui/page-row.ui</file>
   </gresource>
 </gresources>

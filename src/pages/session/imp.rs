@@ -77,7 +77,8 @@ impl Session {
     #[template_callback]
     pub fn add_chat(&self, name: String) {
         self.obj().add_chat(name.clone());
-        self.pages.set_visible_child_name(&name);
+        let full_name = format!("chat-{name}");
+        self.pages.set_visible_child_name(&full_name);
 
         if name.starts_with(CHANNEL_INDICATOR) {
             let join_command = IrcCommand::Join { name };

@@ -3,7 +3,7 @@
   <template class="Sidebar" parent="GtkBox">
     <property name="orientation">vertical</property>
     <child>
-      <object class="GtkListBox" id="chats">
+      <object class="GtkListView" id="chat_list">
         <property name="vexpand">true</property>
       </object>
     </child>
@@ -17,7 +17,14 @@
       </object>
     </child>
     <child>
-      <object class="GtkListBox" id="configs">
+      <object class="GtkScrolledWindow">
+        <property name="hscrollbar-policy">never</property>
+        <property name="vscrollbar-policy">never</property>
+        <child>
+          <object class="GtkListView" id="config_list">
+            <property name="valign">start</property>
+          </object>
+        </child>
       </object>
     </child>
   </template>
