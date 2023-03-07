@@ -8,7 +8,7 @@ use gtk::subclass::prelude::*;
 use gtk::{glib, CompositeTemplate};
 
 use crate::client::UserData;
-use crate::window::session::user_page::UserPageProperty;
+use crate::widgets::user_page::UserPageProperty;
 
 // use super::UserPageProperty;
 

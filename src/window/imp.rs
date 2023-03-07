@@ -5,8 +5,7 @@ use gtk::{glib, template_callbacks, CompositeTemplate, Stack};
 
 use crate::client::{IrcClient, UserData};
 
-use super::registration::Registration;
-use super::session::Session;
+use crate::pages::{registration::Registration, session::Session};
 
 #[derive(CompositeTemplate, Default)]
 #[template(resource = "/com/jgcalderon/irc-client/ui/window.ui")]
@@ -25,7 +24,7 @@ impl ObjectSubclass for Window {
         klass.bind_template();
         klass.bind_template_callbacks();
 
-        Registration::ensure_type()
+        Registration::ensure_type();
     }
 
     fn instance_init(obj: &InitializingObject<Self>) {

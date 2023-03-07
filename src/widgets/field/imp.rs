@@ -7,7 +7,7 @@ use gtk::traits::WidgetExt;
 use gtk::{glib, CompositeTemplate, Entry, Label};
 use std::cell::RefCell;
 
-use crate::window::registration::field::FieldProperty;
+use crate::widgets::field::FieldProperty;
 
 #[derive(CompositeTemplate, Default)]
 #[template(resource = "/com/jgcalderon/irc-client/ui/field.ui")]

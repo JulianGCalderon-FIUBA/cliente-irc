@@ -7,10 +7,10 @@ use gtk::{glib, template_callbacks, CompositeTemplate};
 use rnglib::{Language, RNG};
 
 use crate::client::IrcClient;
-use crate::window::registration::RegistrationSignal;
+use crate::pages::registration::RegistrationSignal;
 
-use super::field::Field;
-use super::password_field::PasswordField;
+use crate::widgets::field::Field;
+use crate::widgets::password_field::PasswordField;
 
 #[derive(CompositeTemplate, Default)]
 #[template(resource = "/com/jgcalderon/irc-client/ui/registration.ui")]

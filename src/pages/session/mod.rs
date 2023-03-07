@@ -1,11 +1,8 @@
 //! This module contains all [´Session`] related structures
 
-mod chat;
 pub mod constant;
 mod handle;
 mod imp;
-mod message;
-mod user_page;
 
 use glib::Object;
 use gtk::glib::{self, clone};
@@ -15,8 +12,8 @@ use gtk::subclass::prelude::*;
 use crate::client::{IrcClient, UserData};
 use crate::message::IrcCommand;
 
-use self::chat::Chat;
 use self::constant::SessionProperty;
+use crate::widgets::chat::Chat;
 
 const CHANNEL_INDICATOR: char = '#';
 

@@ -11,10 +11,10 @@ use crate::client::{IrcClient, UserData};
 use crate::message::IrcCommand;
 use crate::utils::get_and_clear_entry;
 
-use super::chat::Chat;
-use super::constant::SessionProperty;
-use super::user_page::UserPage;
 use super::CHANNEL_INDICATOR;
+use crate::pages::session::SessionProperty;
+use crate::widgets::chat::Chat;
+use crate::widgets::user_page::UserPage;
 
 #[derive(CompositeTemplate, Default)]
 #[template(resource = "/com/jgcalderon/irc-client/ui/session.ui")]

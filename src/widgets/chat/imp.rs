@@ -9,7 +9,7 @@ use gtk::subclass::prelude::*;
 use gtk::{glib, template_callbacks, CompositeTemplate, Entry, ListBox};
 
 use crate::utils::get_and_clear_entry;
-use crate::window::session::chat::constant::ChatSignal;
+use crate::widgets::chat::constant::ChatSignal;
 
 use super::{create_own_message, ChatProperty};
 

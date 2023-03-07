@@ -1,9 +1,7 @@
 //! This modules defines all registration related structures
 mod constant;
-mod field;
 mod handle;
 mod imp;
-mod password_field;
 mod registerer;
 
 use std::io;

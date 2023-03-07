@@ -1,7 +1,5 @@
 //! This modules contains all interface related structures
 mod imp;
-mod registration;
-mod session;
 
 use glib::Object;
 use gtk::gio;

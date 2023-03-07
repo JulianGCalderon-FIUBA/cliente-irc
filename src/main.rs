@@ -6,6 +6,8 @@ mod client;
 mod message;
 mod window;
 mod utils;
+mod pages;
+mod widgets;
 
 use gtk::gdk::Display;
 use gtk::gio;

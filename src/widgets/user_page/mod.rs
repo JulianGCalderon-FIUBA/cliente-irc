@@ -7,12 +7,11 @@ use glib::Object;
 use gtk::glib;
 
 use crate::client::UserData;
-
 pub use constant::UserPageProperty;
 
 glib::wrapper! {
     /// Page to display the user information
-    /// 
+    ///
     /// Subclassifies [´gtk::Box´]
     pub struct UserPage(ObjectSubclass<imp::UserPage>)
     @extends gtk::Widget, gtk::Box,
