@@ -3,15 +3,14 @@ mod constant;
 mod imp;
 
 use glib::Object;
-use gtk::prelude::{ListModelExt, SelectionModelExt};
-use gtk::INVALID_LIST_POSITION;
+use gtk::prelude::ListModelExt;
 use gtk::{
     glib::{self, clone},
-    prelude::{Cast, CastNone, ObjectExt},
+    prelude::{Cast, ObjectExt},
     subclass::prelude::ObjectSubclassIsExt,
-    CustomFilter, FilterListModel, Label, ListItem, SelectionModel, SignalListItemFactory,
-    SingleSelection, Stack, StackPage,
+    CustomFilter, FilterListModel, SelectionModel, SingleSelection, Stack, StackPage,
 };
+use gtk::{BuilderListItemFactory, BuilderScope, INVALID_LIST_POSITION};
 
 pub use constant::SidebarProperty;
 
@@ -163,36 +162,41 @@ fn chat_filter() -> CustomFilter {
     })
 }
 
-fn create_factory() -> SignalListItemFactory {
-    let factory = SignalListItemFactory::new();
+fn create_factory() -> BuilderListItemFactory {
+    // let factory = SignalListItemFactory::new();
 
-    factory.connect_setup(|_, list_item| {
-        let task_row = Label::new(Some("hola"));
-        list_item
-            .downcast_ref::<ListItem>()
-            .unwrap()
-            .set_child(Some(&task_row));
-    });
+    // factory.connect_setup(|_, list_item| {
+    //     let task_row = Label::new(Some("hola"));
+    //     list_item
+    //         .downcast_ref::<ListItem>()
+    //         .unwrap()
+    //         .set_child(Some(&task_row));
+    // });
 
-    factory.connect_bind(move |_, list_item| {
-        let page = list_item
-            .downcast_ref::<ListItem>()
-            .unwrap()
-            .item()
-            .and_downcast::<StackPage>()
-            .unwrap();
+    // factory.connect_bind(move |_, list_item| {
+    //     let page = list_item
+    //         .downcast_ref::<ListItem>()
+    //         .unwrap()
+    //         .item()
+    //         .and_downcast::<StackPage>()
+    //         .unwrap();
 
-        let label = list_item
-            .downcast_ref::<ListItem>()
-            .unwrap()
-            .child()
-            .and_downcast::<Label>()
-            .unwrap();
+    //     let label = list_item
+    //         .downcast_ref::<ListItem>()
+    //         .unwrap()
+    //         .child()
+    //         .and_downcast::<Label>()
+    //         .unwrap();
 
-        page.bind_property("title", &label, "label")
-            .sync_create()
-            .build();
-    });
+    //     page.bind_property("title", &label, "label")
+    //         .sync_create()
+    //         .build();
+    // });
 
-    factory
+    // factory
+
+    BuilderListItemFactory::from_resource(
+        BuilderScope::NONE,
+        "/com/jgcalderon/irc-client/ui/sidebar-row.ui",
+    )
 }

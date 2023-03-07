@@ -47,6 +47,11 @@ stacksidebar list {
     padding: 0px;
 }
 
+sidebar row:selected {
+    background-color: lightgray;
+    color: black;
+}
+
 message {
     border-radius: 10px;
     padding: 10px;

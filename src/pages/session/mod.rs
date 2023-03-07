@@ -69,7 +69,13 @@ impl Session {
         }));
 
         let name = format!("chat-{title}");
-        self.imp().pages.add_titled(&chat, Some(&name), &title);
+        let page = self.imp().pages.add_titled(&chat, Some(&name), &title);
+
+        if title.starts_with('#') {
+            page.set_icon_name("system-users-symbolic");
+        } else {
+            page.set_icon_name("avatar-default-symbolic");
+        }
 
         chat
     }
