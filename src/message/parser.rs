@@ -1,3 +1,6 @@
+//! This module contains parsing logic por separating a message into:
+//! `prefix`, `command`, `parameters`, `trailing`
+
 const PREFIX_CHARACTER: u8 = b':';
 const MAX_LENGTH: usize = 510;
 
@@ -12,7 +15,7 @@ pub type Parameters = Vec<String>;
 pub type Trailing = Option<String>;
 type IrcMessageParse = (Prefix, Command, Parameters, Trailing);
 
-/// Parses string into prefix, command, parameters and trailing
+/// Parses string into `prefix`, `command`, `parameters` and `trailing`.
 pub fn parse(content: &str) -> Result<IrcMessageParse, ParsingError> {
     if content.is_empty() {
         return Err(ParsingError::EmptyMessage);

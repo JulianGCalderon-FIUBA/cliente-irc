@@ -1,31 +1,47 @@
-use super::ParsingError;
+//! This module define [`IrcResponse`]
+
+use super::{Args, ParsingError, Trail};
 
 const WELCOME: &str = "001";
+const NICK_COLLISION: &str = "436";
+const NO_NICKNAME: &str = "200";
 
+/// Messages sent by the server in response to a client's command
 pub enum IrcResponse {
     Welcome {
-        realname: String,
-        servername: String,
         nickname: String,
+        realname: String,
         username: String,
         hostname: String,
+        servername: String,
     },
-
+    NickCollision {
+        nickname: String,
+    },
+    NoNickname,
 }
 
 impl IrcResponse {
-    pub fn new(
-        response: String,
-        arguments: Vec<String>,
-        trailing: Option<String>,
-    ) -> Result<Self, ParsingError> {
+    /// Creates the corresponding variation from the given parameters,
+    ///
+    /// Fails on invalid `response` or on an invalid argument
+    pub fn new(response: String, arguments: Args, trailing: Trail) -> Result<Self, ParsingError> {
         match &response[..] {
             WELCOME => Self::new_welcome(arguments, trailing),
+            NICK_COLLISION => Self::new_nick_collision(arguments, trailing),
+            NO_NICKNAME => Self::new_no_nickname(arguments, trailing),
             _ => Err(ParsingError::UnknownCommand(response)),
         }
     }
 
-    pub fn new_welcome(mut args: Vec<String>, trail: Option<String>) -> Result<Self, ParsingError> {
+    pub fn is_response(response: &str) -> bool {
+        response == WELCOME || response == NICK_COLLISION || response == NO_NICKNAME
+    }
+
+    /// Creates a [IrcResponse::Welcome] from the message arguments.
+    ///
+    /// Fails on invalid arguments
+    pub fn new_welcome(mut args: Args, trail: Trail) -> Result<Self, ParsingError> {
         let realname = args.pop().ok_or(ParsingError::MissingParameter)?;
 
         let trailing = trail.ok_or(ParsingError::MissingParameter)?;
@@ -58,5 +74,21 @@ impl IrcResponse {
             username,
             hostname,
         })
+    }
+
+    /// Creates a [IrcResponse::NickCollision] from the message arguments.
+    ///
+    /// Fails on invalid arguments
+    fn new_nick_collision(mut args: Args, _trail: Trail) -> Result<Self, ParsingError> {
+        let nickname = args.pop().ok_or(ParsingError::MissingParameter)?;
+
+        Ok(Self::NickCollision { nickname })
+    }
+
+    /// Creates a [IrcResponse::NoNickname] from the message arguments.
+    ///
+    /// Fails on invalid arguments
+    fn new_no_nickname(_args: Args, _trail: Trail) -> Result<IrcResponse, ParsingError> {
+        Ok(Self::NoNickname)
     }
 }

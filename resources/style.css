@@ -1,31 +1,85 @@
-#own-message {
-    border-radius: 5px;
-    border-top-right-radius: 0px;
-    border-bottom-right-radius: 0px;
-    background-color: lightblue;
-    padding: 10px;
-    border-right: 2px solid cornflowerblue;
+@define-color error-text Red;
+@define-color error-border Red;
 
+field #error_label {
+    color: @error-text;
+    font-size: 12px;
 }
 
-#external-message {
-    border-radius: 5px;
-    border-top-left-radius: 0px;
-    border-bottom-left-radius: 0px;
-    background-color: lightgreen;
-    padding: 10px;
-    border-left: 2px solid green;
-    border-bottom: 1px solid black;
+field.invalid entry {
+    border-color: @error-border;
 }
 
-stacksidebar list {
-    margin: 0px;
-    padding: 0px;
+levelbar block.low {
+    background-color: red;
+    border-color: red;
+}
+
+levelbar block.high {
+    background-color: orange;
+    border-color: orange;
+}
+
+levelbar block.full {
+    background-color: green;
+    border-color: green;
+}
+
+chat entry {
+    border-radius: 50px;
+}
+
+stack#pages {
+    border-left: 1px solid lightgray;
+}
+
+stacksidebar {
+    border-width: 0px;
 }
 
 stacksidebar row {
-    margin: 0px;
-    padding: 5px;
     border-radius: 0px;
-    border-bottom: 1px solid lightgray;
+    min-height: 44px;
+    margin: 0px;
 }
+
+stacksidebar list {
+    padding: 0px;
+}
+
+sidebar row:selected {
+    background-color: lightgray;
+    color: black;
+}
+
+message {
+    border-radius: 10px;
+    padding: 10px;
+}
+
+message.own {
+    background-color: lightblue;
+    border-color: lightblue;
+}
+
+message.external {
+    background-color: lightgreen;
+    border-color: lightgreen;
+}
+
+message label#sender_label {
+    font-size: x-small;
+    color: gray;
+}
+
+user-page label.title {
+    font-size: xx-large;
+}
+
+add-chat-page label.title {
+    font-size: xx-large;
+}
+
+/* * {
+    border: 1px solid black;
+} */

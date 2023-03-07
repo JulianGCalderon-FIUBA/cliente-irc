@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="Session" parent="GtkBox">
+    <child>
+      <object class="Sidebar">
+        <property name="width-request">180</property>
+        <property name="vexpand">true</property>
+        <property name="stack">pages</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkStack" id="pages">
+        <property name="name">pages</property>
+        <child>
+          <object class="GtkStackPage">
+            <property name="name">config-userinfo</property>
+            <property name="icon-name">user-home-symbolic</property>
+            <binding name="title">
+              <lookup name="nickname">
+                <lookup name="data">Session</lookup>
+              </lookup>
+            </binding>
+            <property name="child">
+              <object class="UserPage">
+                <property name="data" bind-source="Session" bind-property="data" />
+              </object>
+            </property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkStackPage">
+            <property name="name">config-add-chat</property>
+            <property name="icon-name">mail-message-new-symbolic</property>
+            <property name="title">Add Chat</property>
+            <property name="child">
+              <object class="AddChatPage">
+                <signal name="add" handler="add_chat" swapped="true" />
+              </object>
+            </property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

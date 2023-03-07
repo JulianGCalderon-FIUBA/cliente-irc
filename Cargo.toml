@@ -7,6 +7,7 @@ edition = "2021"
 
 [dependencies]
 gtk = { version = "0.6.1", package = "gtk4", features = ["v4_6"] }
+random_name_generator = "0.3.3"
 
 [build-dependencies]
 glib-build-tools = "0.17.0"

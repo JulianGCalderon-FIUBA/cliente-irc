@@ -1,13 +1,20 @@
+//! This module define [`IrcCommand`]
+
 use std::fmt::Display;
 
-use super::ParsingError;
+use super::{Args, ParsingError, Trail};
 
 const PRIVMSG: &str = "PRIVMSG";
 const PASS: &str = "PASS";
 const NICK: &str = "NICK";
 const USER: &str = "USER";
 const QUIT: &str = "QUIT";
+const JOIN: &str = "JOIN";
 
+/// Commands that can be sent to or received from a server
+///
+/// They are asynchronous messages that are not generated as a response,
+///  but rather notify of a new status or notification.
 #[derive(Debug)]
 pub enum IrcCommand {
     Privmsg { target: String, message: String },
@@ -15,65 +22,88 @@ pub enum IrcCommand {
     Nick { nickname: String },
     User { username: String, realname: String },
     Quit { message: String },
+    Join { name: String },
 }
 
 impl IrcCommand {
+    /// Creates the corresponding variation from the given components,
+    ///
+    /// Fails on invalid `response` or on an invalid argument
+    pub fn new(command: String, args: Args, trail: Trail) -> Result<Self, ParsingError> {
+        match &command[..] {
+            PRIVMSG => Self::new_privmsg(args, trail),
+            PASS => Self::new_pass(args, trail),
+            NICK => Self::new_nick(args, trail),
+            USER => Self::new_user(args, trail),
+            QUIT => Self::new_quit(args, trail),
+            JOIN => Self::new_join(args, trail),
+            _ => Err(ParsingError::UnknownCommand(command)),
+        }
+    }
+
     pub fn is_command(command: &str) -> bool {
         command == PRIVMSG
             || command == PASS
             || command == NICK
             || command == USER
             || command == QUIT
+            || command == JOIN
     }
 
-    pub fn new(
-        command: String,
-        arguments: Vec<String>,
-        trailing: Option<String>,
-    ) -> Result<Self, ParsingError> {
-        match &command[..] {
-            PRIVMSG => Self::new_privmsg(arguments, trailing),
-            PASS => Self::new_pass(arguments, trailing),
-            NICK => Self::new_nick(arguments, trailing),
-            USER => Self::new_user(arguments, trailing),
-            QUIT => Self::new_quit(arguments, trailing),
-            _ => Err(ParsingError::UnknownCommand(command)),
-        }
-    }
+    /// Creates a [`IrcCommand::Privmsg`] from the given components.
+    ///
+    /// Fails on invalid arguments
+    pub fn new_privmsg(mut args: Args, trail: Trail) -> Result<Self, ParsingError> {
+        args.reverse();
 
-    pub fn new_privmsg(
-        mut parameters: Vec<String>,
-        trailing: Option<String>,
-    ) -> Result<Self, ParsingError> {
-        parameters.reverse();
-
-        let message = trailing.ok_or(ParsingError::MissingParameter)?;
-        let target = parameters.pop().ok_or(ParsingError::MissingParameter)?;
+        let message = trail.ok_or(ParsingError::MissingParameter)?;
+        let target = args.pop().ok_or(ParsingError::MissingParameter)?;
 
         Ok(Self::Privmsg { target, message })
     }
 
-    fn new_pass(mut args: Vec<String>, _trail: Option<String>) -> Result<IrcCommand, ParsingError> {
+    /// Creates a [`IrcCommand::Pass`] from the given components.
+    ///
+    /// Fails on invalid arguments
+    fn new_pass(mut args: Args, _trail: Trail) -> Result<IrcCommand, ParsingError> {
         let password = args.pop().ok_or(ParsingError::MissingParameter)?;
         Ok(Self::Pass { password })
     }
 
-    fn new_nick(mut args: Vec<String>, _trail: Option<String>) -> Result<IrcCommand, ParsingError> {
+    /// Creates a [`IrcCommand::Nick`] from the given components.
+    ///
+    /// Fails on invalid arguments
+    fn new_nick(mut args: Args, _trail: Trail) -> Result<IrcCommand, ParsingError> {
         let nickname = args.pop().ok_or(ParsingError::MissingParameter)?;
         Ok(Self::Nick { nickname })
     }
 
-    fn new_user(mut args: Vec<String>, trail: Option<String>) -> Result<IrcCommand, ParsingError> {
+    /// Creates a [`IrcCommand::User`] from the given components.
+    ///
+    /// Fails on invalid arguments
+    fn new_user(mut args: Args, trail: Trail) -> Result<IrcCommand, ParsingError> {
         let username = args.pop().ok_or(ParsingError::MissingParameter)?;
         let realname = trail.ok_or(ParsingError::MissingParameter)?;
 
         Ok(Self::User { username, realname })
     }
 
-    fn new_quit(_args: Vec<String>, trail: Option<String>) -> Result<IrcCommand, ParsingError> {
+    /// Creates a [ IrcCommand::Quit`] from the given components.
+    ///
+    /// Fails on invalid arguments
+    fn new_quit(_args: Args, trail: Trail) -> Result<IrcCommand, ParsingError> {
         let message = trail.ok_or(ParsingError::MissingParameter)?;
 
         Ok(Self::Quit { message })
+    }
+
+    /// Creates a [ IrcCommand::Join`] from the given components.
+    ///
+    /// Fails on invalid arguments
+    fn new_join(mut args: Args, _trail: Trail) -> Result<IrcCommand, ParsingError> {
+        let name = args.pop().ok_or(ParsingError::MissingParameter)?;
+
+        Ok(Self::Join { name })
     }
 }
 
@@ -94,6 +124,9 @@ impl Display for IrcCommand {
             }
             IrcCommand::Quit { message } => {
                 write!(f, "{QUIT} :{message}")
+            }
+            IrcCommand::Join { name } => {
+                write!(f, "{JOIN} {name}")
             }
         }
     }

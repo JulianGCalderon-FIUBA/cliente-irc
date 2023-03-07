@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="Registration" parent="GtkBox">
+    <property name="orientation">vertical</property>
+    <property name="valign">center</property>
+    <property name="halign">center</property>
+    <child>
+      <object class="Field" id="address">
+        <property name="name">Address:</property>
+        <property name="default">127.0.0.1:9000</property>
+      </object>
+    </child>
+    <child>
+      <object class="Field" id="nickname">
+        <property name="name">Nickname:</property>
+      </object>
+    </child>
+    <child>
+      <object class="Field" id="username">
+        <property name="name">Username:</property>
+        <property name="default">username</property>
+      </object>
+    </child>
+    <child>
+      <object class="Field" id="realname">
+        <property name="name">Realname:</property>
+        <property name="default">realname</property>
+      </object>
+    </child>
+    <child>
+      <object class="PasswordField" id="password">
+        <property name="name">Password:</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkButton" id="connect">
+        <property name="label">Sign up</property>
+        <property name="height-request">80</property>
+        <signal name="clicked" handler="connect_clicked" swapped="true"></signal>
+        <style>
+          <class name="suggested-action"></class>
+        </style>
+      </object>
+    </child>
+  </template>
+</interface>
