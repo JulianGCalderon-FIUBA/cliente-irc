@@ -61,7 +61,9 @@ impl Session {
     fn add_chat(&self, name: String) -> ChatPage {
         let chat = ChatPage::new(name.clone());
 
-        chat.connect_close(|_| println!("close"));
+        chat.connect_close(clone!(@weak self as session => move |chat| {
+            session.imp().pages.remove(chat);
+        }));
         chat.connect_send(clone!(@weak self as session => move |chat, message| {
             session.send_message(chat, message);
         }));
