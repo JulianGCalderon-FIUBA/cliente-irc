@@ -1,10 +1,17 @@
+//! This module contains useful constants for dealing with `Session`
+
 use std::ops::Deref;
 
 use gtk::glib::{ParamSpec, ParamSpecObject};
 
 use crate::client::UserData;
 
+/// All `Session` custom properties
+///
+/// Can be converted between `&str` to use with properties
 pub enum SessionProperty {
+    /// Stores the user data
+    /// Type: [UserData]
     Data,
 }
 

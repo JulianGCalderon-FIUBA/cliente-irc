@@ -70,6 +70,8 @@ impl BoxImpl for Session {}
 
 #[template_callbacks]
 impl Session {
+    /// Called when a new chat openning is requested.
+    /// Adds the chat, if it is a group chat, it also notifies the server of joining it.
     #[template_callback]
     pub fn add_chat(&self, entry: Entry) {
         if let Some(name) = get_and_clear_entry(entry) {

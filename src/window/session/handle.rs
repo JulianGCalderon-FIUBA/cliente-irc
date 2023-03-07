@@ -1,3 +1,5 @@
+//! This modules contains functionality for handling server messages
+
 use gtk::glib::{self, clone, MainContext};
 
 use crate::message::{IrcCommand, IrcMessage, IrcResponse};
@@ -5,6 +7,7 @@ use crate::message::{IrcCommand, IrcMessage, IrcResponse};
 use super::Session;
 
 impl Session {
+    /// Starts an asynchronous read of server messages, handling each one.
     pub(super) fn start_client_handler(&self) {
         MainContext::default().spawn_local(clone!(@weak self as session => async move {
             let mut client = session.client();
@@ -14,6 +17,7 @@ impl Session {
         }));
     }
 
+    /// Calls the acording function for each message received.
     pub fn handle_message(&self, message: IrcMessage) {
         match message {
             IrcMessage::IrcCommand(sender, command) => match command {
@@ -47,10 +51,10 @@ impl Session {
     }
 
     fn handle_quit(&self, _sender: String, _message: String) {
-        todo!()
+        println!("todo! quit!");
     }
 
     fn handle_join(&self, _sender: String, _name: String) {
-        todo!()
+        println!("todo! joined!");
     }
 }

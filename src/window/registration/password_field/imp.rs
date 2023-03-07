@@ -78,7 +78,9 @@ impl ObjectImpl for PasswordField {
 impl WidgetImpl for PasswordField {}
 impl BoxImpl for PasswordField {}
 
-/// Determines the password strength, returning an integer value between 0 and 3 (inclusive)
+/// Determines the password strength, returning an integer value between 1 and 3 (inclusive)
+///
+/// If password is empty, returns 0;
 fn password_strength(password: String) -> f64 {
     match password.len() {
         0 => 0.0,

@@ -1,4 +1,4 @@
-//! This modules defines the [`Field`] widget
+//! This modules defines the [Field] widget
 
 mod constant;
 mod imp;
