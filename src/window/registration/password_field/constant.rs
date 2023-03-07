@@ -1,7 +1,18 @@
+//! This module contains useful constants for dealing with `PasswordField`
+
 use std::ops::Deref;
 
+/// All `PasswordField` custom properties
+///
+/// Can be easily converted between `&str` to use with properties
 pub enum PasswordFieldProperty {
+    /// Name of the field
+    ///
+    /// Type: String
     Name,
+    /// User provided input
+    ///
+    /// Type: String
     Input,
 }
 

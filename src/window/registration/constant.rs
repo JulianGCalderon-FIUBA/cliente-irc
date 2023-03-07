@@ -10,7 +10,7 @@ use super::Registration;
 
 /// All Registration custom signals
 ///
-/// Can be easily converted to or from `&str` to use with `GOBject::property`
+/// Can be easily converted between `&str` to use with properties
 pub enum RegistrationSignal {
     /// Emitted after registration is completed
     ///

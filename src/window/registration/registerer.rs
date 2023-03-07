@@ -47,6 +47,7 @@ impl Registration {
         self.client().send(nick_command)
     }
 
+    /// Send user command to the server
     fn send_user(&self) -> io::Result<()> {
         let username = self.imp().username.input();
         let realname = self.imp().realname.input();

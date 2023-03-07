@@ -1,4 +1,4 @@
-/// This modules defines [`Window`]
+//! This modules contains all interface related structures
 mod imp;
 mod registration;
 mod session;
@@ -11,7 +11,7 @@ use gtk::Application;
 glib::wrapper! {
     /// Main Window of the IRC Client
     ///
-    /// Derives GtkApplicationWindow
+    /// Subclassifies [`gtk::ApplicationWindow`]
     ///
     /// After creation, Registration is presented.
     pub struct Window(ObjectSubclass<imp::Window>)

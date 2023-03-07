@@ -1,4 +1,4 @@
-//! This modules defines [`Registration`]
+//! This modules defines all registration related structures
 mod constant;
 mod field;
 mod handle;
@@ -19,7 +19,7 @@ glib::wrapper! {
     ///
     /// Asks for user information and establishes connection with an IrcServer
     ///
-    /// Derives GtkBox
+    /// Derives [´gtk::Box´]
     pub struct Registration(ObjectSubclass<imp::Registration>)
     @extends gtk::Widget, gtk::Box,
     @implements gtk::Accessible, gtk::Buildable,
