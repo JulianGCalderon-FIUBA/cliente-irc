@@ -25,7 +25,7 @@ glib::wrapper! {
     /// It's created with an already regeistered client.
     ///
     /// Handles all client related functionality,
-    /// from sending messages to configuring the sate of the client
+    /// from sending messages to configuring the state of the client
     ///
     /// Subclassifies [´gtk::Box´]
     pub struct Session(ObjectSubclass<imp::Session>)

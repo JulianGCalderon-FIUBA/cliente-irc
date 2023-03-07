@@ -1,9 +1,18 @@
+//! Defines useful constants for dealing with [`Message`]
+
 use std::ops::Deref;
 
 use gtk::glib::{ParamSpec, ParamSpecString};
 
+/// All `message` custom properties
+///
+/// Can be converted between &str to use as property name
 pub enum MessageProperty {
+    /// Text to be displayed as the message
+    /// Type: String
     Message,
+    /// Sender of the message, only displayed if not empty
+    /// Type: String
     Sender,
 }
 

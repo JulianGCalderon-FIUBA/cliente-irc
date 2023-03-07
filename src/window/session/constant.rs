@@ -10,7 +10,7 @@ use crate::client::UserData;
 ///
 /// Can be converted between `&str` to use with properties
 pub enum SessionProperty {
-    /// Stores the user data
+    /// User registration data
     /// Type: [UserData]
     Data,
 }

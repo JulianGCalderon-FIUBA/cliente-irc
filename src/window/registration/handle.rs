@@ -49,7 +49,7 @@ impl Registration {
         ControlFlow::Continue(())
     }
 
-    /// After receiving a [´IrcResponse::Welcome´], the asynchronous read is finished
+    /// After receiving a [´IrcResponse::Welcome´], the asynchronous read is finished and 'registered' signal is emited
     fn handle_welcome(
         &self,
         nickname: String,
@@ -68,6 +68,7 @@ impl Registration {
         ControlFlow::Break(())
     }
 
+    /// Notifies the user that nickname is already in use
     fn handle_nick_collision(&self) -> ControlFlow<()> {
         self.imp().nickname.set_error("Nickname already in use");
 

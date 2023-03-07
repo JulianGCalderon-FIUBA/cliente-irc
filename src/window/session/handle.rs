@@ -40,6 +40,9 @@ impl Session {
         }
     }
 
+    /// Adds the message received to the according chat.
+    ///
+    /// If chat does not exist, it is created
     fn handle_privmsg(&self, sender: String, target: String, message: String) {
         if self.is_private_chat(&target) {
             let chat = self.get_or_insert_chat(sender);

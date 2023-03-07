@@ -6,14 +6,12 @@ use gtk::glib::subclass::Signal;
 use gtk::glib::ParamSpec;
 use gtk::prelude::{ObjectExt, ToValue};
 use gtk::subclass::prelude::*;
-use gtk::traits::WidgetExt;
-use gtk::{glib, template_callbacks, Align, CompositeTemplate, Entry, ListBox};
+use gtk::{glib, template_callbacks, CompositeTemplate, Entry, ListBox};
 
 use crate::utils::get_and_clear_entry;
 use crate::window::session::chat::constant::ChatSignal;
-use crate::window::session::message::Message;
 
-use super::ChatProperty;
+use super::{create_own_message, ChatProperty};
 
 #[derive(CompositeTemplate, Default)]
 #[template(resource = "/com/jgcalderon/irc-client/ui/chat.ui")]
@@ -79,19 +77,18 @@ impl BoxImpl for Chat {}
 #[template_callbacks]
 impl Chat {
     #[template_callback]
+    /// Called when the user sends a message through the chat
     pub fn send_message(&self, entry: Entry) {
         if let Some(message) = get_and_clear_entry(entry) {
             self.obj()
                 .emit_by_name::<()>(&ChatSignal::Send, &[&message.to_value()]);
 
-            let message = Message::new(message);
-            message.set_halign(Align::End);
-            message.add_css_class("own");
-
+            let message = create_own_message(message);
             self.messages.append(&message);
         }
     }
 
+    /// Called when the user atempts to close de chat
     #[template_callback]
     pub fn close_chat(&self) {
         self.obj().emit_by_name(&ChatSignal::Close, &[])

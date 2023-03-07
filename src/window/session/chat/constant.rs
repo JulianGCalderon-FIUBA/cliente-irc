@@ -1,3 +1,5 @@
+//! This module contains useful constants for `Chat`
+
 use std::ops::Deref;
 
 use gtk::{
@@ -5,6 +7,9 @@ use gtk::{
     prelude::StaticType,
 };
 
+/// All `Chat` custom properties
+///
+/// Can be converted between &str to use as property names
 pub enum ChatProperty {
     Name,
 }
@@ -33,8 +38,15 @@ impl From<&str> for ChatProperty {
     }
 }
 
+/// All `chat`custom signals
+///
+/// Can be converted between &str to use as signal names
 pub enum ChatSignal {
+    /// Emited when the user atempts to send a message through the chat
+    ///
+    /// Argument: Message (String)
     Send,
+    /// Emited when the user atempts to close the chat
     Close,
 }
 
