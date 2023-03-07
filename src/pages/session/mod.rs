@@ -13,7 +13,7 @@ use crate::client::{IrcClient, UserData};
 use crate::message::IrcCommand;
 
 use self::constant::SessionProperty;
-use crate::widgets::chat::Chat;
+use crate::widgets::chat_page::ChatPage;
 
 const CHANNEL_INDICATOR: char = '#';
 
@@ -58,8 +58,8 @@ impl Session {
     /// Adds a new ´Chat´ with given name to stack.
     ///
     /// Chats are stored in the chat section of the sidebar for easy openning.
-    fn add_chat(&self, name: String) -> Chat {
-        let chat = Chat::new(name.clone());
+    fn add_chat(&self, name: String) -> ChatPage {
+        let chat = ChatPage::new(name.clone());
 
         chat.connect_close(|_| println!("close"));
         chat.connect_send(clone!(@weak self as session => move |chat, message| {
@@ -74,7 +74,7 @@ impl Session {
     /// Sends ´message´ to the target of the given chat.
     ///
     /// May fail on a connection error.
-    fn send_message(&self, chat: &Chat, message: String) {
+    fn send_message(&self, chat: &ChatPage, message: String) {
         let target = chat.property("name");
         let privmsg_command = IrcCommand::Privmsg { target, message };
         if self.client().send(privmsg_command).is_err() {
@@ -85,7 +85,7 @@ impl Session {
     /// If the chat does not already exists, it creates it.
     ///
     /// Returns the specified [´Chat´]
-    fn get_or_insert_chat(&self, chat_name: String) -> Chat {
+    fn get_or_insert_chat(&self, chat_name: String) -> ChatPage {
         self.imp()
             .chats
             .child_by_name(&chat_name)

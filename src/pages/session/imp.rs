@@ -13,7 +13,7 @@ use crate::utils::get_and_clear_entry;
 
 use super::CHANNEL_INDICATOR;
 use crate::pages::session::SessionProperty;
-use crate::widgets::chat::Chat;
+use crate::widgets::chat_page::ChatPage;
 use crate::widgets::user_page::UserPage;
 
 #[derive(CompositeTemplate, Default)]
@@ -35,7 +35,7 @@ impl ObjectSubclass for Session {
         klass.bind_template();
         klass.bind_template_callbacks();
 
-        Chat::ensure_type();
+        ChatPage::ensure_type();
         UserPage::ensure_type();
     }
 

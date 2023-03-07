@@ -10,17 +10,17 @@ use gtk::{
 /// All `Chat` custom properties
 ///
 /// Can be converted between &str to use as property names
-pub enum ChatProperty {
+pub enum ChatPageProperty {
     Name,
 }
 
-impl ChatProperty {
+impl ChatPageProperty {
     pub fn vec() -> Vec<ParamSpec> {
-        vec![ParamSpecString::builder(&ChatProperty::Name).build()]
+        vec![ParamSpecString::builder(&ChatPageProperty::Name).build()]
     }
 }
 
-impl Deref for ChatProperty {
+impl Deref for ChatPageProperty {
     type Target = str;
     fn deref(&self) -> &str {
         match self {
@@ -29,7 +29,7 @@ impl Deref for ChatProperty {
     }
 }
 
-impl From<&str> for ChatProperty {
+impl From<&str> for ChatPageProperty {
     fn from(value: &str) -> Self {
         match value {
             "name" => Self::Name,

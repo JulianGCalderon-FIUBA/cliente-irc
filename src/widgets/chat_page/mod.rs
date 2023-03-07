@@ -8,7 +8,7 @@ use gtk::{
     glib, prelude::ObjectExt, subclass::prelude::ObjectSubclassIsExt, traits::WidgetExt, Align,
 };
 
-pub use constant::{ChatProperty, ChatSignal};
+pub use constant::{ChatPageProperty, ChatSignal};
 
 use super::message::Message;
 
@@ -18,21 +18,21 @@ glib::wrapper! {
     /// Displays chat information and message history.
     ///
     /// User may send messages to given chat, emiting the 'send' signal.
-    /// 
+    ///
     /// Has a single css node 'chat'
     ///
     /// Subclassifies [´gtk::Box´]
-    pub struct Chat(ObjectSubclass<imp::Chat>)
+    pub struct ChatPage(ObjectSubclass<imp::ChatPage>)
     @extends gtk::Widget, gtk::Box,
     @implements gtk::Accessible, gtk::Buildable,
         gtk::ConstraintTarget, gtk::Orientable;
 }
 
-impl Chat {
+impl ChatPage {
     /// Creates a new [`Chat`] with the given name
     pub fn new(name: String) -> Self {
         Object::builder()
-            .property(&ChatProperty::Name, name)
+            .property(&ChatPageProperty::Name, name)
             .build()
     }
 
@@ -42,7 +42,7 @@ impl Chat {
         F: Fn(&Self) + 'static,
     {
         self.connect_local(&ChatSignal::Close, true, move |args| {
-            let chat: Chat = args[0].get().unwrap();
+            let chat: ChatPage = args[0].get().unwrap();
             f(&chat);
             None
         });
@@ -54,7 +54,7 @@ impl Chat {
         F: Fn(&Self, String) + 'static,
     {
         self.connect_local(&ChatSignal::Send, true, move |args| {
-            let chat: Chat = args[0].get().unwrap();
+            let chat: ChatPage = args[0].get().unwrap();
             let message: String = args[1].get().unwrap();
             f(&chat, message);
             None
