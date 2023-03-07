@@ -5,11 +5,11 @@ use gtk::glib::once_cell::sync::{Lazy, OnceCell};
 use gtk::glib::ParamSpec;
 use gtk::prelude::{StaticTypeExt, ToValue};
 use gtk::subclass::prelude::*;
-use gtk::{glib, template_callbacks, CompositeTemplate, Entry, Stack};
+use gtk::{glib, template_callbacks, CompositeTemplate, Stack};
 
 use crate::client::{IrcClient, UserData};
 use crate::message::IrcCommand;
-use crate::utils::get_and_clear_entry;
+use crate::widgets::AddChatPage;
 
 use super::CHANNEL_INDICATOR;
 use crate::pages::session::SessionProperty;
@@ -36,6 +36,7 @@ impl ObjectSubclass for Session {
         klass.bind_template_callbacks();
 
         ChatPage::ensure_type();
+        AddChatPage::ensure_type();
         UserPage::ensure_type();
     }
 
@@ -73,15 +74,13 @@ impl Session {
     /// Called when a new chat openning is requested.
     /// Adds the chat, if it is a group chat, it also notifies the server of joining it.
     #[template_callback]
-    pub fn add_chat(&self, entry: Entry) {
-        if let Some(name) = get_and_clear_entry(entry) {
-            self.obj().add_chat(name.clone());
+    pub fn add_chat(&self, name: String) {
+        self.obj().add_chat(name.clone());
 
-            if name.starts_with(CHANNEL_INDICATOR) {
-                let join_command = IrcCommand::Join { name };
-                if self.obj().client().send(join_command).is_err() {
-                    println!("todo! connection error");
-                }
+        if name.starts_with(CHANNEL_INDICATOR) {
+            let join_command = IrcCommand::Join { name };
+            if self.obj().client().send(join_command).is_err() {
+                println!("todo! connection error");
             }
         }
     }

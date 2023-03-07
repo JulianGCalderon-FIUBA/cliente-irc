@@ -59,8 +59,8 @@ impl ObjectImpl for Registration {
     }
 
     fn signals() -> &'static [glib::subclass::Signal] {
-        static PROPERTIES: Lazy<Vec<Signal>> = Lazy::new(RegistrationSignal::vec);
-        PROPERTIES.as_ref()
+        static SIGNALS: Lazy<Vec<Signal>> = Lazy::new(RegistrationSignal::vec);
+        SIGNALS.as_ref()
     }
 }
 

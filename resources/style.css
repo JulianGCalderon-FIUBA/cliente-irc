@@ -71,6 +71,10 @@ user-page label.title {
     font-size: xx-large;
 }
 
+add-chat-page label.title {
+    font-size: xx-large;
+}
+
 /* * {
     border: 1px solid black;
 } */

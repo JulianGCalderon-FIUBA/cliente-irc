@@ -12,26 +12,6 @@
             <property name="stack">chats</property>
           </object>
         </child>
-        <child>
-          <object class="GtkSeparator">
-            <property name="valign">end</property>
-            <property name="margin-top">5</property>
-            <property name="margin-bottom">5</property>
-            <property name="margin-start">5</property>
-            <property name="margin-end">5</property>
-          </object>
-        </child>
-        <child>
-          <object class="GtkEntry">
-            <property name="valign">end</property>
-            <property name="margin-top">5</property>
-            <property name="margin-bottom">5</property>
-            <property name="margin-start">5</property>
-            <property name="margin-end">5</property>
-            <property name="secondary-icon-name">list-add-symbolic</property>
-            <signal name="activate" handler="add_chat" swapped="true" />
-          </object>
-        </child>
       </object>
     </child>
     <child>
@@ -59,8 +39,8 @@
             <property name="icon-name">mail-message-new-symbolic</property>
             <property name="title">Add Chat</property>
             <property name="child">
-              <object class="UserPage">
-                <property name="data" bind-source="Session" bind-property="data" />
+              <object class="AddChatPage">
+                <signal name="add" handler="add_chat" swapped="true" />
               </object>
             </property>
           </object>
