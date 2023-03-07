@@ -67,6 +67,10 @@ message label#sender_label {
     color: gray;
 }
 
+user-page label.title {
+    font-size: xx-large;
+}
+
 /* * {
     border: 1px solid black;
 } */

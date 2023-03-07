@@ -1,9 +1,76 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <template class="UserPage" parent="GtkBox">
+    <property name="orientation">vertical</property>
+    <property name="vexpand">true</property>
+    <property name="hexpand">true</property>
+    <property name="valign">center</property>
+    <property name="halign">center</property>
     <child>
       <object class="GtkLabel">
-        <property name="label">hola</property>
+        <property name="margin-top">10</property>
+        <property name="margin-bottom">10</property>
+        <property name="margin-start">10</property>
+        <property name="margin-end">10</property>
+        <property name="label">Account Information</property>
+        <style>
+          <class name="title" />
+        </style>
+      </object>
+    </child>
+    <child>
+      <object class="Field">
+        <property name="name">Nickname</property>
+        <property name="locked">true</property>
+        <binding name="input">
+          <lookup name="nickname">
+            <lookup name="data">UserPage</lookup>
+          </lookup>
+        </binding>
+      </object>
+    </child>
+    <child>
+      <object class="Field">
+        <property name="name">Realname</property>
+        <property name="locked">true</property>
+        <binding name="input">
+          <lookup name="realname">
+            <lookup name="data">UserPage</lookup>
+          </lookup>
+        </binding>
+      </object>
+    </child>
+    <child>
+      <object class="Field">
+        <property name="name">Username</property>
+        <property name="locked">true</property>
+        <binding name="input">
+          <lookup name="username">
+            <lookup name="data">UserPage</lookup>
+          </lookup>
+        </binding>
+      </object>
+    </child>
+    <child>
+      <object class="Field">
+        <property name="name">Servername</property>
+        <property name="locked">true</property>
+        <binding name="input">
+          <lookup name="servername">
+            <lookup name="data">UserPage</lookup>
+          </lookup>
+        </binding>
+      </object>
+    </child>
+    <child>
+      <object class="Field">
+        <property name="name">Hostname</property>
+        <property name="locked">true</property>
+        <binding name="input">
+          <lookup name="hostname">
+            <lookup name="data">UserPage</lookup>
+          </lookup>
+        </binding>
       </object>
     </child>
   </template>

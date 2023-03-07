@@ -6,13 +6,15 @@
         <property name="orientation">vertical</property>
         <property name="vexpand">true</property>
         <child>
-          <object class="GtkStackSidebar">
-            <property name="vexpand">true</property>
+          <object class="GtkStackSwitcher">
+            <property name="vexpand">false</property>
+            <property name="orientation">vertical</property>
             <property name="stack">chats</property>
           </object>
         </child>
         <child>
           <object class="GtkSeparator">
+            <property name="valign">end</property>
             <property name="margin-top">5</property>
             <property name="margin-bottom">5</property>
             <property name="margin-start">5</property>
@@ -21,6 +23,7 @@
         </child>
         <child>
           <object class="GtkEntry">
+            <property name="valign">end</property>
             <property name="margin-top">5</property>
             <property name="margin-bottom">5</property>
             <property name="margin-start">5</property>
