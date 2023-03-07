@@ -52,10 +52,10 @@ impl ObjectImpl for Registration {
         self.parent_constructed();
 
         // AUTOMATIC LOGIN: ONLY FOR TESTING PURPOSES
-        let generator = RNG::try_from(&Language::Roman).unwrap();
-        let nickname = generator.generate_short();
-        self.nickname.set_input(&nickname);
-        self.connect_clicked();
+        // let generator = RNG::try_from(&Language::Roman).unwrap();
+        // let nickname = generator.generate_short();
+        // self.nickname.set_input(&nickname);
+        // self.connect_clicked();
     }
 
     fn signals() -> &'static [glib::subclass::Signal] {
