@@ -1,9 +1,7 @@
 //! This module defines all [`UserPage`] related structures
 
-mod constant;
 mod imp;
 
-pub use constant::UserPageProperty;
 use glib::Object;
 use gtk::glib;
 
@@ -22,8 +20,6 @@ glib::wrapper! {
 impl UserPage {
     /// Creates a [`UserPage`] with an associated [´UserData`]
     pub fn new(data: UserData) -> Self {
-        Object::builder()
-            .property(&UserPageProperty::Data, data)
-            .build()
+        Object::builder().property("user-data", data).build()
     }
 }

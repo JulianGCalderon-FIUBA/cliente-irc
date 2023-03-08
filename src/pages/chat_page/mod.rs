@@ -1,16 +1,14 @@
 //! This modue contains all chat related structures
 
-mod constant;
 mod imp;
 
-pub use constant::{ChatPageProperty, ChatSignal};
 use glib::Object;
 use gtk::prelude::ObjectExt;
 use gtk::subclass::prelude::ObjectSubclassIsExt;
 use gtk::traits::WidgetExt;
 use gtk::{glib, Align};
 
-use super::message::Message;
+use crate::widgets::Message;
 
 glib::wrapper! {
     /// Window associated to a particular chat in the client. Can be a private chat or a channel.
@@ -31,9 +29,7 @@ glib::wrapper! {
 impl ChatPage {
     /// Creates a new [`Chat`] with the given name
     pub fn new(name: String) -> Self {
-        Object::builder()
-            .property(&ChatPageProperty::Name, name)
-            .build()
+        Object::builder().property("name", name).build()
     }
 
     /// Connects to the `close` signal.
@@ -41,7 +37,7 @@ impl ChatPage {
     where
         F: Fn(&Self) + 'static,
     {
-        self.connect_local(&ChatSignal::Close, true, move |args| {
+        self.connect_local("close", true, move |args| {
             let chat: ChatPage = args[0].get().unwrap();
             f(&chat);
             None
@@ -53,7 +49,7 @@ impl ChatPage {
     where
         F: Fn(&Self, String) + 'static,
     {
-        self.connect_local(&ChatSignal::Send, true, move |args| {
+        self.connect_local("send", true, move |args| {
             let chat: ChatPage = args[0].get().unwrap();
             let message: String = args[1].get().unwrap();
             f(&chat, message);

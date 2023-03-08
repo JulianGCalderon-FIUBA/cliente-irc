@@ -2,7 +2,7 @@ use std::cell::RefCell;
 
 use glib::subclass::InitializingObject;
 use gtk::glib::once_cell::sync::{Lazy, OnceCell};
-use gtk::glib::ParamSpec;
+use gtk::glib::{ParamSpec, ParamSpecObject};
 use gtk::prelude::{StaticTypeExt, ToValue};
 use gtk::subclass::prelude::*;
 use gtk::{glib, template_callbacks, CompositeTemplate, Stack};
@@ -10,10 +10,8 @@ use gtk::{glib, template_callbacks, CompositeTemplate, Stack};
 use super::CHANNEL_INDICATOR;
 use crate::client::{IrcClient, UserData};
 use crate::message::IrcCommand;
-use crate::pages::session::SessionProperty;
-use crate::widgets::chat_page::ChatPage;
-use crate::widgets::user_page::UserPage;
-use crate::widgets::{AddChatPage, Sidebar};
+use crate::pages::{AddChatPage, ChatPage, UserPage};
+use crate::widgets::Sidebar;
 
 #[derive(CompositeTemplate, Default)]
 #[template(resource = "/com/jgcalderon/irc-client/ui/session.ui")]
@@ -47,22 +45,25 @@ impl ObjectSubclass for Session {
 
 impl ObjectImpl for Session {
     fn properties() -> &'static [glib::ParamSpec] {
-        static PROPERTIES: Lazy<Vec<ParamSpec>> = Lazy::new(SessionProperty::vec);
+        static PROPERTIES: Lazy<Vec<ParamSpec>> =
+            Lazy::new(|| vec![ParamSpecObject::builder::<UserData>("user-data").build()]);
         PROPERTIES.as_ref()
     }
 
     fn set_property(&self, _id: usize, value: &glib::Value, pspec: &glib::ParamSpec) {
-        match SessionProperty::from(pspec.name()) {
-            SessionProperty::Data => {
+        match pspec.name() {
+            "user-data" => {
                 let data = value.get().unwrap();
                 self.data.replace(data);
             }
+            _ => unimplemented!(),
         };
     }
 
     fn property(&self, _id: usize, pspec: &glib::ParamSpec) -> glib::Value {
-        match SessionProperty::from(pspec.name()) {
-            SessionProperty::Data => self.data.borrow().to_value(),
+        match pspec.name() {
+            "user-data" => self.data.borrow().to_value(),
+            _ => unimplemented!(),
         }
     }
 }

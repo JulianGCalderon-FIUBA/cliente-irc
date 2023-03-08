@@ -1,12 +1,10 @@
 //! This modules defines all registration related structures
-mod constant;
 mod handle;
 mod imp;
 mod registerer;
 
 use std::io;
 
-pub use constant::RegistrationSignal;
 use glib::Object;
 use gtk::glib;
 use gtk::subclass::prelude::*;

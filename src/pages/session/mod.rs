@@ -1,6 +1,5 @@
 //! This module contains all [´Session`] related structures
 
-pub mod constant;
 mod handle;
 mod imp;
 
@@ -9,10 +8,9 @@ use gtk::glib::{self, clone};
 use gtk::prelude::{Cast, ObjectExt};
 use gtk::subclass::prelude::*;
 
-use self::constant::SessionProperty;
 use crate::client::{IrcClient, UserData};
 use crate::message::IrcCommand;
-use crate::widgets::chat_page::ChatPage;
+use crate::pages::ChatPage;
 
 const CHANNEL_INDICATOR: char = '#';
 
@@ -33,9 +31,7 @@ glib::wrapper! {
 impl Session {
     /// Creates a new Session for the provided client, client must already be registered.
     pub fn new(client: IrcClient, data: UserData) -> Self {
-        let session: Self = Object::builder()
-            .property(&SessionProperty::Data, data)
-            .build();
+        let session: Self = Object::builder().property("user-data", data).build();
 
         session.setup_client(client);
 
@@ -115,6 +111,6 @@ impl Session {
 
     // Shortcut for accessing the client's nickname
     fn nickname(&self) -> String {
-        self.property::<UserData>(&SessionProperty::Data).nickname()
+        self.property::<UserData>("user-data").nickname()
     }
 }

@@ -1,9 +1,7 @@
 //! This module defines all [`AddChatPage`] related structures
 
-mod constant;
 mod imp;
 
-pub use constant::AddChatPageSignal;
 use glib::Object;
 use gtk::glib;
 

@@ -7,7 +7,7 @@ use gtk::glib;
 use gtk::prelude::{ObjectExt, ToValue};
 use gtk::subclass::prelude::ObjectSubclassIsExt;
 
-use super::{Registration, RegistrationSignal};
+use super::Registration;
 use crate::client::UserData;
 use crate::message::{IrcMessage, IrcResponse};
 
@@ -56,7 +56,7 @@ impl Registration {
         let data = UserData::new(nickname, realname, username, hostname, servername);
 
         self.emit_by_name::<()>(
-            &RegistrationSignal::Registered,
+            "registered",
             &[self, &self.client().to_value(), &data.to_value()],
         );
 

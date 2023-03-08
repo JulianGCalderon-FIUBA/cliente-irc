@@ -1,11 +1,11 @@
 use glib::subclass::InitializingObject;
 use gtk::glib::once_cell::sync::{Lazy, OnceCell};
 use gtk::glib::subclass::Signal;
+use gtk::prelude::StaticType;
 use gtk::subclass::prelude::*;
 use gtk::{glib, template_callbacks, Button, CompositeTemplate};
 
-use crate::client::IrcClient;
-use crate::pages::registration::RegistrationSignal;
+use crate::client::{IrcClient, UserData};
 use crate::widgets::field::Field;
 use crate::widgets::password_field::PasswordField;
 
@@ -56,7 +56,15 @@ impl ObjectImpl for Registration {
     }
 
     fn signals() -> &'static [glib::subclass::Signal] {
-        static SIGNALS: Lazy<Vec<Signal>> = Lazy::new(RegistrationSignal::vec);
+        static SIGNALS: Lazy<Vec<Signal>> = Lazy::new(|| {
+            vec![Signal::builder("registered")
+                .param_types([
+                    super::Registration::static_type(),
+                    IrcClient::static_type(),
+                    UserData::static_type(),
+                ])
+                .build()]
+        });
         SIGNALS.as_ref()
     }
 }

@@ -4,8 +4,7 @@ use gtk::subclass::prelude::*;
 use gtk::{glib, template_callbacks, CompositeTemplate, Stack};
 
 use crate::client::{IrcClient, UserData};
-use crate::pages::registration::Registration;
-use crate::pages::session::Session;
+use crate::pages::{Registration, Session};
 
 #[derive(CompositeTemplate, Default)]
 #[template(resource = "/com/jgcalderon/irc-client/ui/window.ui")]

@@ -1,11 +1,10 @@
 use glib::subclass::InitializingObject;
 use gtk::glib::once_cell::sync::Lazy;
 use gtk::glib::subclass::Signal;
-use gtk::prelude::{ObjectExt, ToValue};
+use gtk::prelude::{ObjectExt, StaticType, ToValue};
 use gtk::subclass::prelude::*;
 use gtk::{glib, template_callbacks, CompositeTemplate, Entry};
 
-use super::AddChatPageSignal;
 use crate::utils::get_and_clear_entry;
 
 #[derive(CompositeTemplate, Default)]
@@ -31,7 +30,11 @@ impl ObjectSubclass for AddChatPage {
 
 impl ObjectImpl for AddChatPage {
     fn signals() -> &'static [Signal] {
-        static SIGNALS: Lazy<Vec<Signal>> = Lazy::new(AddChatPageSignal::vec);
+        static SIGNALS: Lazy<Vec<Signal>> = Lazy::new(|| {
+            vec![Signal::builder("add")
+                .param_types([String::static_type()])
+                .build()]
+        });
         SIGNALS.as_ref()
     }
 }
@@ -44,8 +47,7 @@ impl AddChatPage {
     #[template_callback]
     fn add_chat(&self, entry: Entry) {
         if let Some(name) = get_and_clear_entry(entry) {
-            self.obj()
-                .emit_by_name(&AddChatPageSignal::Add, &[&name.to_value()])
+            self.obj().emit_by_name("add", &[&name.to_value()])
         }
     }
 }

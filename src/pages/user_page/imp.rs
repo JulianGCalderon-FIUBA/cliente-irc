@@ -2,13 +2,12 @@ use std::cell::RefCell;
 
 use glib::subclass::InitializingObject;
 use gtk::glib::once_cell::sync::Lazy;
-use gtk::glib::ParamSpec;
+use gtk::glib::{ParamSpec, ParamSpecObject};
 use gtk::prelude::ToValue;
 use gtk::subclass::prelude::*;
 use gtk::{glib, CompositeTemplate};
 
 use crate::client::UserData;
-use crate::widgets::user_page::UserPageProperty;
 
 // use super::UserPageProperty;
 
@@ -36,22 +35,25 @@ impl ObjectSubclass for UserPage {
 
 impl ObjectImpl for UserPage {
     fn properties() -> &'static [glib::ParamSpec] {
-        static PROPERTIES: Lazy<Vec<ParamSpec>> = Lazy::new(UserPageProperty::vec);
+        static PROPERTIES: Lazy<Vec<ParamSpec>> =
+            Lazy::new(|| vec![ParamSpecObject::builder::<UserData>("user-data").build()]);
         PROPERTIES.as_ref()
     }
 
     fn set_property(&self, _id: usize, value: &glib::Value, pspec: &glib::ParamSpec) {
-        match UserPageProperty::from(pspec.name()) {
-            UserPageProperty::Data => {
+        match pspec.name() {
+            "user-data" => {
                 let data = value.get().unwrap();
                 self.data.replace(data);
             }
+            _ => unimplemented!(),
         };
     }
 
     fn property(&self, _id: usize, pspec: &glib::ParamSpec) -> glib::Value {
-        match UserPageProperty::from(pspec.name()) {
-            UserPageProperty::Data => self.data.borrow().to_value(),
+        match pspec.name() {
+            "user-data" => self.data.borrow().to_value(),
+            _ => unimplemented!(),
         }
     }
 
