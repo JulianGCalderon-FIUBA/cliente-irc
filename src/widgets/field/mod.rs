@@ -4,7 +4,8 @@ mod constant;
 mod imp;
 
 use glib::Object;
-use gtk::{glib, prelude::ObjectExt};
+use gtk::glib;
+use gtk::prelude::ObjectExt;
 
 pub use constant::FieldProperty;
 

@@ -1,4 +1,6 @@
-use gtk::{prelude::EntryBufferExtManual, traits::EntryExt, Entry};
+use gtk::prelude::EntryBufferExtManual;
+use gtk::traits::EntryExt;
+use gtk::Entry;
 
 /// If entry has content, it returns it, clearing the entry
 pub fn get_and_clear_entry(entry: Entry) -> Option<String> {

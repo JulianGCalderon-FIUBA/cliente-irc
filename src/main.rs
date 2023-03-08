@@ -4,20 +4,15 @@
 
 mod client;
 mod message;
-mod window;
-mod utils;
 mod pages;
+mod utils;
 mod widgets;
+mod window;
 
 use gtk::gdk::Display;
-use gtk::gio;
-use gtk::glib;
 use gtk::prelude::*;
 use gtk::traits::GtkWindowExt;
-use gtk::Application;
-use gtk::CssProvider;
-use gtk::IconTheme;
-use gtk::StyleContext;
+use gtk::{gio, glib, Application, CssProvider, IconTheme, StyleContext};
 
 use window::Window;
 

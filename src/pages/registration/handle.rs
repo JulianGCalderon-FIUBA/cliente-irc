@@ -3,16 +3,12 @@
 use std::ops::ControlFlow;
 
 use glib::{clone, MainContext};
-use gtk::{
-    glib,
-    prelude::{ObjectExt, ToValue},
-    subclass::prelude::ObjectSubclassIsExt,
-};
+use gtk::glib;
+use gtk::prelude::{ObjectExt, ToValue};
+use gtk::subclass::prelude::ObjectSubclassIsExt;
 
-use crate::{
-    client::UserData,
-    message::{IrcMessage, IrcResponse},
-};
+use crate::client::UserData;
+use crate::message::{IrcMessage, IrcResponse};
 
 use super::{Registration, RegistrationSignal};
 

@@ -3,10 +3,8 @@
 use std::ops::Deref;
 
 use glib::ParamSpec;
-use gtk::{
-    glib::{self, ParamSpecObject},
-    Stack,
-};
+use gtk::glib::{self, ParamSpecObject};
+use gtk::Stack;
 
 /// All `message` custom properties
 ///

@@ -3,7 +3,9 @@ mod constant;
 mod imp;
 
 use glib::Object;
-use gtk::{glib, prelude::ObjectExt, subclass::prelude::ObjectSubclassIsExt, Label};
+use gtk::prelude::ObjectExt;
+use gtk::subclass::prelude::ObjectSubclassIsExt;
+use gtk::{glib, Label};
 
 pub use constant::MessageProperty;
 

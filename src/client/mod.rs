@@ -9,12 +9,10 @@
 mod data;
 mod utils;
 
-use async_std::{
-    channel::{Receiver, Sender},
-    io,
-    net::{TcpStream, ToSocketAddrs},
-    task::block_on,
-};
+use async_std::channel::{Receiver, Sender};
+use async_std::io;
+use async_std::net::{TcpStream, ToSocketAddrs};
+use async_std::task::block_on;
 use gtk::glib;
 use std::io::ErrorKind;
 

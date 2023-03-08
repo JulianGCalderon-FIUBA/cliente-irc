@@ -4,9 +4,10 @@ mod constant;
 mod imp;
 
 use glib::Object;
-use gtk::{
-    glib, prelude::ObjectExt, subclass::prelude::ObjectSubclassIsExt, traits::WidgetExt, Align,
-};
+use gtk::prelude::ObjectExt;
+use gtk::subclass::prelude::ObjectSubclassIsExt;
+use gtk::traits::WidgetExt;
+use gtk::{glib, Align};
 
 pub use constant::{ChatPageProperty, ChatSignal};
 

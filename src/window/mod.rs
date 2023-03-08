@@ -2,9 +2,7 @@
 mod imp;
 
 use glib::Object;
-use gtk::gio;
-use gtk::glib;
-use gtk::Application;
+use gtk::{gio, glib, Application};
 
 glib::wrapper! {
     /// Main Window of the IRC Client

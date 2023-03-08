@@ -2,8 +2,7 @@ use glib::subclass::InitializingObject;
 use gtk::glib::once_cell::sync::{Lazy, OnceCell};
 use gtk::glib::subclass::Signal;
 use gtk::subclass::prelude::*;
-use gtk::Button;
-use gtk::{glib, template_callbacks, CompositeTemplate};
+use gtk::{glib, template_callbacks, Button, CompositeTemplate};
 
 use crate::client::IrcClient;
 use crate::pages::registration::RegistrationSignal;

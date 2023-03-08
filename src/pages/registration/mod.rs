@@ -8,7 +8,8 @@ use std::io;
 
 use crate::client::IrcClient;
 use glib::Object;
-use gtk::{glib, subclass::prelude::*};
+use gtk::glib;
+use gtk::subclass::prelude::*;
 
 pub use constant::RegistrationSignal;
 

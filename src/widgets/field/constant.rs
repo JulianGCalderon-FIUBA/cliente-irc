@@ -2,7 +2,7 @@
 use std::ops::Deref;
 
 /// All custom defined propeties for `Field`
-/// 
+///
 /// Can be easily converted between `&str` to use with properties
 pub enum FieldProperty {
     /// Name of the field

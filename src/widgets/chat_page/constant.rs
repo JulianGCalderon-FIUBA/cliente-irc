@@ -2,10 +2,9 @@
 
 use std::ops::Deref;
 
-use gtk::{
-    glib::{subclass::Signal, ParamSpec, ParamSpecString},
-    prelude::StaticType,
-};
+use gtk::glib::subclass::Signal;
+use gtk::glib::{ParamSpec, ParamSpecString};
+use gtk::prelude::StaticType;
 
 /// All `Chat` custom properties
 ///

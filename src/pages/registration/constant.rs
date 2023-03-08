@@ -2,7 +2,8 @@
 
 use std::ops::Deref;
 
-use gtk::{glib::subclass::Signal, prelude::StaticType};
+use gtk::glib::subclass::Signal;
+use gtk::prelude::StaticType;
 
 use crate::client::{IrcClient, UserData};
 

@@ -3,14 +3,13 @@ mod constant;
 mod imp;
 
 use glib::Object;
-use gtk::prelude::ListModelExt;
+use gtk::glib::{self, clone};
+use gtk::prelude::{Cast, ListModelExt, ObjectExt};
+use gtk::subclass::prelude::ObjectSubclassIsExt;
 use gtk::{
-    glib::{self, clone},
-    prelude::{Cast, ObjectExt},
-    subclass::prelude::ObjectSubclassIsExt,
-    CustomFilter, FilterListModel, SelectionModel, SingleSelection, Stack, StackPage,
+    BuilderListItemFactory, BuilderScope, CustomFilter, FilterListModel, SelectionModel,
+    SingleSelection, Stack, StackPage, INVALID_LIST_POSITION,
 };
-use gtk::{BuilderListItemFactory, BuilderScope, INVALID_LIST_POSITION};
 
 pub use constant::SidebarProperty;
 
