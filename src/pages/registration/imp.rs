@@ -4,7 +4,6 @@ use gtk::glib::subclass::Signal;
 use gtk::subclass::prelude::*;
 use gtk::Button;
 use gtk::{glib, template_callbacks, CompositeTemplate};
-use rnglib::{Language, RNG};
 
 use crate::client::IrcClient;
 use crate::pages::registration::RegistrationSignal;
@@ -52,7 +51,7 @@ impl ObjectImpl for Registration {
         self.parent_constructed();
 
         // AUTOMATIC LOGIN: ONLY FOR TESTING PURPOSES
-        // let generator = RNG::try_from(&Language::Roman).unwrap();
+        // let generator = rnglib::RNG::try_from(&rnglib::Language::Roman).unwrap();
         // let nickname = generator.generate_short();
         // self.nickname.set_input(&nickname);
         // self.connect_clicked();
