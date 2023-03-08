@@ -10,7 +10,7 @@ use gtk::subclass::prelude::*;
 
 use crate::client::message::IrcCommand;
 use crate::client::{IrcClient, UserData};
-use crate::pages::ChatPage;
+use crate::pages::Chat;
 
 const CHANNEL_INDICATOR: char = '#';
 
@@ -53,8 +53,8 @@ impl Session {
     /// Adds a new ´Chat´ with given name to stack.
     ///
     /// Chats are stored in the chat section of the sidebar for easy openning.
-    fn add_chat(&self, title: String) -> ChatPage {
-        let chat = ChatPage::new(title.clone());
+    fn add_chat(&self, title: String) -> Chat {
+        let chat = Chat::new(title.clone());
 
         chat.connect_close(clone!(@weak self as session => move |chat| {
             session.imp().pages.remove(chat);
@@ -78,7 +78,7 @@ impl Session {
     /// Sends ´message´ to the target of the given chat.
     ///
     /// May fail on a connection error.
-    fn send_message(&self, chat: &ChatPage, message: String) {
+    fn send_message(&self, chat: &Chat, message: String) {
         let target = chat.property("name");
         let privmsg_command = IrcCommand::Privmsg { target, message };
         if self.client().send(privmsg_command).is_err() {
@@ -89,12 +89,13 @@ impl Session {
     /// If the chat does not already exists, it creates it.
     ///
     /// Returns the specified [´Chat´]
-    fn get_or_insert_chat(&self, chat_name: String) -> ChatPage {
+    fn get_or_insert_chat(&self, chat: String) -> Chat {
+        let full_name = format!("chat-{chat}");
         self.imp()
             .pages
-            .child_by_name(&chat_name)
+            .child_by_name(&full_name)
             .map(|widget| widget.downcast().unwrap())
-            .unwrap_or_else(|| self.add_chat(chat_name))
+            .unwrap_or_else(|| self.add_chat(chat))
     }
 
     /// Returns whether a received privmsg is for a private chat

@@ -7,11 +7,11 @@ use gtk::glib;
 use gtk::prelude::{ObjectExt, ToValue};
 use gtk::subclass::prelude::ObjectSubclassIsExt;
 
-use super::Registration;
+use super::Login;
 use crate::client::message::{IrcMessage, IrcResponse};
 use crate::client::UserData;
 
-impl Registration {
+impl Login {
     /// Starts an asynchronous read of server messages until registration is complete
     pub(super) fn start_client_handler(&self) {
         MainContext::default().spawn_local(clone!(@weak self as registration => async move {

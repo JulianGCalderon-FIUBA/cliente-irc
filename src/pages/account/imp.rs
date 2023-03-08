@@ -13,14 +13,14 @@ use crate::client::UserData;
 
 #[derive(CompositeTemplate, Default)]
 #[template(resource = "/com/jgcalderon/irc-client/ui/user-page.ui")]
-pub struct UserPage {
+pub struct Account {
     data: RefCell<UserData>,
 }
 
 #[glib::object_subclass]
-impl ObjectSubclass for UserPage {
+impl ObjectSubclass for Account {
     const NAME: &'static str = "UserPage";
-    type Type = super::UserPage;
+    type Type = super::Account;
     type ParentType = gtk::Box;
 
     fn class_init(klass: &mut Self::Class) {
@@ -33,7 +33,7 @@ impl ObjectSubclass for UserPage {
     }
 }
 
-impl ObjectImpl for UserPage {
+impl ObjectImpl for Account {
     fn properties() -> &'static [glib::ParamSpec] {
         static PROPERTIES: Lazy<Vec<ParamSpec>> =
             Lazy::new(|| vec![ParamSpecObject::builder::<UserData>("user-data").build()]);
@@ -63,5 +63,5 @@ impl ObjectImpl for UserPage {
 
     fn dispose(&self) {}
 }
-impl WidgetImpl for UserPage {}
-impl BoxImpl for UserPage {}
+impl WidgetImpl for Account {}
+impl BoxImpl for Account {}

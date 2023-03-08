@@ -9,20 +9,20 @@ glib::wrapper! {
     /// This widget allows the user to add a new chat
     ///
     /// Subclassifies [´gtk::Box´]
-    pub struct AddChatPage(ObjectSubclass<imp::AddChatPage>)
+    pub struct ChatAdder(ObjectSubclass<imp::ChatAdder>)
     @extends gtk::Widget, gtk::Box,
     @implements gtk::Accessible, gtk::Buildable,
         gtk::ConstraintTarget, gtk::Orientable;
 }
 
-impl AddChatPage {
+impl ChatAdder {
     /// Creates a new [`AddChatPage`]
     pub fn new() -> Self {
         Object::builder().build()
     }
 }
 
-impl Default for AddChatPage {
+impl Default for ChatAdder {
     fn default() -> Self {
         Self::new()
     }

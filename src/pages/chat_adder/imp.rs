@@ -9,12 +9,12 @@ use crate::utils::get_and_clear_entry;
 
 #[derive(CompositeTemplate, Default)]
 #[template(resource = "/com/jgcalderon/irc-client/ui/add-chat-page.ui")]
-pub struct AddChatPage {}
+pub struct ChatAdder {}
 
 #[glib::object_subclass]
-impl ObjectSubclass for AddChatPage {
+impl ObjectSubclass for ChatAdder {
     const NAME: &'static str = "AddChatPage";
-    type Type = super::AddChatPage;
+    type Type = super::ChatAdder;
     type ParentType = gtk::Box;
 
     fn class_init(klass: &mut Self::Class) {
@@ -28,7 +28,7 @@ impl ObjectSubclass for AddChatPage {
     }
 }
 
-impl ObjectImpl for AddChatPage {
+impl ObjectImpl for ChatAdder {
     fn signals() -> &'static [Signal] {
         static SIGNALS: Lazy<Vec<Signal>> = Lazy::new(|| {
             vec![Signal::builder("add")
@@ -39,11 +39,11 @@ impl ObjectImpl for AddChatPage {
     }
 }
 
-impl WidgetImpl for AddChatPage {}
-impl BoxImpl for AddChatPage {}
+impl WidgetImpl for ChatAdder {}
+impl BoxImpl for ChatAdder {}
 
 #[template_callbacks]
-impl AddChatPage {
+impl ChatAdder {
     #[template_callback]
     fn add_chat(&self, entry: Entry) {
         if let Some(name) = get_and_clear_entry(entry) {

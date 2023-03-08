@@ -17,12 +17,12 @@
             <property name="icon-name">user-home-symbolic</property>
             <binding name="title">
               <lookup name="nickname">
-                <lookup name="data">Session</lookup>
+                <lookup name="user-data">Session</lookup>
               </lookup>
             </binding>
             <property name="child">
               <object class="UserPage">
-                <property name="data" bind-source="Session" bind-property="data" />
+                <property name="user-data" bind-source="Session" />
               </object>
             </property>
           </object>

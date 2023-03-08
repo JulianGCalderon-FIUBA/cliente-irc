@@ -11,7 +11,7 @@ use crate::components::password_field::PasswordField;
 
 #[derive(CompositeTemplate, Default)]
 #[template(resource = "/com/jgcalderon/irc-client/ui/registration.ui")]
-pub struct Registration {
+pub struct Login {
     #[template_child]
     pub address: TemplateChild<Field>,
     #[template_child]
@@ -28,9 +28,9 @@ pub struct Registration {
 }
 
 #[glib::object_subclass]
-impl ObjectSubclass for Registration {
+impl ObjectSubclass for Login {
     const NAME: &'static str = "Registration";
-    type Type = super::Registration;
+    type Type = super::Login;
     type ParentType = gtk::Box;
 
     fn class_init(klass: &mut Self::Class) {
@@ -44,7 +44,7 @@ impl ObjectSubclass for Registration {
     }
 }
 
-impl ObjectImpl for Registration {
+impl ObjectImpl for Login {
     fn constructed(&self) {
         self.parent_constructed();
 
@@ -59,7 +59,7 @@ impl ObjectImpl for Registration {
         static SIGNALS: Lazy<Vec<Signal>> = Lazy::new(|| {
             vec![Signal::builder("registered")
                 .param_types([
-                    super::Registration::static_type(),
+                    super::Login::static_type(),
                     IrcClient::static_type(),
                     UserData::static_type(),
                 ])
@@ -69,11 +69,11 @@ impl ObjectImpl for Registration {
     }
 }
 
-impl WidgetImpl for Registration {}
-impl BoxImpl for Registration {}
+impl WidgetImpl for Login {}
+impl BoxImpl for Login {}
 
 #[template_callbacks]
-impl Registration {
+impl Login {
     #[template_callback]
     /// Called after ´connect` button is clicked.
     ///

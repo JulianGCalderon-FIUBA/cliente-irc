@@ -17,13 +17,13 @@ glib::wrapper! {
     /// Asks for user information and establishes connection with an IrcServer
     ///
     /// Derives [´gtk::Box´]
-    pub struct Registration(ObjectSubclass<imp::Registration>)
+    pub struct Login(ObjectSubclass<imp::Login>)
     @extends gtk::Widget, gtk::Box,
     @implements gtk::Accessible, gtk::Buildable,
         gtk::ConstraintTarget, gtk::Orientable;
 }
 
-impl Registration {
+impl Login {
     pub fn new() -> Self {
         Object::builder().build()
     }
@@ -61,7 +61,7 @@ impl Registration {
     }
 }
 
-impl Default for Registration {
+impl Default for Login {
     fn default() -> Self {
         Self::new()
     }

@@ -3,10 +3,10 @@ use std::io;
 
 use gtk::subclass::prelude::*;
 
-use super::Registration;
+use super::Login;
 use crate::client::message::IrcCommand;
 
-impl Registration {
+impl Login {
     /// Sends registration commands to the client
     pub(super) fn register_client(&self) -> io::Result<()> {
         self.send_pass()?;

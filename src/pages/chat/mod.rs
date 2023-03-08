@@ -20,13 +20,13 @@ glib::wrapper! {
     /// Has a single css node 'chat'
     ///
     /// Subclassifies [´gtk::Box´]
-    pub struct ChatPage(ObjectSubclass<imp::ChatPage>)
+    pub struct Chat(ObjectSubclass<imp::Chat>)
     @extends gtk::Widget, gtk::Box,
     @implements gtk::Accessible, gtk::Buildable,
         gtk::ConstraintTarget, gtk::Orientable;
 }
 
-impl ChatPage {
+impl Chat {
     /// Creates a new [`Chat`] with the given name
     pub fn new(name: String) -> Self {
         Object::builder().property("name", name).build()
@@ -38,7 +38,7 @@ impl ChatPage {
         F: Fn(&Self) + 'static,
     {
         self.connect_local("close", true, move |args| {
-            let chat: ChatPage = args[0].get().unwrap();
+            let chat: Chat = args[0].get().unwrap();
             f(&chat);
             None
         });
@@ -50,7 +50,7 @@ impl ChatPage {
         F: Fn(&Self, String) + 'static,
     {
         self.connect_local("send", true, move |args| {
-            let chat: ChatPage = args[0].get().unwrap();
+            let chat: Chat = args[0].get().unwrap();
             let message: String = args[1].get().unwrap();
             f(&chat, message);
             None

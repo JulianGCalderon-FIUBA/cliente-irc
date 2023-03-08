@@ -8,22 +8,21 @@ use gtk::prelude::{ObjectExt, StaticType, ToValue};
 use gtk::subclass::prelude::*;
 use gtk::{glib, template_callbacks, CompositeTemplate, Entry, ListBox};
 
-use crate::utils::get_and_clear_entry;
-
 use super::create_own_message;
+use crate::utils::get_and_clear_entry;
 
 #[derive(CompositeTemplate, Default)]
 #[template(resource = "/com/jgcalderon/irc-client/ui/chat.ui")]
-pub struct ChatPage {
+pub struct Chat {
     #[template_child]
     pub messages: TemplateChild<ListBox>,
     name: RefCell<String>,
 }
 
 #[glib::object_subclass]
-impl ObjectSubclass for ChatPage {
+impl ObjectSubclass for Chat {
     const NAME: &'static str = "Chat";
-    type Type = super::ChatPage;
+    type Type = super::Chat;
     type ParentType = gtk::Box;
 
     fn class_init(klass: &mut Self::Class) {
@@ -38,7 +37,7 @@ impl ObjectSubclass for ChatPage {
     }
 }
 
-impl ObjectImpl for ChatPage {
+impl ObjectImpl for Chat {
     fn properties() -> &'static [glib::ParamSpec] {
         static PROPERTIES: Lazy<Vec<ParamSpec>> =
             Lazy::new(|| vec![ParamSpecString::builder("name").build()]);
@@ -80,11 +79,11 @@ impl ObjectImpl for ChatPage {
 
     fn dispose(&self) {}
 }
-impl WidgetImpl for ChatPage {}
-impl BoxImpl for ChatPage {}
+impl WidgetImpl for Chat {}
+impl BoxImpl for Chat {}
 
 #[template_callbacks]
-impl ChatPage {
+impl Chat {
     #[template_callback]
     /// Called when the user sends a message through the chat
     pub fn send_message(&self, entry: Entry) {
