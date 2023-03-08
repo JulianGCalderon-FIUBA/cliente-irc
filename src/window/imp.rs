@@ -4,7 +4,6 @@ use gtk::subclass::prelude::*;
 use gtk::{glib, template_callbacks, CompositeTemplate, Stack};
 
 use crate::client::{IrcClient, UserData};
-
 use crate::pages::registration::Registration;
 use crate::pages::session::Session;
 

@@ -13,7 +13,6 @@ use gtk::gdk::Display;
 use gtk::prelude::*;
 use gtk::traits::GtkWindowExt;
 use gtk::{gio, glib, Application, CssProvider, IconTheme, StyleContext};
-
 use window::Window;
 
 const APPLICATION_ID: &str = "com.jgcalderon.irc-client";

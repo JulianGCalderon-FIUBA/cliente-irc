@@ -3,11 +3,10 @@
 mod constant;
 mod imp;
 
+pub use constant::PasswordFieldProperty;
 use glib::Object;
 use gtk::glib;
 use gtk::prelude::ObjectExt;
-
-pub use constant::PasswordFieldProperty;
 
 glib::wrapper! {
     /// This widgets is used to ask for user for a password, indicating the name of the variable.

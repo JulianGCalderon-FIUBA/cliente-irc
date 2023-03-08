@@ -7,10 +7,9 @@ use gtk::glib;
 use gtk::prelude::{ObjectExt, ToValue};
 use gtk::subclass::prelude::ObjectSubclassIsExt;
 
+use super::{Registration, RegistrationSignal};
 use crate::client::UserData;
 use crate::message::{IrcMessage, IrcResponse};
-
-use super::{Registration, RegistrationSignal};
 
 impl Registration {
     /// Starts an asynchronous read of server messages until registration is complete

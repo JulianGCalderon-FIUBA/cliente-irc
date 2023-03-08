@@ -8,10 +8,9 @@ use gtk::prelude::{ObjectExt, ToValue};
 use gtk::subclass::prelude::*;
 use gtk::{glib, template_callbacks, CompositeTemplate, Entry, ListBox};
 
+use super::{create_own_message, ChatPageProperty};
 use crate::utils::get_and_clear_entry;
 use crate::widgets::chat_page::constant::ChatSignal;
-
-use super::{create_own_message, ChatPageProperty};
 
 #[derive(CompositeTemplate, Default)]
 #[template(resource = "/com/jgcalderon/irc-client/ui/chat.ui")]

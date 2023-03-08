@@ -5,9 +5,8 @@ use gtk::prelude::{ObjectExt, ToValue};
 use gtk::subclass::prelude::*;
 use gtk::{glib, template_callbacks, CompositeTemplate, Entry};
 
-use crate::utils::get_and_clear_entry;
-
 use super::AddChatPageSignal;
+use crate::utils::get_and_clear_entry;
 
 #[derive(CompositeTemplate, Default)]
 #[template(resource = "/com/jgcalderon/irc-client/ui/add-chat-page.ui")]

@@ -9,10 +9,9 @@ use gtk::glib::{self, clone};
 use gtk::prelude::{Cast, ObjectExt};
 use gtk::subclass::prelude::*;
 
+use self::constant::SessionProperty;
 use crate::client::{IrcClient, UserData};
 use crate::message::IrcCommand;
-
-use self::constant::SessionProperty;
 use crate::widgets::chat_page::ChatPage;
 
 const CHANNEL_INDICATOR: char = '#';

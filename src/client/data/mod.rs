@@ -3,11 +3,10 @@
 mod constant;
 mod imp;
 
+pub use constant::UserDataProperty;
 use glib::Object;
 use gtk::glib;
 use gtk::prelude::ObjectExt;
-
-pub use constant::UserDataProperty;
 
 glib::wrapper! {
     /// Used to store user data as properties

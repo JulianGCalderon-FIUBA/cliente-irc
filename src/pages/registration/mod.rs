@@ -6,12 +6,12 @@ mod registerer;
 
 use std::io;
 
-use crate::client::IrcClient;
+pub use constant::RegistrationSignal;
 use glib::Object;
 use gtk::glib;
 use gtk::subclass::prelude::*;
 
-pub use constant::RegistrationSignal;
+use crate::client::IrcClient;
 
 glib::wrapper! {
     /// This windows manages the registration process

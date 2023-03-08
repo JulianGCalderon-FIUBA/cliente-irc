@@ -5,9 +5,8 @@ use std::ops::Deref;
 use gtk::glib::subclass::Signal;
 use gtk::prelude::StaticType;
 
-use crate::client::{IrcClient, UserData};
-
 use super::Registration;
+use crate::client::{IrcClient, UserData};
 
 /// All Registration custom signals
 ///

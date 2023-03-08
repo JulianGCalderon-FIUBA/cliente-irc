@@ -3,11 +3,11 @@
 mod constant;
 mod imp;
 
+pub use constant::UserPageProperty;
 use glib::Object;
 use gtk::glib;
 
 use crate::client::UserData;
-pub use constant::UserPageProperty;
 
 glib::wrapper! {
     /// Page to display the user information

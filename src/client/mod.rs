@@ -9,17 +9,17 @@
 mod data;
 mod utils;
 
+use std::io::ErrorKind;
+
 use async_std::channel::{Receiver, Sender};
 use async_std::io;
 use async_std::net::{TcpStream, ToSocketAddrs};
 use async_std::task::block_on;
-use gtk::glib;
-use std::io::ErrorKind;
-
-use crate::message::{IrcCommand, IrcMessage};
 pub use data::UserData;
+use gtk::glib;
 
 use self::utils::{spawn_reader, spawn_writer};
+use crate::message::{IrcCommand, IrcMessage};
 
 /// This struct can be used to comunicate with an IRC Server
 ///

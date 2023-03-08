@@ -1,10 +1,11 @@
+use std::cell::RefCell;
+
 use glib::subclass::InitializingObject;
 use gtk::glib::once_cell::sync::Lazy;
 use gtk::glib::{ParamSpec, ParamSpecString};
 use gtk::prelude::{ObjectExt, ToValue};
 use gtk::subclass::prelude::*;
 use gtk::{glib, CompositeTemplate, LevelBar, PasswordEntry};
-use std::cell::RefCell;
 
 use super::PasswordFieldProperty;
 

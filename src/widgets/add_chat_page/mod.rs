@@ -3,10 +3,9 @@
 mod constant;
 mod imp;
 
+pub use constant::AddChatPageSignal;
 use glib::Object;
 use gtk::glib;
-
-pub use constant::AddChatPageSignal;
 
 glib::wrapper! {
     /// This widget allows the user to add a new chat

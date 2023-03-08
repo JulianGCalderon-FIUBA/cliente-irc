@@ -3,9 +3,8 @@ use std::io;
 
 use gtk::subclass::prelude::*;
 
-use crate::message::IrcCommand;
-
 use super::Registration;
+use crate::message::IrcCommand;
 
 impl Registration {
     /// Sends registration commands to the client

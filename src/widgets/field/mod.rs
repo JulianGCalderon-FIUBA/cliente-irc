@@ -3,11 +3,10 @@
 mod constant;
 mod imp;
 
+pub use constant::FieldProperty;
 use glib::Object;
 use gtk::glib;
 use gtk::prelude::ObjectExt;
-
-pub use constant::FieldProperty;
 
 glib::wrapper! {
     /// This widgets is used to ask for user for information, indicating the name of the variable.

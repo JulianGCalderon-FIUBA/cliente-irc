@@ -2,6 +2,7 @@
 mod constant;
 mod imp;
 
+pub use constant::SidebarProperty;
 use glib::Object;
 use gtk::glib::{self, clone};
 use gtk::prelude::{Cast, ListModelExt, ObjectExt};
@@ -10,8 +11,6 @@ use gtk::{
     BuilderListItemFactory, BuilderScope, CustomFilter, FilterListModel, SelectionModel,
     SingleSelection, Stack, StackPage, INVALID_LIST_POSITION,
 };
-
-pub use constant::SidebarProperty;
 
 glib::wrapper! {
     /// Used to display all sesion pages and switch between them

@@ -6,7 +6,6 @@ use gtk::{glib, template_callbacks, Button, CompositeTemplate};
 
 use crate::client::IrcClient;
 use crate::pages::registration::RegistrationSignal;
-
 use crate::widgets::field::Field;
 use crate::widgets::password_field::PasswordField;
 

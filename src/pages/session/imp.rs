@@ -7,14 +7,13 @@ use gtk::prelude::{StaticTypeExt, ToValue};
 use gtk::subclass::prelude::*;
 use gtk::{glib, template_callbacks, CompositeTemplate, Stack};
 
+use super::CHANNEL_INDICATOR;
 use crate::client::{IrcClient, UserData};
 use crate::message::IrcCommand;
-use crate::widgets::{AddChatPage, Sidebar};
-
-use super::CHANNEL_INDICATOR;
 use crate::pages::session::SessionProperty;
 use crate::widgets::chat_page::ChatPage;
 use crate::widgets::user_page::UserPage;
+use crate::widgets::{AddChatPage, Sidebar};
 
 #[derive(CompositeTemplate, Default)]
 #[template(resource = "/com/jgcalderon/irc-client/ui/session.ui")]

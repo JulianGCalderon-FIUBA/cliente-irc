@@ -2,9 +2,8 @@
 
 use gtk::glib::{self, clone, MainContext};
 
-use crate::message::{IrcCommand, IrcMessage, IrcResponse};
-
 use super::Session;
+use crate::message::{IrcCommand, IrcMessage, IrcResponse};
 
 impl Session {
     /// Starts an asynchronous read of server messages, handling each one.

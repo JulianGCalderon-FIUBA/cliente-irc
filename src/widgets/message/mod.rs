@@ -2,12 +2,11 @@
 mod constant;
 mod imp;
 
+pub use constant::MessageProperty;
 use glib::Object;
 use gtk::prelude::ObjectExt;
 use gtk::subclass::prelude::ObjectSubclassIsExt;
 use gtk::{glib, Label};
-
-pub use constant::MessageProperty;
 
 glib::wrapper! {
     /// Used to display a message inside a chat

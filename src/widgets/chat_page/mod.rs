@@ -3,13 +3,12 @@
 mod constant;
 mod imp;
 
+pub use constant::{ChatPageProperty, ChatSignal};
 use glib::Object;
 use gtk::prelude::ObjectExt;
 use gtk::subclass::prelude::ObjectSubclassIsExt;
 use gtk::traits::WidgetExt;
 use gtk::{glib, Align};
-
-pub use constant::{ChatPageProperty, ChatSignal};
 
 use super::message::Message;
 

@@ -1,8 +1,9 @@
 //! This module contains useful constants for dealing with `AddChatPage`
 
+use std::ops::Deref;
+
 use gtk::glib::subclass::Signal;
 use gtk::prelude::StaticType;
-use std::ops::Deref;
 
 pub enum AddChatPageSignal {
     /// Emitted after user requests to add new chat
