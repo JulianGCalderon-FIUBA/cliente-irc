@@ -7,6 +7,7 @@
 //! This is indicated by RFC 1459
 
 mod data;
+pub mod message;
 mod utils;
 
 use std::io::ErrorKind;
@@ -18,8 +19,8 @@ use async_std::task::block_on;
 use gtk::glib;
 
 use self::utils::{spawn_reader, spawn_writer};
-use crate::message::{IrcCommand, IrcMessage};
 pub use data::UserData;
+use message::{IrcCommand, IrcMessage};
 
 /// This struct can be used to comunicate with an IRC Server
 ///

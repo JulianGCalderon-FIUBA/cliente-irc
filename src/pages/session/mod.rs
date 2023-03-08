@@ -8,8 +8,8 @@ use gtk::glib::{self, clone};
 use gtk::prelude::{Cast, ObjectExt};
 use gtk::subclass::prelude::*;
 
+use crate::client::message::IrcCommand;
 use crate::client::{IrcClient, UserData};
-use crate::message::IrcCommand;
 use crate::pages::ChatPage;
 
 const CHANNEL_INDICATOR: char = '#';

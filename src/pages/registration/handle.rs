@@ -8,8 +8,8 @@ use gtk::prelude::{ObjectExt, ToValue};
 use gtk::subclass::prelude::ObjectSubclassIsExt;
 
 use super::Registration;
+use crate::client::message::{IrcMessage, IrcResponse};
 use crate::client::UserData;
-use crate::message::{IrcMessage, IrcResponse};
 
 impl Registration {
     /// Starts an asynchronous read of server messages until registration is complete

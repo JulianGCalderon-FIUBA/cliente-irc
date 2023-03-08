@@ -7,8 +7,8 @@ use async_std::net::TcpStream;
 use glib::MainContext;
 use gtk::glib;
 
+use super::message::{IrcCommand, IrcMessage};
 use super::unexpected_eof;
-use crate::message::{IrcCommand, IrcMessage};
 
 const MESSAGE_SEPARATOR: &[u8] = b"\r\n";
 

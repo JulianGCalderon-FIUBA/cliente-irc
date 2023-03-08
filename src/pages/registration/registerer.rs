@@ -4,7 +4,7 @@ use std::io;
 use gtk::subclass::prelude::*;
 
 use super::Registration;
-use crate::message::IrcCommand;
+use crate::client::message::IrcCommand;
 
 impl Registration {
     /// Sends registration commands to the client

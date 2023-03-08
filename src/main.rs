@@ -4,7 +4,6 @@
 
 mod client;
 mod components;
-mod message;
 mod pages;
 mod utils;
 mod window;
