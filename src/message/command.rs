@@ -50,9 +50,6 @@ impl IrcCommand {
             || command == JOIN
     }
 
-    /// Creates a [`IrcCommand::Privmsg`] from the given components.
-    ///
-    /// Fails on invalid arguments
     pub fn new_privmsg(mut args: Args, trail: Trail) -> Result<Self, ParsingError> {
         args.reverse();
 
@@ -62,25 +59,16 @@ impl IrcCommand {
         Ok(Self::Privmsg { target, message })
     }
 
-    /// Creates a [`IrcCommand::Pass`] from the given components.
-    ///
-    /// Fails on invalid arguments
     fn new_pass(mut args: Args, _trail: Trail) -> Result<IrcCommand, ParsingError> {
         let password = args.pop().ok_or(ParsingError::MissingParameter)?;
         Ok(Self::Pass { password })
     }
 
-    /// Creates a [`IrcCommand::Nick`] from the given components.
-    ///
-    /// Fails on invalid arguments
     fn new_nick(mut args: Args, _trail: Trail) -> Result<IrcCommand, ParsingError> {
         let nickname = args.pop().ok_or(ParsingError::MissingParameter)?;
         Ok(Self::Nick { nickname })
     }
 
-    /// Creates a [`IrcCommand::User`] from the given components.
-    ///
-    /// Fails on invalid arguments
     fn new_user(mut args: Args, trail: Trail) -> Result<IrcCommand, ParsingError> {
         let username = args.pop().ok_or(ParsingError::MissingParameter)?;
         let realname = trail.ok_or(ParsingError::MissingParameter)?;
@@ -88,18 +76,12 @@ impl IrcCommand {
         Ok(Self::User { username, realname })
     }
 
-    /// Creates a [ IrcCommand::Quit`] from the given components.
-    ///
-    /// Fails on invalid arguments
     fn new_quit(_args: Args, trail: Trail) -> Result<IrcCommand, ParsingError> {
         let message = trail.ok_or(ParsingError::MissingParameter)?;
 
         Ok(Self::Quit { message })
     }
 
-    /// Creates a [ IrcCommand::Join`] from the given components.
-    ///
-    /// Fails on invalid arguments
     fn new_join(mut args: Args, _trail: Trail) -> Result<IrcCommand, ParsingError> {
         let name = args.pop().ok_or(ParsingError::MissingParameter)?;
 

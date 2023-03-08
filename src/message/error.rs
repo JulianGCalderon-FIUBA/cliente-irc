@@ -1,4 +1,4 @@
-//! This module contains error that can be encountered while parsing a server message
+//! This module defines [`ParsingError`]
 
 /// Parsing errors that can be encountered while parsing a server message
 #[derive(Debug)]

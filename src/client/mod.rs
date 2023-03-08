@@ -15,11 +15,11 @@ use async_std::channel::{Receiver, Sender};
 use async_std::io;
 use async_std::net::{TcpStream, ToSocketAddrs};
 use async_std::task::block_on;
-pub use data::UserData;
 use gtk::glib;
 
 use self::utils::{spawn_reader, spawn_writer};
 use crate::message::{IrcCommand, IrcMessage};
+pub use data::UserData;
 
 /// This struct can be used to comunicate with an IRC Server
 ///

@@ -1,16 +1,6 @@
 //! This module contains all IRC message variations.
 //!
-//! All messages are parsed in `prefix`, `command`, `arguments`, `trailing`
-//!
-//! Example: `:prefix command argument1 argument2 argument3 :trai ling`
-//!
-//! - prefix: Optional, must be prefixed with `:`
-//! - command: Mandatory
-//! - arguments: whitespace separated arguments, not prefixed by an `:`
-//! - trailing: last argument, prefixed by a `:`. Can contain whitespace
-//!
-//! Each IRC command has different number of arguments and validations,
-//! acording to the protocol RFC 1459
+//! Messages are parsed acording to RFC 1459
 
 mod command;
 mod error;

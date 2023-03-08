@@ -38,9 +38,6 @@ impl IrcResponse {
         response == WELCOME || response == NICK_COLLISION || response == NO_NICKNAME
     }
 
-    /// Creates a [IrcResponse::Welcome] from the message arguments.
-    ///
-    /// Fails on invalid arguments
     pub fn new_welcome(mut args: Args, trail: Trail) -> Result<Self, ParsingError> {
         let realname = args.pop().ok_or(ParsingError::MissingParameter)?;
 
@@ -76,18 +73,12 @@ impl IrcResponse {
         })
     }
 
-    /// Creates a [IrcResponse::NickCollision] from the message arguments.
-    ///
-    /// Fails on invalid arguments
     fn new_nick_collision(mut args: Args, _trail: Trail) -> Result<Self, ParsingError> {
         let nickname = args.pop().ok_or(ParsingError::MissingParameter)?;
 
         Ok(Self::NickCollision { nickname })
     }
 
-    /// Creates a [IrcResponse::NoNickname] from the message arguments.
-    ///
-    /// Fails on invalid arguments
     fn new_no_nickname(_args: Args, _trail: Trail) -> Result<IrcResponse, ParsingError> {
         Ok(Self::NoNickname)
     }

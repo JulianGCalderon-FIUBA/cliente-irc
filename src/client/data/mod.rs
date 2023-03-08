@@ -1,4 +1,4 @@
-//! This modules defines `UserData`
+//! This modules defines [`UserData`]
 mod imp;
 
 use glib::Object;
