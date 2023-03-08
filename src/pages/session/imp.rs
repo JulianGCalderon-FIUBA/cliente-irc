@@ -11,7 +11,7 @@ use super::CHANNEL_INDICATOR;
 use crate::client::{IrcClient, UserData};
 use crate::message::IrcCommand;
 use crate::pages::{AddChatPage, ChatPage, UserPage};
-use crate::widgets::Sidebar;
+use crate::components::Sidebar;
 
 #[derive(CompositeTemplate, Default)]
 #[template(resource = "/com/jgcalderon/irc-client/ui/session.ui")]

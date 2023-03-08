@@ -2,12 +2,11 @@ use std::cell::RefCell;
 
 use glib::subclass::InitializingObject;
 use gtk::glib::once_cell::sync::Lazy;
-use gtk::glib::ParamSpec;
+use gtk::glib::{ParamSpec, ParamSpecObject};
 use gtk::prelude::{ObjectExt, ToValue};
 use gtk::subclass::prelude::*;
 use gtk::{glib, CompositeTemplate, ListView, SingleSelection, Stack};
 
-use super::SidebarProperty;
 
 #[derive(CompositeTemplate, Default)]
 #[template(resource = "/com/jgcalderon/irc-client/ui/sidebar.ui")]
@@ -39,22 +38,25 @@ impl ObjectSubclass for Sidebar {
 
 impl ObjectImpl for Sidebar {
     fn properties() -> &'static [glib::ParamSpec] {
-        static PROPERTIES: Lazy<Vec<ParamSpec>> = Lazy::new(SidebarProperty::vec);
+        static PROPERTIES: Lazy<Vec<ParamSpec>> =
+            Lazy::new(|| vec![ParamSpecObject::builder::<Stack>("stack").build()]);
         PROPERTIES.as_ref()
     }
 
     fn set_property(&self, _id: usize, value: &glib::Value, pspec: &glib::ParamSpec) {
-        match SidebarProperty::from(pspec.name()) {
-            SidebarProperty::Stack => {
+        match pspec.name() {
+            "stack" => {
                 let stack: Stack = value.get().unwrap();
                 self.stack.replace(stack);
             }
+            _ => unimplemented!(),
         };
     }
 
     fn property(&self, _id: usize, pspec: &glib::ParamSpec) -> glib::Value {
-        match SidebarProperty::from(pspec.name()) {
-            SidebarProperty::Stack => self.stack.borrow().to_value(),
+        match pspec.name() {
+            "stack" => self.stack.borrow().to_value(),
+            _ => unimplemented!(),
         }
     }
 

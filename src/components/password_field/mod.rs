@@ -1,9 +1,7 @@
 //! This modules defines the [`PasswordField`] widget
 
-mod constant;
 mod imp;
 
-pub use constant::PasswordFieldProperty;
 use glib::Object;
 use gtk::glib;
 use gtk::prelude::ObjectExt;
@@ -27,7 +25,7 @@ impl PasswordField {
 
     /// Gets the user input
     pub fn input(&self) -> String {
-        let input: String = self.property(&PasswordFieldProperty::Input);
+        let input: String = self.property("input");
 
         input
     }

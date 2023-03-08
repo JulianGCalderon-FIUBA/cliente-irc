@@ -7,8 +7,6 @@ use gtk::prelude::{ObjectExt, ToValue};
 use gtk::subclass::prelude::*;
 use gtk::{glib, CompositeTemplate, LevelBar, PasswordEntry};
 
-use super::PasswordFieldProperty;
-
 #[derive(CompositeTemplate, Default)]
 #[template(resource = "/com/jgcalderon/irc-client/ui/password-field.ui")]
 pub struct PasswordField {
@@ -40,30 +38,32 @@ impl ObjectImpl for PasswordField {
     fn properties() -> &'static [glib::ParamSpec] {
         static PROPERTIES: Lazy<Vec<ParamSpec>> = Lazy::new(|| {
             vec![
-                ParamSpecString::builder(&PasswordFieldProperty::Name).build(),
-                ParamSpecString::builder(&PasswordFieldProperty::Input).build(),
+                ParamSpecString::builder("name").build(),
+                ParamSpecString::builder("input").build(),
             ]
         });
         PROPERTIES.as_ref()
     }
 
     fn set_property(&self, _id: usize, value: &glib::Value, pspec: &glib::ParamSpec) {
-        match PasswordFieldProperty::from(pspec.name()) {
-            PasswordFieldProperty::Name => {
+        match pspec.name() {
+            "name" => {
                 let value = value.get().unwrap();
                 self.name.replace(value);
             }
-            PasswordFieldProperty::Input => {
+            "input" => {
                 let value = value.get().unwrap();
                 self.input.replace(value);
             }
+            _ => unimplemented!(),
         };
     }
 
     fn property(&self, _id: usize, pspec: &glib::ParamSpec) -> glib::Value {
-        match PasswordFieldProperty::from(pspec.name()) {
-            PasswordFieldProperty::Name => self.name.borrow().to_value(),
-            PasswordFieldProperty::Input => self.input.borrow().to_value(),
+        match pspec.name() {
+            "name" => self.name.borrow().to_value(),
+            "input" => self.input.borrow().to_value(),
+            _ => unimplemented!(),
         }
     }
 

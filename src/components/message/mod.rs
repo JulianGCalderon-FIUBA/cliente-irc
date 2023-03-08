@@ -1,8 +1,6 @@
 /// This module defines [`Message`] related structures
-mod constant;
 mod imp;
 
-pub use constant::MessageProperty;
 use glib::Object;
 use gtk::prelude::ObjectExt;
 use gtk::subclass::prelude::ObjectSubclassIsExt;
@@ -25,20 +23,18 @@ glib::wrapper! {
 impl Message {
     /// Creates a new [´Message´] with the specified text
     pub fn new(message: String) -> Self {
-        Object::builder()
-            .property(&MessageProperty::Message, message)
-            .build()
+        Object::builder().property("message", message).build()
     }
 
     /// Sets the sender of the message to be displayed
     pub fn set_sender(&self, sender: String) {
-        self.set_property(&MessageProperty::Sender, sender);
+        self.set_property("sender", sender);
     }
 
     /// Binds the sender's emptiness to the label's visibiliy
     fn bind_sender_to_label_visibility(&self) {
         let sender_label = &self.imp().sender_label;
-        self.bind_property::<Label>(&MessageProperty::Sender, sender_label, "visible")
+        self.bind_property::<Label>("sender", sender_label, "visible")
             .transform_to(|_, sender: String| Some(!sender.is_empty()))
             .sync_create()
             .build();

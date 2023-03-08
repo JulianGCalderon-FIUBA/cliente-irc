@@ -2,12 +2,10 @@ use std::cell::RefCell;
 
 use glib::subclass::InitializingObject;
 use gtk::glib::once_cell::sync::Lazy;
-use gtk::glib::ParamSpec;
+use gtk::glib::{ParamSpec, ParamSpecString};
 use gtk::prelude::ToValue;
 use gtk::subclass::prelude::*;
 use gtk::{glib, CompositeTemplate, Label};
-
-use super::MessageProperty;
 
 #[derive(CompositeTemplate, Default)]
 #[template(resource = "/com/jgcalderon/irc-client/ui/message.ui")]
@@ -36,27 +34,34 @@ impl ObjectSubclass for Message {
 
 impl ObjectImpl for Message {
     fn properties() -> &'static [glib::ParamSpec] {
-        static PROPERTIES: Lazy<Vec<ParamSpec>> = Lazy::new(MessageProperty::vec);
+        static PROPERTIES: Lazy<Vec<ParamSpec>> = Lazy::new(|| {
+            vec![
+                ParamSpecString::builder("message").build(),
+                ParamSpecString::builder("sender").build(),
+            ]
+        });
         PROPERTIES.as_ref()
     }
 
     fn set_property(&self, _id: usize, value: &glib::Value, pspec: &glib::ParamSpec) {
-        match MessageProperty::from(pspec.name()) {
-            MessageProperty::Message => {
+        match pspec.name() {
+            "message" => {
                 let message: String = value.get().unwrap();
                 self.message.replace(message);
             }
-            MessageProperty::Sender => {
+            "sender" => {
                 let sender: String = value.get().unwrap();
                 self.sender.replace(sender);
             }
+            _ => unimplemented!(),
         };
     }
 
     fn property(&self, _id: usize, pspec: &glib::ParamSpec) -> glib::Value {
-        match MessageProperty::from(pspec.name()) {
-            MessageProperty::Message => self.message.borrow().to_value(),
-            MessageProperty::Sender => self.sender.borrow().to_value(),
+        match pspec.name() {
+            "message" => self.message.borrow().to_value(),
+            "sender" => self.sender.borrow().to_value(),
+            _ => unimplemented!(),
         }
     }
 

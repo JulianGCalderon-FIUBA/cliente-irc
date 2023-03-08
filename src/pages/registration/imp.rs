@@ -6,8 +6,8 @@ use gtk::subclass::prelude::*;
 use gtk::{glib, template_callbacks, Button, CompositeTemplate};
 
 use crate::client::{IrcClient, UserData};
-use crate::widgets::field::Field;
-use crate::widgets::password_field::PasswordField;
+use crate::components::field::Field;
+use crate::components::password_field::PasswordField;
 
 #[derive(CompositeTemplate, Default)]
 #[template(resource = "/com/jgcalderon/irc-client/ui/registration.ui")]

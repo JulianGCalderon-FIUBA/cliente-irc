@@ -3,10 +3,10 @@
 #![warn(missing_docs)]
 
 mod client;
+mod components;
 mod message;
 mod pages;
 mod utils;
-mod widgets;
 mod window;
 
 use gtk::gdk::Display;

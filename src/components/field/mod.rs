@@ -1,9 +1,7 @@
 //! This modules defines the [Field] widget
 
-mod constant;
 mod imp;
 
-pub use constant::FieldProperty;
 use glib::Object;
 use gtk::glib;
 use gtk::prelude::ObjectExt;
@@ -30,10 +28,10 @@ impl Field {
 
     /// Gets the user input, or default if no input was provided.
     pub fn input(&self) -> String {
-        let input: String = self.property(&FieldProperty::Input);
+        let input: String = self.property("input");
 
         if input.is_empty() {
-            return self.property(&FieldProperty::Default);
+            return self.property("default");
         }
 
         input
@@ -41,29 +39,29 @@ impl Field {
 
     /// Sets the user input to ´value´.
     pub fn set_input(&self, value: &str) {
-        self.set_property(&FieldProperty::Input, value);
+        self.set_property("input", value);
     }
 
     /// Locks the input, preventing the user from modifying its value
     /// If no input was provided by te user, then the default value is set.
     pub fn lock(&self) {
-        let input: String = self.property(&FieldProperty::Input);
+        let input: String = self.property("input");
         if input.is_empty() {
-            let default: String = self.property(&FieldProperty::Default);
+            let default: String = self.property("default");
             self.set_input(&default);
         }
 
-        self.set_property(&FieldProperty::Locked, true);
+        self.set_property("locked", true);
     }
 
     /// Sets an error message on the widget.
     pub fn set_error(&self, message: &str) {
-        self.set_property(&FieldProperty::Error, message);
+        self.set_property("error", message);
     }
 
     /// Unsets the error message.
     pub fn unset_error(&self) {
-        self.set_property(&FieldProperty::Error, "");
+        self.set_property("error", "");
     }
 }
 

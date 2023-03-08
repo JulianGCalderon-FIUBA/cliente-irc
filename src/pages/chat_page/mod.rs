@@ -8,7 +8,7 @@ use gtk::subclass::prelude::ObjectSubclassIsExt;
 use gtk::traits::WidgetExt;
 use gtk::{glib, Align};
 
-use crate::widgets::Message;
+use crate::components::Message;
 
 glib::wrapper! {
     /// Window associated to a particular chat in the client. Can be a private chat or a channel.

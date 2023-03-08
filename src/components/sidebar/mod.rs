@@ -1,8 +1,6 @@
 /// This module defines [`Sidebar`] related structures
-mod constant;
 mod imp;
 
-pub use constant::SidebarProperty;
 use glib::Object;
 use gtk::glib::{self, clone};
 use gtk::prelude::{Cast, ListModelExt, ObjectExt};
@@ -32,17 +30,15 @@ glib::wrapper! {
 impl Sidebar {
     /// Creates a new [´Sidebar´] with associated stack
     pub fn new(stack: Stack) -> Self {
-        Object::builder()
-            .property(&SidebarProperty::Stack, stack)
-            .build()
+        Object::builder().property("stack", stack).build()
     }
 
     fn stack(&self) -> Stack {
-        self.property(&SidebarProperty::Stack)
+        self.property("stack")
     }
 
     fn setup_stack(&self) {
-        let stack: Stack = self.property(&SidebarProperty::Stack);
+        let stack: Stack = self.property("stack");
         let selection = stack.pages();
 
         self.setup_config_view(selection.clone());
