@@ -1,22 +1,26 @@
-//! This modules defines [`UserData`]
-
-mod constant;
+//! This modules defines `UserData`
 mod imp;
 
-pub use constant::UserDataProperty;
 use glib::Object;
 use gtk::glib;
 use gtk::prelude::ObjectExt;
 
 glib::wrapper! {
-    /// Used to store user data as properties
+    /// `UserData` is used to store user information.
     ///
-    /// Subclassifies [´glib::GObject´], therefore it can comunicate well with Gtk4 rust bindings.
+    /// Subclassifies `glib::GObject`.
+    ///
+    /// #### Properties:
+    /// * `nickname`: The nickname of the user.
+    /// * `realname`: The real name of the user.
+    /// * `username`: The username of the user.
+    /// * `hostname`: The hostname of the user.
+    /// * `servername`: The name of the server the user is connected to.
     pub struct UserData(ObjectSubclass<imp::UserData>);
 }
 
 impl UserData {
-    /// Creates a new [`UserData`] with the given values
+    /// creates a new `UserData` with the given properties
     pub fn new(
         nickname: String,
         realname: String,
@@ -25,17 +29,17 @@ impl UserData {
         servername: String,
     ) -> Self {
         Object::builder()
-            .property(&UserDataProperty::Nickname, nickname)
-            .property(&UserDataProperty::Realname, realname)
-            .property(&UserDataProperty::Username, username)
-            .property(&UserDataProperty::Hostname, hostname)
-            .property(&UserDataProperty::Servername, servername)
+            .property("nickname", nickname)
+            .property("realname", realname)
+            .property("username", username)
+            .property("hostname", hostname)
+            .property("servername", servername)
             .build()
     }
 
-    /// Shortcut to access `nickname` property
+    /// Returns the nickname of the user.
     pub fn nickname(&self) -> String {
-        self.property(&UserDataProperty::Nickname)
+        self.property("nickname")
     }
 }
 

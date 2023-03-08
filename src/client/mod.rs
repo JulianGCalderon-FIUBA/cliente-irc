@@ -27,7 +27,7 @@ use crate::message::{IrcCommand, IrcMessage};
 /// - Sending IrcCommands
 /// - Receiving IrcMessages
 ///
-/// Derives glib::Boxed, therefore it can comunicate well with Gtk4 rust bindings.
+/// Derives `glib::Boxed`
 #[derive(glib::Boxed, Clone, Debug)]
 #[boxed_type(name = "IrcClient")]
 pub struct IrcClient {
@@ -36,7 +36,7 @@ pub struct IrcClient {
 }
 
 impl IrcClient {
-    /// Creates a new [`IrcClient`] connected to `address`
+    /// Creates a new `IrcClient` connected to `address`
     ///
     /// Fails if connection could not be established
     pub fn connect<A: ToSocketAddrs>(address: A) -> io::Result<Self> {
