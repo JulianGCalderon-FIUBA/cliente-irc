@@ -1,3 +1,5 @@
+//! Implementation of the Session page.
+
 use std::cell::RefCell;
 
 use glib::subclass::InitializingObject;
@@ -7,11 +9,10 @@ use gtk::prelude::{StaticTypeExt, ToValue};
 use gtk::subclass::prelude::*;
 use gtk::{glib, template_callbacks, CompositeTemplate, Stack};
 
-use super::CHANNEL_INDICATOR;
+use super::{build_name_for_chat_title, CHANNEL_INDICATOR};
 use crate::components::CategorizedStackSidebar;
 use crate::gtk_client::{BoxedIrcClient, RegistrationDataObject};
 use crate::pages::{Account, Chat, ChatAdder};
-use client::message::IrcCommand;
 
 #[derive(CompositeTemplate, Default)]
 #[template(resource = "/com/jgcalderon/irc-client/ui/session.ui")]
@@ -73,19 +74,21 @@ impl BoxImpl for Session {}
 
 #[template_callbacks]
 impl Session {
-    /// Called when a new chat openning is requested.
-    /// Adds the chat, if it is a group chat, it also notifies the server of joining it.
+    /// Called when the user requests to add a new chat
+    ///
+    /// This function adds a new chat to the session and
+    /// sends a join command to the server if the chat is a channel
+    ///
+    /// The new chat is made visible
     #[template_callback]
-    pub fn add_chat(&self, name: String) {
-        self.obj().add_chat(name.clone());
-        let full_name = format!("chat-{name}");
-        self.pages.set_visible_child_name(&full_name);
+    pub fn add_chat(&self, title: String) {
+        self.obj().add_chat(title.clone());
 
-        if name.starts_with(CHANNEL_INDICATOR) {
-            let join_command = IrcCommand::Join { name };
-            if self.obj().client().send(join_command).is_err() {
-                println!("todo! connection error");
-            }
+        let name = build_name_for_chat_title(&title);
+        self.pages.set_visible_child_name(&name);
+
+        if title.starts_with(CHANNEL_INDICATOR) {
+            self.obj().join_channel(title);
         }
     }
 }

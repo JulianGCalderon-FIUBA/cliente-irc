@@ -1,6 +1,11 @@
 //! IRC Client
 //!
 //! This is a simple IRC client written in Rust using GTK and GTK-rs.
+//!
+//! # Features
+//!
+//! * 'automatic-login' - Automatically registers the local server with a random name
+//!     when the application starts.
 
 #![warn(missing_docs)]
 

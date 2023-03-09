@@ -14,7 +14,7 @@ use crate::gtk_client::RegistrationDataObject;
 use super::Login;
 
 impl Login {
-    /// Starts an asynchronous read from the server until registration is complete
+    /// Starts an asynchronous read from the server until [´ControlFlow::Break(())´] is returned
     ///
     /// Calls [´Login::handle_message´] for each message received
     pub(super) fn start_client_handler(&self) {
@@ -30,8 +30,8 @@ impl Login {
 
     /// Handles a message received from the server
     ///
-    /// If the message is a [´IrcResponse::Welcome´],
-    /// then the asynchronous read is finished
+    /// If the handler returns [´ControlFlow::Break(())´] then this function will return
+    /// [´ControlFlow::Break(())´] as well
     fn handle_message(&self, message: IrcMessage) -> ControlFlow<()> {
         if let IrcMessage::IrcResponse(response) = message {
             if let IrcResponse::Welcome {
@@ -52,6 +52,8 @@ impl Login {
     }
 
     /// builds the registration data and emits the 'registered' signal
+    ///
+    /// Returns [´ControlFlow::Break(())´]
     fn handle_welcome(
         &self,
         nickname: String,
@@ -69,18 +71,25 @@ impl Login {
         };
         let data = RegistrationDataObject::new(data);
 
-        self.emit_by_name::<()>(
-            "registered",
-            &[self, &self.client().to_value(), &data.to_value()],
-        );
+        self.emit_registered_signal(data);
 
         ControlFlow::Break(())
     }
 
     /// Notifies the user that the nickname is already in use
+    ///
+    /// Returns [´ControlFlow::Continue(())´]
     fn handle_nick_collision(&self) -> ControlFlow<()> {
         self.imp().nickname.set_error("Nickname already in use");
 
         ControlFlow::Continue(())
+    }
+
+    /// Emits the 'registered' signal
+    fn emit_registered_signal(&self, data: RegistrationDataObject) {
+        self.emit_by_name(
+            "registered",
+            &[self, &self.client().to_value(), &data.to_value()],
+        )
     }
 }

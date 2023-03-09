@@ -17,15 +17,22 @@ glib::wrapper! {
     ///
     /// This page is used to connect to the server and register the user
     ///
-    /// After registration is complete, the `registered` signal is emitted
+    /// # Features
     ///
-    /// User input is validated before being sent to the server
+    /// * User input is validated before being sent to the server
+    /// * Once the user has connected to the server, then the address input is locked
+    /// * After registration is complete, the `registered` signal is emitted
     ///
-    /// Once the user has connected to the server, then the address input is locked
+    /// If the program is executed with the `automatic-login` feature, then the client
+    /// will automatically register with a random roman nickname.
     ///
     /// # Signals
     ///
     /// * `registered` - Emitted when the user is registered
+    ///
+    ///     Arguments:
+    ///    - `client` - The client
+    ///    - `data` - The user data
     pub struct Login(ObjectSubclass<imp::Login>)
     @extends gtk::Widget, gtk::Box,
     @implements gtk::Accessible, gtk::Buildable,
