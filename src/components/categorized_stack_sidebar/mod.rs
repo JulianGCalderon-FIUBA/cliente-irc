@@ -155,8 +155,6 @@ impl CategorizedStackSidebar {
     /// When a page is added to the model, the corresponding model will select it if is visible
     fn connect_model(&self, key: &str, selection_model: &SingleSelection) {
         self.connect_selection_for_model(key, selection_model);
-
-        self.connect_new_item_for_model(selection_model);
     }
 
     /// Connect the default selection model to the sidebar
@@ -167,19 +165,6 @@ impl CategorizedStackSidebar {
     /// When a page is added to the model, the corresponding model will select it if is visible
     fn connect_default_model(&self, selection_model: &SingleSelection) {
         self.connect_selection_for_default_model(selection_model);
-        self.connect_new_item_for_model(selection_model);
-    }
-
-    /// When a page is added to the model, the corresponding model will select it if is visible
-    /// in the stack
-    fn connect_new_item_for_model(&self, selection_model: &SingleSelection) {
-        selection_model.connect_items_changed(
-            clone!(@weak self as sidebar => move |model, pos, _, add| {
-                    if add == 0 {return};
-                    model.set_selected(pos);
-                }
-            ),
-        );
     }
 
     /// When an item is selected in the model, the sidebar will select the corresponding page in the stack
@@ -225,7 +210,10 @@ impl CategorizedStackSidebar {
     fn build_model_for_filter(&self, filter: CustomFilter) -> SingleSelection {
         let filter_model = FilterListModel::new(Some(self.pages()), Some(filter));
 
-        SingleSelection::new(Some(filter_model))
+        let selection_model = SingleSelection::new(Some(filter_model));
+        selection_model.set_autoselect(false);
+
+        selection_model
     }
 
     /// Build a selection model that filters stack pages for the given key
