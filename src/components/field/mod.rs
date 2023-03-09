@@ -1,4 +1,4 @@
-//! Defines the `Field` component
+//! Defines the [`Field`] widget
 
 mod imp;
 
@@ -11,17 +11,21 @@ use gtk::{glib, Entry, Label};
 glib::wrapper! {
     /// The `Field` component is a widget that allows the user to input a value.
     ///
-    /// The name of the field is shown as a label.
+    /// Subclassifies [`gtk::Box`].
     ///
-    /// The input can be locked, preventing the user from changing it.
+    /// # Features
     ///
-    /// The default value is shown as a placeholder.
+    /// * The name of the field is shown as a label.
     ///
-    /// An error message can be displayed below the input.
+    /// * The input can be locked, preventing the user from changing it.
+    ///
+    /// * The default value is shown as a placeholder.
+    ///
+    /// * An error message can be displayed below the input.
     ///
     /// # Properties
     ///
-    /// * `label`: The label of the field.
+    /// * `name`: The name of the field.
     /// * `default`: The default value of the field.
     /// * `input`: The user input.
     /// * `locked`: Whether the input is locked.
@@ -30,6 +34,8 @@ glib::wrapper! {
     /// # CSS nodes
     ///
     /// `Field` has a single CSS node with name `field`.
+    ///
+    ///
     pub struct Field(ObjectSubclass<imp::Field>)
     @extends gtk::Widget, gtk::Box,
     @implements gtk::Accessible, gtk::Buildable,

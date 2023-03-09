@@ -1,3 +1,5 @@
+//! Implementation of the Field component.
+
 use std::cell::RefCell;
 
 use glib::subclass::InitializingObject;

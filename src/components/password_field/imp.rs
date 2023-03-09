@@ -1,9 +1,11 @@
+//! Implementation of the PasswordField widget.
+
 use std::cell::RefCell;
 
 use glib::subclass::InitializingObject;
 use gtk::glib::once_cell::sync::Lazy;
 use gtk::glib::{ParamSpec, ParamSpecString};
-use gtk::prelude::{ObjectExt, ToValue};
+use gtk::prelude::ToValue;
 use gtk::subclass::prelude::*;
 use gtk::{glib, CompositeTemplate, LevelBar, PasswordEntry};
 
@@ -13,7 +15,7 @@ pub struct PasswordField {
     #[template_child]
     pub entry: TemplateChild<PasswordEntry>,
     #[template_child]
-    pub strength: TemplateChild<LevelBar>,
+    pub level_bar: TemplateChild<LevelBar>,
     name: RefCell<String>,
     input: RefCell<String>,
 }
@@ -70,23 +72,8 @@ impl ObjectImpl for PasswordField {
     fn constructed(&self) {
         self.parent_constructed();
 
-        self.entry
-            .bind_property::<LevelBar>("text", &self.strength, "value")
-            .transform_to(|_, password: String| Some(password_strength(password)))
-            .build();
+        self.obj().setup_bindings();
     }
 }
 impl WidgetImpl for PasswordField {}
 impl BoxImpl for PasswordField {}
-
-/// Determines the password strength, returning an integer value between 1 and 3 (inclusive)
-///
-/// If password is empty, returns 0;
-fn password_strength(password: String) -> f64 {
-    match password.len() {
-        0 => 0.0,
-        1..=4 => 1.0,
-        5..=9 => 2.0,
-        _ => 3.0,
-    }
-}
