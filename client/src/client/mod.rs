@@ -79,6 +79,6 @@ impl IrcClient {
 fn connection_closed_error() -> io::Error {
     io::Error::new(
         io::ErrorKind::ConnectionAborted,
-        "connection with the remote server ended",
+        "connection with the remote server wa closed",
     )
 }
