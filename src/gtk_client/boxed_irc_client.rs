@@ -34,9 +34,6 @@ impl BoxedIrcClient {
 
     /// Receives a message from the server.
     ///
-    /// The receiving of messages is done asynchronously as it integrates better with the
-    /// asynchronous nature of the gtk4 library. Should be fixed in the future.
-    ///
     /// # Errors
     ///
     /// This method returns an error if the connection to the server is closed.
