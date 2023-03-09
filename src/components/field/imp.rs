@@ -3,9 +3,8 @@ use std::cell::RefCell;
 use glib::subclass::InitializingObject;
 use gtk::glib::once_cell::sync::Lazy;
 use gtk::glib::{ParamSpec, ParamSpecBoolean, ParamSpecString};
-use gtk::prelude::{ObjectExt, ToValue};
+use gtk::prelude::ToValue;
 use gtk::subclass::prelude::*;
-use gtk::traits::WidgetExt;
 use gtk::{glib, CompositeTemplate, Entry, Label};
 
 #[derive(CompositeTemplate, Default)]
@@ -18,8 +17,8 @@ pub struct Field {
     name: RefCell<String>,
     input: RefCell<String>,
     default: RefCell<String>,
-    locked: RefCell<bool>,
     error: RefCell<String>,
+    locked: RefCell<bool>,
 }
 
 #[glib::object_subclass]
@@ -93,32 +92,7 @@ impl ObjectImpl for Field {
     fn constructed(&self) {
         self.parent_constructed();
 
-        let field = self.obj();
-
-        field
-            .bind_property::<Label>("error", &self.error_label, "visible")
-            .transform_to(|_, error: String| Some(!error.is_empty()))
-            .build();
-
-        field
-            .bind_property::<Entry>("locked", &self.entry, "secondary-icon-name")
-            .transform_to(|_, locked: bool| {
-                if locked {
-                    Some("system-lock-screen-symbolic")
-                } else {
-                    Some("")
-                }
-            })
-            .build();
-
-        field.connect_notify(Some("error"), |field, _| {
-            let error: String = field.property("error");
-            if error.is_empty() {
-                field.remove_css_class("invalid");
-            } else {
-                field.add_css_class("invalid");
-            };
-        });
+        self.obj().setup_bindings();
     }
 }
 impl WidgetImpl for Field {}

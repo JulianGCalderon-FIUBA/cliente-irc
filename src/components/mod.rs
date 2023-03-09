@@ -1,6 +1,7 @@
-//! This module contains all custom widgets
-
-#![warn(missing_docs)]
+//! Components are the building blocks of the user interface.
+//!
+//! Components are the building blocks of the user interface. They are
+//! self-contained widgets that can be used in multiple places.
 
 pub mod categorized_stack_sidebar;
 pub mod field;

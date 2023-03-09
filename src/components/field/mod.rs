@@ -1,20 +1,35 @@
-//! This modules defines the [Field] widget
+//! Defines the `Field` component
 
 mod imp;
 
 use glib::Object;
-use gtk::glib;
 use gtk::prelude::ObjectExt;
+use gtk::subclass::prelude::ObjectSubclassIsExt;
+use gtk::traits::WidgetExt;
+use gtk::{glib, Entry, Label};
 
 glib::wrapper! {
-    /// This widgets is used to ask for user for information, indicating the name of the variable.
-    /// Input can be locked if value may not be changed.
+    /// The `Field` component is a widget that allows the user to input a value.
     ///
-    /// A default value can be set if the user does not input any value.
+    /// The name of the field is shown as a label.
     ///
-    /// If the user inputs an invalid value, an error message can be displayed
+    /// The input can be locked, preventing the user from changing it.
     ///
-    /// Subclassifies [´gtk::Box`]
+    /// The default value is shown as a placeholder.
+    ///
+    /// An error message can be displayed below the input.
+    ///
+    /// # Properties
+    ///
+    /// * `label`: The label of the field.
+    /// * `default`: The default value of the field.
+    /// * `input`: The user input.
+    /// * `locked`: Whether the input is locked.
+    /// * `error`: The error message. When empty, no error message is shown.
+    ///
+    /// # CSS nodes
+    ///
+    /// `Field` has a single CSS node with name `field`.
     pub struct Field(ObjectSubclass<imp::Field>)
     @extends gtk::Widget, gtk::Box,
     @implements gtk::Accessible, gtk::Buildable,
@@ -22,11 +37,14 @@ glib::wrapper! {
 }
 
 impl Field {
+    /// Creates a new `Field` widget.
     pub fn new() -> Self {
         Object::builder().build()
     }
 
-    /// Gets the user input, or default if no input was provided.
+    /// Returns the user input.
+    ///
+    /// If the user has not provided any input, the default value is returned.
     pub fn input(&self) -> String {
         let input: String = self.property("input");
 
@@ -37,13 +55,13 @@ impl Field {
         input
     }
 
-    /// Sets the user input to ´value´.
+    /// Sets the user input.
     pub fn set_input(&self, value: &str) {
         self.set_property("input", value);
     }
 
-    /// Locks the input, preventing the user from modifying its value
-    /// If no input was provided by te user, then the default value is set.
+    /// Locks the input.
+    /// If the user has not provided any input, the default value is set.
     pub fn lock(&self) {
         let input: String = self.property("input");
         if input.is_empty() {
@@ -54,7 +72,7 @@ impl Field {
         self.set_property("locked", true);
     }
 
-    /// Sets an error message on the widget.
+    /// Sets the error message.
     pub fn set_error(&self, message: &str) {
         self.set_property("error", message);
     }
@@ -62,6 +80,47 @@ impl Field {
     /// Unsets the error message.
     pub fn unset_error(&self) {
         self.set_property("error", "");
+    }
+
+    /// Setups the object bindings.
+    fn setup_bindings(&self) {
+        self.bind_error_visibility();
+
+        self.bind_locked_icon_visibility();
+
+        self.bind_invalid_css_class();
+    }
+
+    /// Binds the error visibility to the error property.
+    fn bind_error_visibility(&self) {
+        self.bind_property::<Label>("error", &self.imp().error_label, "visible")
+            .transform_to(|_, error: String| Some(!error.is_empty()))
+            .build();
+    }
+
+    /// Binds the invalid CSS class to the error property.
+    fn bind_invalid_css_class(&self) {
+        self.connect_notify(Some("error"), |field, _| {
+            let error: String = field.property("error");
+            if error.is_empty() {
+                field.remove_css_class("invalid");
+            } else {
+                field.add_css_class("invalid");
+            };
+        });
+    }
+
+    /// Binds the locked icon visibility to the locked property.
+    fn bind_locked_icon_visibility(&self) {
+        self.bind_property::<Entry>("locked", &self.imp().entry, "secondary-icon-name")
+            .transform_to(|_, locked: bool| {
+                if locked {
+                    Some("system-lock-screen-symbolic")
+                } else {
+                    Some("")
+                }
+            })
+            .build();
     }
 }
 

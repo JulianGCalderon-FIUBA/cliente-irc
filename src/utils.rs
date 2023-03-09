@@ -1,8 +1,14 @@
+//! Utility functions.
+//!
+//! This module contains utility functions that are used in multiple places in the application.
+
 use gtk::prelude::EntryBufferExtManual;
 use gtk::traits::EntryExt;
 use gtk::Entry;
 
-/// If entry has content, it returns it, clearing the entry
+/// Get the text from an entry and clear it.
+///
+/// Returns `None` if the entry is empty.
 pub fn get_and_clear_entry(entry: Entry) -> Option<String> {
     let buffer = entry.buffer();
     let message = buffer.text().to_string();

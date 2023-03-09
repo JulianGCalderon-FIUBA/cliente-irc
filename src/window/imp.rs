@@ -39,9 +39,10 @@ impl ApplicationWindowImpl for Window {}
 #[template_callbacks]
 impl Window {
     #[template_callback]
-    /// Called after registration is finished.
+    /// Called when the user logs in.
     ///
-    /// Changes view to Session
+    /// This function is called when the user logs in. It creates a new `Session`
+    /// and shows it.
     pub fn registered(
         &self,
         registration: Login,
