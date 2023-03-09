@@ -55,16 +55,18 @@ impl CategorizedStackSidebar {
         self.setup_default_view();
     }
 
+    /// Get the selection model of the stack pages
     fn pages(&self) -> SelectionModel {
         self.imp().pages.borrow().clone().unwrap()
     }
 
+    /// Select the given page in the stack (make it visible)
     fn select_page(&self, page: StackPage) {
         let Some(name) = page.name() else {return};
         self.stack().set_visible_child_name(&name);
     }
 
-    /// Called after the stack is set
+    /// Called after the stack is set or after a category is added
     ///
     /// This method sets up the default view of the sidebar
     ///
@@ -76,12 +78,12 @@ impl CategorizedStackSidebar {
         // The order of the following lines is important.
         // Program will panic if not.
 
-        self.add_model("default", &model);
+        self.add_default_model(&model);
 
         self.imp().default_view.set_factory(Some(&factory));
         self.imp().default_view.set_model(Some(&model));
 
-        self.connect_model("default", &model);
+        self.connect_default_model(&model);
     }
 
     /// Add a category to the sidebar with an associated key
@@ -102,6 +104,7 @@ impl CategorizedStackSidebar {
         self.setup_default_view();
     }
 
+    /// Adds the model to the model hashmap
     fn add_model(&self, key: &str, model: &SingleSelection) {
         self.imp()
             .models
@@ -109,6 +112,12 @@ impl CategorizedStackSidebar {
             .insert(key.to_string(), model.clone());
     }
 
+    /// Adds the default model to the structure
+    fn add_default_model(&self, model: &SingleSelection) {
+        self.imp().default_model.borrow_mut().replace(model.clone());
+    }
+
+    /// Append a new view to the sidebar, with its corresponding separator
     fn append_new_view(&self, view: ListView) {
         let separator = build_category_separator();
 
@@ -138,8 +147,44 @@ impl CategorizedStackSidebar {
         self.build_model_for_filter(filter)
     }
 
-    /// Connect the selection model to the sidebar
+    /// Connect the key selection model to the sidebar
+    ///
+    /// When a page is selected, the sidebar will select the corresponding page in the stack
+    /// and unset the selection of all other models
+    ///
+    /// When a page is added to the model, the corresponding model will select it if is visible
     fn connect_model(&self, key: &str, selection_model: &SingleSelection) {
+        self.connect_selection_for_model(key, selection_model);
+
+        self.connect_new_item_for_model(selection_model);
+    }
+
+    /// Connect the default selection model to the sidebar
+    ///
+    /// When a page is selected, the sidebar will select the corresponding page in the stack
+    /// and unset the selection of all other models
+    ///
+    /// When a page is added to the model, the corresponding model will select it if is visible
+    fn connect_default_model(&self, selection_model: &SingleSelection) {
+        self.connect_selection_for_default_model(selection_model);
+        self.connect_new_item_for_model(selection_model);
+    }
+
+    /// When a page is added to the model, the corresponding model will select it if is visible
+    /// in the stack
+    fn connect_new_item_for_model(&self, selection_model: &SingleSelection) {
+        selection_model.connect_items_changed(
+            clone!(@weak self as sidebar => move |model, pos, _, add| {
+                    if add == 0 {return};
+                    model.set_selected(pos);
+                }
+            ),
+        );
+    }
+
+    /// When an item is selected in the model, the sidebar will select the corresponding page in the stack
+    /// and unset the selection of all other models
+    fn connect_selection_for_model(&self, key: &str, selection_model: &SingleSelection) {
         selection_model.connect_selected_item_notify(
             clone!(@weak self as sidebar, @to-owned key => move |model| {
                 let Some(page) = model.selected_item() else {return};
@@ -151,15 +196,28 @@ impl CategorizedStackSidebar {
                         model.set_selected(GTK_INVALID_LIST_POSITION);
                     };
                 });
+
+                let mut default_model = sidebar.imp().default_model.borrow_mut();
+                if let Some(model) = default_model.as_mut() {
+                    model.set_selected(GTK_INVALID_LIST_POSITION);
+                }
             }),
         );
+    }
 
-        selection_model.connect_items_changed(
-            clone!(@weak self as sidebar => move |model, pos, _, add| {
-                    if add == 0 {return};
-                    model.set_selected(pos);
-                }
-            ),
+    /// When an item is selected in the model, the sidebar will select the corresponding page in the stack
+    /// and unset the selection of all other models
+    fn connect_selection_for_default_model(&self, selection_model: &SingleSelection) {
+        selection_model.connect_selected_item_notify(
+            clone!(@weak self as sidebar => move |model| {
+                let Some(page) = model.selected_item() else {return};
+                let page: StackPage = page.downcast().unwrap();
+                sidebar.select_page(page);
+
+                sidebar.imp().models.borrow_mut().values_mut().for_each(|model| {
+                    model.set_selected(GTK_INVALID_LIST_POSITION);
+                });
+            }),
         );
     }
 
@@ -190,6 +248,7 @@ impl CategorizedStackSidebar {
     }
 }
 
+/// Build a separator for the sidebar
 fn build_category_separator() -> Separator {
     Separator::builder()
         .orientation(Orientation::Horizontal)

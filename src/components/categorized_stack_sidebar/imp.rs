@@ -17,6 +17,7 @@ pub struct CategorizedStackSidebar {
     pub container: TemplateChild<Box>,
     #[template_child]
     pub default_view: TemplateChild<ListView>,
+    pub default_model: RefCell<Option<SingleSelection>>,
     pub pages: RefCell<Option<SelectionModel>>,
     pub models: RefCell<HashMap<String, SingleSelection>>,
     stack: RefCell<Stack>,
