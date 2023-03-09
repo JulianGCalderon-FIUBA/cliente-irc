@@ -5,7 +5,7 @@ use std::cell::RefCell;
 use glib::subclass::InitializingObject;
 use gtk::glib::once_cell::sync::Lazy;
 use gtk::glib::{ParamSpec, ParamSpecObject};
-use gtk::prelude::ToValue;
+use gtk::prelude::*;
 use gtk::subclass::prelude::*;
 use gtk::{glib, CompositeTemplate};
 

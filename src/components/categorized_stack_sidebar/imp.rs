@@ -1,21 +1,24 @@
 //! Contains the implementation of the CategorizedStackSidebar widget.
 
 use std::cell::RefCell;
+use std::collections::HashMap;
 
 use glib::subclass::InitializingObject;
 use gtk::glib::once_cell::sync::Lazy;
 use gtk::glib::{ParamSpec, ParamSpecObject};
-use gtk::prelude::{ObjectExt, ToValue};
+use gtk::prelude::*;
 use gtk::subclass::prelude::*;
-use gtk::{glib, CompositeTemplate, SelectionModel, SingleSelection, Stack};
+use gtk::{glib, Box, CompositeTemplate, ListView, SelectionModel, SingleSelection, Stack};
 
 #[derive(CompositeTemplate, Default)]
 #[template(resource = "/com/jgcalderon/irc-client/ui/sidebar.ui")]
 pub struct CategorizedStackSidebar {
     #[template_child]
-    pub default_view: TemplateChild<gtk::ListView>,
-    pub default_model: RefCell<Option<SingleSelection>>,
+    pub container: TemplateChild<Box>,
+    #[template_child]
+    pub default_view: TemplateChild<ListView>,
     pub pages: RefCell<Option<SelectionModel>>,
+    pub models: RefCell<HashMap<String, SingleSelection>>,
     stack: RefCell<Stack>,
 }
 

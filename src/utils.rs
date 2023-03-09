@@ -2,7 +2,7 @@
 //!
 //! This module contains utility functions that are used in multiple places in the application.
 
-use gtk::prelude::EntryBufferExtManual;
+use gtk::prelude::*;
 use gtk::traits::EntryExt;
 use gtk::Entry;
 

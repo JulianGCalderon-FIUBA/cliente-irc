@@ -6,7 +6,7 @@ use glib::subclass::InitializingObject;
 use gtk::glib::once_cell::sync::Lazy;
 use gtk::glib::subclass::Signal;
 use gtk::glib::{ParamSpec, ParamSpecString};
-use gtk::prelude::{ObjectExt, StaticType, ToValue};
+use gtk::prelude::*;
 use gtk::subclass::prelude::*;
 use gtk::{glib, template_callbacks, CompositeTemplate, Entry, ListBox};
 

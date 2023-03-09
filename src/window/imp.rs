@@ -1,5 +1,5 @@
 use glib::subclass::InitializingObject;
-use gtk::prelude::StaticTypeExt;
+use gtk::prelude::*;
 use gtk::subclass::prelude::*;
 use gtk::{glib, template_callbacks, CompositeTemplate, Stack};
 

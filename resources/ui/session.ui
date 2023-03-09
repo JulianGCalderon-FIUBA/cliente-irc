@@ -2,7 +2,7 @@
 <interface>
   <template class="Session" parent="GtkBox">
     <child>
-      <object class="CategorizedStackSidebar">
+      <object class="CategorizedStackSidebar" id="sidebar">
         <property name="width-request">180</property>
         <property name="vexpand">true</property>
         <property name="stack">pages</property>

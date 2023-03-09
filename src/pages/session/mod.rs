@@ -5,7 +5,7 @@ mod imp;
 
 use glib::Object;
 use gtk::glib::{self, clone};
-use gtk::prelude::{Cast, ObjectExt};
+use gtk::prelude::*;
 use gtk::subclass::prelude::*;
 
 use crate::gtk_client::{BoxedIrcClient, RegistrationDataObject};

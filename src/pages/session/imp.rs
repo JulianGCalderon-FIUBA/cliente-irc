@@ -5,7 +5,7 @@ use std::cell::RefCell;
 use glib::subclass::InitializingObject;
 use gtk::glib::once_cell::sync::{Lazy, OnceCell};
 use gtk::glib::{ParamSpec, ParamSpecObject};
-use gtk::prelude::{StaticTypeExt, ToValue};
+use gtk::prelude::*;
 use gtk::subclass::prelude::*;
 use gtk::{glib, template_callbacks, CompositeTemplate, Stack};
 
@@ -19,6 +19,8 @@ use crate::pages::{Account, Chat, ChatAdder};
 pub struct Session {
     #[template_child]
     pub pages: TemplateChild<Stack>,
+    #[template_child]
+    pub sidebar: TemplateChild<CategorizedStackSidebar>,
     pub client: OnceCell<BoxedIrcClient>,
     pub data: RefCell<RegistrationDataObject>,
 }
@@ -68,6 +70,12 @@ impl ObjectImpl for Session {
             "registration-data" => self.data.borrow().to_value(),
             _ => unimplemented!(),
         }
+    }
+
+    fn constructed(&self) {
+        self.parent_constructed();
+
+        self.sidebar.add_category("config");
     }
 }
 impl WidgetImpl for Session {}

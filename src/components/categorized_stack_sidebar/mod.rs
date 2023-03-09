@@ -2,12 +2,13 @@
 mod imp;
 
 use glib::Object;
+use gtk::ffi::GTK_INVALID_LIST_POSITION;
 use gtk::glib::clone;
-use gtk::prelude::{Cast, ListModelExt, ObjectExt};
-use gtk::subclass::prelude::ObjectSubclassIsExt;
+use gtk::prelude::*;
+use gtk::subclass::prelude::*;
 use gtk::{
-    glib, BuilderListItemFactory, BuilderScope, CustomFilter, FilterListModel, SelectionModel,
-    SingleSelection, Stack, StackPage,
+    glib, BuilderListItemFactory, BuilderScope, CustomFilter, FilterListModel, ListView,
+    Orientation, SelectionModel, Separator, SingleSelection, Stack, StackPage,
 };
 
 glib::wrapper! {
@@ -67,69 +68,117 @@ impl CategorizedStackSidebar {
     ///
     /// This method sets up the default view of the sidebar
     ///
-    /// All pages belonging to no category will be displayed here
+    /// All uncategorized pages will be displayed here
     fn setup_default_view(&self) {
-        let model = self.build_model_for_default_key();
         let factory = self.build_factory();
+        let model = self.build_model_for_default_key();
 
-        self.imp().default_view.set_model(Some(&model));
+        // The order of the following lines is important.
+        // Program will panic if not.
+
+        self.add_model("default", &model);
+
         self.imp().default_view.set_factory(Some(&factory));
+        self.imp().default_view.set_model(Some(&model));
+
+        self.connect_model("default", &model);
     }
 
     /// Add a category to the sidebar with an associated key
     ///
     /// Only pages with the same key will be displayed in the category
-    fn _add_category(&self, key: &str) {
-        let model = self._build_model_for_key(key);
+    pub fn add_category(&self, key: &str) {
+        let model = self.build_model_for_key(key);
         let factory = self.build_factory();
 
-        let _list_view = gtk::ListView::new(Some(model), Some(factory));
+        self.add_model(key, &model);
+
+        let list_view = gtk::ListView::new(Some(model.clone()), Some(factory));
+
+        self.append_new_view(list_view);
+
+        self.connect_model(key, &model);
+
+        self.setup_default_view();
     }
 
-    fn build_model_for_default_key(&self) -> SingleSelection {
-        let filter = CustomFilter::new(|_| true);
-        let selection_model = self.build_model_for_filter(filter);
-
+    fn add_model(&self, key: &str, model: &SingleSelection) {
         self.imp()
-            .default_model
+            .models
             .borrow_mut()
-            .replace(selection_model.clone());
+            .insert(key.to_string(), model.clone());
+    }
 
-        selection_model.connect_selected_item_notify(
-            clone!(@weak self as sidebar => move |model| {
-                let Some(page) = model.selected_item() else {return};
-                let page: StackPage = page.downcast().unwrap();
-                sidebar.select_page(page);
+    fn append_new_view(&self, view: ListView) {
+        let separator = build_category_separator();
+
+        self.imp().container.append(&separator);
+        self.imp().container.append(&view);
+    }
+
+    /// Build a selection model that contains all uncategorized pages
+    fn build_model_for_default_key(&self) -> SingleSelection {
+        let filter = CustomFilter::new(
+            clone!(@weak self as sidebar => @default-return false, move |object| {
+                let page: &StackPage = object.downcast_ref().unwrap();
+                let Some(name) = page.name() else {return false};
+
+                let hashmap = sidebar.imp().models.borrow();
+                let keys = hashmap.keys().map(String::to_owned).collect::<Vec<String>>();
+
+                for key in keys {
+                    if name.starts_with(&key) {
+                        return false;
+                    }
+                }
+                true
             }),
         );
 
-        // selection_model.connect_items_changed(
-        //     clone!(@weak self as sidebar => move |model, pos, _, add| {
-        //             if add == 0 {return};
-        //             model.set_selected(pos);
-        //         }
-        //     ),
-        // );
-
-        selection_model
+        self.build_model_for_filter(filter)
     }
 
+    /// Connect the selection model to the sidebar
+    fn connect_model(&self, key: &str, selection_model: &SingleSelection) {
+        selection_model.connect_selected_item_notify(
+            clone!(@weak self as sidebar, @to-owned key => move |model| {
+                let Some(page) = model.selected_item() else {return};
+                let page: StackPage = page.downcast().unwrap();
+                sidebar.select_page(page);
+
+                sidebar.imp().models.borrow_mut().iter_mut().for_each(|(k, model)| {
+                    if *k != key {
+                        model.set_selected(GTK_INVALID_LIST_POSITION);
+                    };
+                });
+            }),
+        );
+
+        selection_model.connect_items_changed(
+            clone!(@weak self as sidebar => move |model, pos, _, add| {
+                    if add == 0 {return};
+                    model.set_selected(pos);
+                }
+            ),
+        );
+    }
+
+    /// Build a selection model that filters pages for the given filter
     fn build_model_for_filter(&self, filter: CustomFilter) -> SingleSelection {
         let filter_model = FilterListModel::new(Some(self.pages()), Some(filter));
 
         SingleSelection::new(Some(filter_model))
     }
 
-    /// Build a selection model that filters pages for the given key
-    fn _build_model_for_key(&self, key: &str) -> SingleSelection {
+    /// Build a selection model that filters stack pages for the given key
+    fn build_model_for_key(&self, key: &str) -> SingleSelection {
         let filter = CustomFilter::new(clone!(@to-owned key => move |object| {
             let page: &StackPage = object.downcast_ref().unwrap();
             let Some(name) = page.name() else {return false};
             name.starts_with(&key)
         }));
-        let filter_model = FilterListModel::new(Some(self.pages()), Some(filter));
 
-        SingleSelection::new(Some(filter_model))
+        self.build_model_for_filter(filter)
     }
 
     /// Build a list item factory for the sidebar
@@ -139,4 +188,14 @@ impl CategorizedStackSidebar {
             "/com/jgcalderon/irc-client/ui/sidebar-row.ui",
         )
     }
+}
+
+fn build_category_separator() -> Separator {
+    Separator::builder()
+        .orientation(Orientation::Horizontal)
+        .margin_top(10)
+        .margin_bottom(10)
+        .margin_start(10)
+        .margin_end(10)
+        .build()
 }

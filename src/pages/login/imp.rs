@@ -3,7 +3,7 @@
 use glib::subclass::InitializingObject;
 use gtk::glib::once_cell::sync::{Lazy, OnceCell};
 use gtk::glib::subclass::Signal;
-use gtk::prelude::StaticType;
+use gtk::prelude::*;
 use gtk::subclass::prelude::*;
 use gtk::{glib, template_callbacks, Button, CompositeTemplate};
 

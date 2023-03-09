@@ -6,8 +6,8 @@ use client::data::RegistrationData;
 use client::message::{IrcMessage, IrcResponse};
 use glib::{clone, MainContext};
 use gtk::glib;
-use gtk::prelude::{ObjectExt, ToValue};
-use gtk::subclass::prelude::ObjectSubclassIsExt;
+use gtk::prelude::*;
+use gtk::subclass::prelude::*;
 
 use crate::gtk_client::RegistrationDataObject;
 
