@@ -12,7 +12,7 @@ use crate::message::{IrcCommand, IrcMessage};
 
 const MESSAGE_SEPARATOR: &[u8] = b"\r\n";
 
-/// Spawns a task that reads messages from a channel and sends them to the server.
+/// Spawns a thread that reads messages from a channel and sends them to the server.
 ///
 /// Returns a sender that can be used to send commands to the server.
 pub fn spawn_writer(mut stream: TcpStream) -> Sender<IrcCommand> {
@@ -29,7 +29,7 @@ pub fn spawn_writer(mut stream: TcpStream) -> Sender<IrcCommand> {
     sender
 }
 
-/// Spawns a task that reads messages from the server and sends them to a channel.
+/// Spawns a thread that reads messages from the server and sends them to a channel.
 ///
 /// Returns a receiver that can be used to receive messages from the server.
 pub fn spawn_reader(stream: TcpStream) -> UnboundedReceiver<IrcMessage> {
