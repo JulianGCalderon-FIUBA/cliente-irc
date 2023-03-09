@@ -38,7 +38,7 @@ impl ObjectSubclass for Login {
     fn class_init(klass: &mut Self::Class) {
         klass.bind_template();
         klass.bind_template_callbacks();
-        klass.set_css_name("registration")
+        klass.set_css_name("login")
     }
 
     fn instance_init(obj: &InitializingObject<Self>) {

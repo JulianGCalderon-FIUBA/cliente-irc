@@ -22,6 +22,10 @@ glib::wrapper! {
     /// * `sender`: The sender of the message.
     ///     When empty, the sender is not shown.
     ///     * type: `String`
+    ///
+    /// # CSS nodes
+    ///
+    /// `Message` has a single CSS node with name `message`.
     pub struct Message(ObjectSubclass<imp::Message>)
     @extends gtk::Widget, gtk::Box,
     @implements gtk::Accessible, gtk::Buildable,

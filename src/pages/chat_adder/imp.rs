@@ -21,7 +21,7 @@ impl ObjectSubclass for ChatAdder {
 
     fn class_init(klass: &mut Self::Class) {
         klass.bind_template();
-        klass.set_css_name("add-chat-page");
+        klass.set_css_name("chat-adder");
         klass.bind_template_callbacks();
     }
 

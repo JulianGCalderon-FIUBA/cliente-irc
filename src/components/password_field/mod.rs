@@ -24,6 +24,10 @@ glib::wrapper! {
     ///    * type: `String`
     /// * `name`: The name of the field.
     ///    * type: `String`
+    ///
+    /// # CSS nodes
+    ///
+    /// `PasswordField` has a single CSS node with name `password-field`.
     pub struct PasswordField(ObjectSubclass<imp::PasswordField>)
     @extends gtk::Widget, gtk::Box,
     @implements gtk::Accessible, gtk::Buildable,

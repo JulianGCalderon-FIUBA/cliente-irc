@@ -16,6 +16,10 @@ glib::wrapper! {
     ///
     /// * `registration-data` - The user registration data
     ///     - Type: `RegistrationDataObject`
+    ///
+    /// # CSS nodes
+    ///
+    /// `Account` has a single CSS node with name `account`.
     pub struct Account(ObjectSubclass<imp::Account>)
     @extends gtk::Widget, gtk::Box,
     @implements gtk::Accessible, gtk::Buildable,

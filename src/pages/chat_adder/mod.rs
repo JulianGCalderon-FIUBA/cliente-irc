@@ -17,6 +17,10 @@ glib::wrapper! {
     ///     Arguments:
     ///     - `String` - The title of the new chat
     ///         * Type: `String`
+    ///
+    /// # CSS nodes
+    ///
+    /// `ChatAdder` has a single CSS node with name `chat-adder`.
     pub struct ChatAdder(ObjectSubclass<imp::ChatAdder>)
     @extends gtk::Widget, gtk::Box,
     @implements gtk::Accessible, gtk::Buildable,

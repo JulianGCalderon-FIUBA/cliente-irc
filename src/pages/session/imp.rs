@@ -32,6 +32,7 @@ impl ObjectSubclass for Session {
     fn class_init(klass: &mut Self::Class) {
         klass.bind_template();
         klass.bind_template_callbacks();
+        klass.set_css_name("session");
 
         Chat::ensure_type();
         ChatAdder::ensure_type();

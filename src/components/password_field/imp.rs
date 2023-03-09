@@ -28,7 +28,7 @@ impl ObjectSubclass for PasswordField {
 
     fn class_init(klass: &mut Self::Class) {
         klass.bind_template();
-        klass.set_css_name("field")
+        klass.set_css_name("password-field");
     }
 
     fn instance_init(obj: &InitializingObject<Self>) {

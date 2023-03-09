@@ -35,6 +35,10 @@ glib::wrapper! {
     ///
     /// * `registration-data` - The user registration data
     ///     - Type: `RegistrationDataObject`
+    ///
+    /// # CSS nodes
+    ///
+    /// `Session` has a single CSS node with name `session`.
     pub struct Session(ObjectSubclass<imp::Session>)
     @extends gtk::Widget, gtk::Box,
     @implements gtk::Accessible, gtk::Buildable,

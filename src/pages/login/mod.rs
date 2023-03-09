@@ -17,6 +17,8 @@ glib::wrapper! {
     ///
     /// This page is used to connect to the server and register the user
     ///
+    /// Subclassifies `gtk::Box`
+    ///
     /// # Features
     ///
     /// * User input is validated before being sent to the server
@@ -35,6 +37,10 @@ glib::wrapper! {
     ///         * Type: `BoxedIrcClient`
     ///    - `data` - The user data
     ///        * Type: `RegistrationDataObject`
+    ///
+    /// # CSS nodes
+    ///
+    /// `Login` has a single CSS node with name `login`.
     pub struct Login(ObjectSubclass<imp::Login>)
     @extends gtk::Widget, gtk::Box,
     @implements gtk::Accessible, gtk::Buildable,
