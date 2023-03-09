@@ -1,4 +1,5 @@
-//! This modules defines all registration related structures
+//! This module contains the login page
+
 mod handle;
 mod imp;
 mod registerer;
@@ -12,11 +13,19 @@ use gtk::subclass::prelude::*;
 use crate::gtk_client::BoxedIrcClient;
 
 glib::wrapper! {
-    /// This windows manages the registration process
+    /// The login page
     ///
-    /// Asks for user information and establishes connection with an IrcServer
+    /// This page is used to connect to the server and register the user
     ///
-    /// Derives [´gtk::Box´]
+    /// After registration is complete, the `registered` signal is emitted
+    ///
+    /// User input is validated before being sent to the server
+    ///
+    /// Once the user has connected to the server, then the address input is locked
+    ///
+    /// # Signals
+    ///
+    /// * `registered` - Emitted when the user is registered
     pub struct Login(ObjectSubclass<imp::Login>)
     @extends gtk::Widget, gtk::Box,
     @implements gtk::Accessible, gtk::Buildable,
@@ -24,13 +33,16 @@ glib::wrapper! {
 }
 
 impl Login {
+    /// Creates a new login page
     pub fn new() -> Self {
         Object::builder().build()
     }
 
-    /// Attempts to connect with the server.
+    /// Sets up the client
     ///
-    /// if successfull, starts an asynchronous read of server messages until registration is complete
+    /// This function will attempt to connect to the server
+    ///
+    /// If the connection is successful, then the client handler is started
     fn setup_client(&self) -> io::Result<()> {
         self.connect_client()?;
 
@@ -39,7 +51,7 @@ impl Login {
         Ok(())
     }
 
-    /// Attempts to connect with the server
+    /// Attempts to connect to the server
     fn connect_client(&self) -> io::Result<()> {
         let address = self.imp().address.input();
 
@@ -52,12 +64,25 @@ impl Login {
         Ok(())
     }
 
+    /// Whether the client is connected
     fn connected(&self) -> bool {
         self.imp().client.get().is_some()
     }
 
+    /// Gets the client
     fn client(&self) -> BoxedIrcClient {
         self.imp().client.get().unwrap().clone()
+    }
+
+    /// Only for testing purposes
+    ///
+    /// Registers the client with a random roman nickname
+    #[cfg(feature = "automatic-login")]
+    fn automatic_login(&self) {
+        let generator = rnglib::RNG::try_from(&rnglib::Language::Roman).unwrap();
+        let nickname = generator.generate_short();
+        self.imp().nickname.set_input(&nickname);
+        self.imp().connect_clicked();
     }
 }
 

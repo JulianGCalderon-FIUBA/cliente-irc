@@ -1,4 +1,4 @@
-//! This modules encapsulates the receiving and handling of server messages
+//! This module contains the the handling of server messages
 
 use std::ops::ControlFlow;
 
@@ -14,7 +14,9 @@ use crate::gtk_client::RegistrationDataObject;
 use super::Login;
 
 impl Login {
-    /// Starts an asynchronous read of server messages until registration is complete
+    /// Starts an asynchronous read from the server until registration is complete
+    ///
+    /// Calls [´Login::handle_message´] for each message received
     pub(super) fn start_client_handler(&self) {
         MainContext::default().spawn_local(clone!(@weak self as registration => async move {
             let mut client = registration.client();
@@ -26,7 +28,10 @@ impl Login {
         }));
     }
 
-    /// Handles the message with the corresponding action
+    /// Handles a message received from the server
+    ///
+    /// If the message is a [´IrcResponse::Welcome´],
+    /// then the asynchronous read is finished
     fn handle_message(&self, message: IrcMessage) -> ControlFlow<()> {
         if let IrcMessage::IrcResponse(response) = message {
             if let IrcResponse::Welcome {
@@ -46,7 +51,7 @@ impl Login {
         ControlFlow::Continue(())
     }
 
-    /// After receiving a [´IrcResponse::Welcome´], the asynchronous read is finished and 'registered' signal is emited
+    /// builds the registration data and emits the 'registered' signal
     fn handle_welcome(
         &self,
         nickname: String,
@@ -72,7 +77,7 @@ impl Login {
         ControlFlow::Break(())
     }
 
-    /// Notifies the user that nickname is already in use
+    /// Notifies the user that the nickname is already in use
     fn handle_nick_collision(&self) -> ControlFlow<()> {
         self.imp().nickname.set_error("Nickname already in use");
 

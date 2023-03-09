@@ -1,3 +1,5 @@
+//! Implementation of the Message widget.
+
 use std::cell::RefCell;
 
 use glib::subclass::InitializingObject;

@@ -1,4 +1,8 @@
+//! Pages are the main components of the application.
 //!
+//! They are advanced widgets that are used to build the user interface.
+//! They are usually composed of multiple components.
+//! They are also responsible for the application logic.
 
 mod account;
 mod chat;

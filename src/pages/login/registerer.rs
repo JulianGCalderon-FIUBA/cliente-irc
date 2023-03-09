@@ -1,4 +1,5 @@
-//! This module encapsulates the sending of messages to the server
+//! This module contains the registration logic
+
 use std::io;
 
 use client::message::IrcCommand;
@@ -7,7 +8,7 @@ use gtk::subclass::prelude::*;
 use super::Login;
 
 impl Login {
-    /// Sends registration commands to the client
+    /// Sends the registration commands to the server, in the correct order
     pub(super) fn register_client(&self) -> io::Result<()> {
         self.send_pass()?;
 
@@ -16,7 +17,7 @@ impl Login {
         self.send_user()
     }
 
-    /// Sends pass command to the server, if a password is provided
+    /// Sends pass command to the server
     fn send_pass(&self) -> io::Result<()> {
         let password = self.imp().password.input();
         if password.is_empty() {
@@ -28,9 +29,9 @@ impl Login {
         self.client().send(pass_command)
     }
 
-    /// Sends nick command to the server.
+    /// Sends nick command to the server
     ///
-    /// An error message is shown if nickname field is empty
+    /// If the nickname is empty, then an error is set on the nickname input
     fn send_nick(&self) -> io::Result<()> {
         let nickname = self.imp().nickname.input();
 
@@ -46,7 +47,7 @@ impl Login {
         self.client().send(nick_command)
     }
 
-    /// Send user command to the server
+    /// Sends user command to the server
     fn send_user(&self) -> io::Result<()> {
         let username = self.imp().username.input();
         let realname = self.imp().realname.input();

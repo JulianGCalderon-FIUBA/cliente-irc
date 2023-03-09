@@ -1,3 +1,5 @@
+//! Implementation of the Login page.
+
 use glib::subclass::InitializingObject;
 use gtk::glib::once_cell::sync::{Lazy, OnceCell};
 use gtk::glib::subclass::Signal;
@@ -48,11 +50,8 @@ impl ObjectImpl for Login {
     fn constructed(&self) {
         self.parent_constructed();
 
-        // AUTOMATIC LOGIN: ONLY FOR TESTING PURPOSES
-        // let generator = rnglib::RNG::try_from(&rnglib::Language::Roman).unwrap();
-        // let nickname = generator.generate_short();
-        // self.nickname.set_input(&nickname);
-        // self.connect_clicked();
+        #[cfg(feature = "automatic-login")]
+        self.obj().automatic_login();
     }
 
     fn signals() -> &'static [glib::subclass::Signal] {
@@ -75,9 +74,9 @@ impl BoxImpl for Login {}
 #[template_callbacks]
 impl Login {
     #[template_callback]
-    /// Called after ´connect` button is clicked.
+    /// Called when the connect button is clicked
     ///
-    /// Attempts to connect and register to the server
+    /// This function will attempt to connect to the server and register the user
     pub fn connect_clicked(&self) {
         let registration = self.obj();
 
