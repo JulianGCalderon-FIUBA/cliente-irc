@@ -26,10 +26,15 @@ glib::wrapper! {
     /// # Properties
     ///
     /// * `name`: The name of the field.
+    ///     * type: `String`
     /// * `default`: The default value of the field.
+    ///     * type: `String`
     /// * `input`: The user input.
+    ///     * type: `String`
     /// * `locked`: Whether the input is locked.
+    ///     * type: `bool`
     /// * `error`: The error message. When empty, no error message is shown.
+    ///     * type: `String`
     ///
     /// # CSS nodes
     ///

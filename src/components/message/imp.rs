@@ -68,9 +68,7 @@ impl ObjectImpl for Message {
     fn constructed(&self) {
         self.parent_constructed();
 
-        let message = self.obj();
-
-        message.bind_sender_to_label_visibility();
+        self.obj().setup_bindings();
     }
 
     fn dispose(&self) {}

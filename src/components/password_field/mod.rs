@@ -21,7 +21,9 @@ glib::wrapper! {
     /// # Properties
     ///
     /// * `input`: The user input.
+    ///    * type: `String`
     /// * `name`: The name of the field.
+    ///    * type: `String`
     pub struct PasswordField(ObjectSubclass<imp::PasswordField>)
     @extends gtk::Widget, gtk::Box,
     @implements gtk::Accessible, gtk::Buildable,
