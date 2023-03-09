@@ -32,7 +32,9 @@ glib::wrapper! {
     ///
     ///     Arguments:
     ///    - `client` - The client
+    ///         * Type: `BoxedIrcClient`
     ///    - `data` - The user data
+    ///        * Type: `RegistrationDataObject`
     pub struct Login(ObjectSubclass<imp::Login>)
     @extends gtk::Widget, gtk::Box,
     @implements gtk::Accessible, gtk::Buildable,

@@ -1,4 +1,4 @@
-//! This module defines all [`UserPage`] related structures
+//! Defines the [`Account`] page
 
 mod imp;
 
@@ -8,9 +8,14 @@ use gtk::glib;
 use crate::gtk_client::RegistrationDataObject;
 
 glib::wrapper! {
-    /// Page to display the user information
+    /// The account page is used to display the user's information
     ///
-    /// Subclassifies [´gtk::Box´]
+    /// Subclassifies `gtk::Box`
+    ///
+    /// # Properties
+    ///
+    /// * `registration-data` - The user registration data
+    ///     - Type: `RegistrationDataObject`
     pub struct Account(ObjectSubclass<imp::Account>)
     @extends gtk::Widget, gtk::Box,
     @implements gtk::Accessible, gtk::Buildable,
@@ -18,8 +23,10 @@ glib::wrapper! {
 }
 
 impl Account {
-    /// Creates a [`UserPage`] with an associated [´UserData`]
+    /// Creates a new account page with the given registration data
     pub fn new(data: RegistrationDataObject) -> Self {
-        Object::builder().property("user-data", data).build()
+        Object::builder()
+            .property("registration-data", data)
+            .build()
     }
 }

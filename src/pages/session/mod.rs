@@ -33,7 +33,7 @@ glib::wrapper! {
     ///
     /// # Properties
     ///
-    /// * `user-data` - The user data
+    /// * `registration-data` - The user registration data
     ///     - Type: `RegistrationDataObject`
     pub struct Session(ObjectSubclass<imp::Session>)
     @extends gtk::Widget, gtk::Box,
@@ -44,7 +44,9 @@ glib::wrapper! {
 impl Session {
     /// Creates a new session page with the given client and user data
     pub fn new(client: BoxedIrcClient, data: RegistrationDataObject) -> Self {
-        let session: Self = Object::builder().property("user-data", data).build();
+        let session: Self = Object::builder()
+            .property("registration-data", data)
+            .build();
 
         session.setup_client(client);
 
@@ -120,7 +122,7 @@ impl Session {
 
     /// Returns the nickname of the client
     fn nickname(&self) -> String {
-        self.property::<RegistrationDataObject>("user-data")
+        self.property::<RegistrationDataObject>("registration-data")
             .property("nickname")
     }
 

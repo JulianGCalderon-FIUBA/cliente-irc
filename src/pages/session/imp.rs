@@ -47,14 +47,14 @@ impl ObjectSubclass for Session {
 impl ObjectImpl for Session {
     fn properties() -> &'static [glib::ParamSpec] {
         static PROPERTIES: Lazy<Vec<ParamSpec>> = Lazy::new(|| {
-            vec![ParamSpecObject::builder::<RegistrationDataObject>("user-data").build()]
+            vec![ParamSpecObject::builder::<RegistrationDataObject>("registration-data").build()]
         });
         PROPERTIES.as_ref()
     }
 
     fn set_property(&self, _id: usize, value: &glib::Value, pspec: &glib::ParamSpec) {
         match pspec.name() {
-            "user-data" => {
+            "registration-data" => {
                 let data = value.get().unwrap();
                 self.data.replace(data);
             }
@@ -64,7 +64,7 @@ impl ObjectImpl for Session {
 
     fn property(&self, _id: usize, pspec: &glib::ParamSpec) -> glib::Value {
         match pspec.name() {
-            "user-data" => self.data.borrow().to_value(),
+            "registration-data" => self.data.borrow().to_value(),
             _ => unimplemented!(),
         }
     }

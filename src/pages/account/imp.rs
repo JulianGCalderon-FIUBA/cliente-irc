@@ -1,3 +1,5 @@
+//! Implementation of the Account page
+
 use std::cell::RefCell;
 
 use glib::subclass::InitializingObject;
@@ -8,8 +10,6 @@ use gtk::subclass::prelude::*;
 use gtk::{glib, CompositeTemplate};
 
 use crate::gtk_client::RegistrationDataObject;
-
-// use super::UserPageProperty;
 
 #[derive(CompositeTemplate, Default)]
 #[template(resource = "/com/jgcalderon/irc-client/ui/user-page.ui")]
@@ -36,24 +36,21 @@ impl ObjectSubclass for Account {
 impl ObjectImpl for Account {
     fn properties() -> &'static [glib::ParamSpec] {
         static PROPERTIES: Lazy<Vec<ParamSpec>> = Lazy::new(|| {
-            vec![ParamSpecObject::builder::<RegistrationDataObject>("user-data").build()]
+            vec![ParamSpecObject::builder::<RegistrationDataObject>("registration-data").build()]
         });
         PROPERTIES.as_ref()
     }
 
     fn set_property(&self, _id: usize, value: &glib::Value, pspec: &glib::ParamSpec) {
         match pspec.name() {
-            "user-data" => {
-                let data = value.get().unwrap();
-                self.data.replace(data);
-            }
+            "registration-data" => self.data.replace(value.get().unwrap()),
             _ => unimplemented!(),
         };
     }
 
     fn property(&self, _id: usize, pspec: &glib::ParamSpec) -> glib::Value {
         match pspec.name() {
-            "user-data" => self.data.borrow().to_value(),
+            "registration-data" => self.data.borrow().to_value(),
             _ => unimplemented!(),
         }
     }

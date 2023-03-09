@@ -1,3 +1,5 @@
+//! Implementation of the chat adder page.
+
 use glib::subclass::InitializingObject;
 use gtk::glib::once_cell::sync::Lazy;
 use gtk::glib::subclass::Signal;
@@ -44,6 +46,7 @@ impl BoxImpl for ChatAdder {}
 
 #[template_callbacks]
 impl ChatAdder {
+    /// Called when the user attempts to add a new chat
     #[template_callback]
     fn add_chat(&self, entry: Entry) {
         if let Some(name) = get_and_clear_entry(entry) {

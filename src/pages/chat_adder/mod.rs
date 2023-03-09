@@ -1,4 +1,4 @@
-//! This module defines all [`AddChatPage`] related structures
+//! Defines the [`ChatAdder`] page
 
 mod imp;
 
@@ -6,9 +6,17 @@ use glib::Object;
 use gtk::glib;
 
 glib::wrapper! {
-    /// This widget allows the user to add a new chat
+    /// The chat adder page is used to add new chats
     ///
-    /// Subclassifies [´gtk::Box´]
+    /// Subclassifies `gtk::Box`
+    ///
+    /// # Signals
+    ///
+    /// * `add-chat` - Emitted when a new chat must be added
+    ///
+    ///     Arguments:
+    ///     - `String` - The title of the new chat
+    ///         * Type: `String`
     pub struct ChatAdder(ObjectSubclass<imp::ChatAdder>)
     @extends gtk::Widget, gtk::Box,
     @implements gtk::Accessible, gtk::Buildable,
@@ -16,7 +24,7 @@ glib::wrapper! {
 }
 
 impl ChatAdder {
-    /// Creates a new [`AddChatPage`]
+    /// Creates a new chat adder page
     pub fn new() -> Self {
         Object::builder().build()
     }
