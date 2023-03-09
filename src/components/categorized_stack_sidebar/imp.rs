@@ -1,9 +1,11 @@
+//! Contains the implementation of the CategorizedStackSidebar widget.
+
 use std::cell::RefCell;
 
 use glib::subclass::InitializingObject;
 use gtk::glib::once_cell::sync::Lazy;
 use gtk::glib::{ParamSpec, ParamSpecObject};
-use gtk::prelude::{ObjectExt, ToValue};
+use gtk::prelude::ToValue;
 use gtk::subclass::prelude::*;
 use gtk::{glib, CompositeTemplate, ListView, SingleSelection, Stack};
 
@@ -27,7 +29,7 @@ impl ObjectSubclass for CategorizedStackSidebar {
 
     fn class_init(klass: &mut Self::Class) {
         klass.bind_template();
-        klass.set_css_name("sidebar")
+        klass.set_css_name("categorized-stack-sidebar")
     }
 
     fn instance_init(obj: &InitializingObject<Self>) {
@@ -62,9 +64,7 @@ impl ObjectImpl for CategorizedStackSidebar {
     fn constructed(&self) {
         self.parent_constructed();
 
-        let sidebar = self.obj();
-
-        sidebar.connect_notify(Some("stack"), |sidebar, _| sidebar.setup_stack());
+        self.obj().setup();
     }
 }
 

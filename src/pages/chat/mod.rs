@@ -1,4 +1,4 @@
-//! This modue contains all chat related structures
+//! Defines the [`Chat`] page
 
 mod imp;
 
@@ -11,15 +11,37 @@ use gtk::{glib, Align};
 use crate::components::Message;
 
 glib::wrapper! {
-    /// Window associated to a particular chat in the client. Can be a private chat or a channel.
+    /// The chat page is used to display the chat messages
     ///
-    /// Displays chat information and message history.
+    /// It also allows the user to send messages
     ///
-    /// User may send messages to given chat, emiting the 'send' signal.
+    /// When the user sends a message, the `send` signal is emitted.
+    /// And the message is added to the chat.
     ///
-    /// Has a single css node 'chat'
+    /// External messages are added to the chat with the `add_message` method.
+    /// They may have a sender
     ///
-    /// Subclassifies [´gtk::Box´]
+    /// Subclassifies `gtk::Box`
+    ///
+    /// # Properties
+    ///
+    /// * `name` - The name of the chat
+    ///    - Type: `String`
+    ///
+    /// # Signals
+    ///
+    /// * `close` - Emitted when the chat must be closed
+    /// * `send` - Emitted when a message must be sent
+    ///     - Arguments:
+    ///        - `message` - The message to send
+    ///           * Type: `String`
+    ///
+    /// # CSS nodes
+    ///
+    /// `Chat` has a single CSS node with name `chat`.
+    ///
+    ///  Message have a CSS node with name `message`.
+    ///
     pub struct Chat(ObjectSubclass<imp::Chat>)
     @extends gtk::Widget, gtk::Box,
     @implements gtk::Accessible, gtk::Buildable,
@@ -57,16 +79,14 @@ impl Chat {
         });
     }
 
-    /// Adds an external message to the chat.
-    /// Does not have a sender, used only for private chats
+    /// Adds an external message.
     pub fn add_message(&self, message: String) {
         let message = create_external_message(message);
 
         self.imp().messages.append(&message);
     }
 
-    /// Adds an external message to the chat,
-    /// A sender is specified, used only for channel chats.
+    /// Adds an external message with a sender.
     pub fn add_message_with_sender(&self, message: String, sender: String) {
         let message = create_external_message(message);
         message.set_sender(sender);
@@ -76,6 +96,8 @@ impl Chat {
 }
 
 /// Creates an external message
+/// The message is aligned to the start
+/// And has the `external` CSS class
 fn create_external_message(message: String) -> Message {
     let message = Message::new(message);
     message.set_halign(Align::Start);
@@ -83,6 +105,9 @@ fn create_external_message(message: String) -> Message {
     message
 }
 
+/// Creates an own message
+/// The message is aligned to the end
+/// And has the `own` CSS class
 fn create_own_message(message: String) -> Message {
     let message = Message::new(message);
     message.set_halign(Align::End);

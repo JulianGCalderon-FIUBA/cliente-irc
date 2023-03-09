@@ -1,4 +1,4 @@
-/// This module defines [`Sidebar`] related structures
+/// This module contains the CategorizedStackSidebar widget.
 mod imp;
 
 use glib::Object;
@@ -11,16 +11,22 @@ use gtk::{
 };
 
 glib::wrapper! {
-    /// Used to display all sesion pages and switch between them
+    /// The CategorizedStackSidebar is a sidebar that displays the pages of a [`Stack`].
     ///
-    /// If a page name in trailed with 'config', it is displayed in the config section
-    /// If a page name is trailed with 'chat', it is displayed in the chat section
+    /// It is used to navigate between the pages of the stack.
     ///
-    /// If a page has an icon, it is displayed with the title
+    /// Stack pages are categorized by their name
     ///
-    /// Has a single css node 'sidebar'
+    /// Categories can be added with the `add_category` method.
     ///
-    /// Subclassifies [`gtk::Box`]
+    /// # Properties
+    ///
+    /// * `stack` - The stack to display
+    ///   - Type: [`Stack`]
+    ///
+    /// # CSS nodes
+    ///
+    /// `CategorizedStackSidebar` has a single CSS node with name `categorized-stack-sidebar`.
     pub struct CategorizedStackSidebar(ObjectSubclass<imp::CategorizedStackSidebar>)
     @extends gtk::Widget, gtk::Box,
     @implements gtk::Accessible, gtk::Buildable,
@@ -28,7 +34,6 @@ glib::wrapper! {
 }
 
 impl CategorizedStackSidebar {
-    /// Creates a new [´Sidebar´] with associated stack
     pub fn new(stack: Stack) -> Self {
         Object::builder().property("stack", stack).build()
     }
@@ -37,6 +42,11 @@ impl CategorizedStackSidebar {
         self.property("stack")
     }
 
+    fn setup(&self) {
+        self.connect_notify(Some("stack"), |sidebar, _| sidebar.setup_stack());
+    }
+
+    /// Called after the stack property is set
     fn setup_stack(&self) {
         let stack: Stack = self.property("stack");
         let selection = stack.pages();

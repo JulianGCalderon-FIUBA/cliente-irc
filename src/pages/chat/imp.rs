@@ -1,3 +1,5 @@
+//! Implementation of the Chat widget
+
 use std::cell::RefCell;
 
 use glib::subclass::InitializingObject;
@@ -84,8 +86,12 @@ impl BoxImpl for Chat {}
 
 #[template_callbacks]
 impl Chat {
+    /// Called when the user atempts to send a message
+    ///
+    /// Emits the `send` signal and adds the message to the chat
+    ///
+    /// Entry is cleared after the message is sent
     #[template_callback]
-    /// Called when the user sends a message through the chat
     pub fn send_message(&self, entry: Entry) {
         if let Some(message) = get_and_clear_entry(entry) {
             self.obj()
@@ -97,6 +103,8 @@ impl Chat {
     }
 
     /// Called when the user atempts to close de chat
+    ///
+    /// Emits the `close` signal
     #[template_callback]
     pub fn close_chat(&self) {
         self.obj().emit_by_name("close", &[])
