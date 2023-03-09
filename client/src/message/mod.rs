@@ -1,6 +1,8 @@
-//! This module contains all IRC message variations.
+//! IRC message parsing and serialization.
 //!
-//! Messages are parsed acording to RFC 1459
+//! This crate provides a set of types and functions to parse and serialize IRC messages.
+//!
+//! All types are defines according to the protocol RFC 1459
 
 mod command;
 mod error;
@@ -14,22 +16,34 @@ pub use response::IrcResponse;
 type Trail = Option<String>;
 type Args = Vec<String>;
 
-/// Parses messages coming from the server
+/// IRC message
+///
+/// This enum represents an IRC message. It can be either a command or a response.
+///
 pub enum IrcMessage {
-    /// If a command comes from a server, it must always have a sender
+    /// IRC command
+    ///
+    /// This variant represents an IRC command. It contains the sender of the command
     IrcCommand(String, IrcCommand),
+    /// IRC response
+    ///
+    /// This variant represents an IRC response. It contains the response itself.
     IrcResponse(IrcResponse),
 }
 
 impl IrcMessage {
-    /// Creates an [IrcMessage] by parsing a [&str]
+    /// Parses an IRC message
     ///
-    /// Fails on an invalid or unknown command
+    /// This function parses an IRC message and returns an IrcMessage enum.
+    ///
+    /// # Errors
+    ///
+    /// This function returns an error if the message is not a valid IRC message.
     pub fn parse(message: &str) -> Result<Self, ParsingError> {
         let (prefix, command, arguments, trailing) = parser::parse(message)?;
 
         if IrcCommand::is_command(&command) {
-            let prefix = prefix.ok_or(ParsingError::MissingPrefix)?;
+            let prefix = prefix.ok_or(ParsingError::MissingSender)?;
             let command = IrcCommand::new(command, arguments, trailing)?;
             return Ok(IrcMessage::IrcCommand(prefix, command));
         }

@@ -5,7 +5,7 @@ mod imp;
 use glib::Object;
 use gtk::glib;
 
-use crate::client::UserData;
+use crate::gtk_client::RegistrationDataObject;
 
 glib::wrapper! {
     /// Page to display the user information
@@ -19,7 +19,7 @@ glib::wrapper! {
 
 impl Account {
     /// Creates a [`UserPage`] with an associated [´UserData`]
-    pub fn new(data: UserData) -> Self {
+    pub fn new(data: RegistrationDataObject) -> Self {
         Object::builder().property("user-data", data).build()
     }
 }

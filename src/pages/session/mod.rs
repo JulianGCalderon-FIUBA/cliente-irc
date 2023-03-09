@@ -8,9 +8,9 @@ use gtk::glib::{self, clone};
 use gtk::prelude::{Cast, ObjectExt};
 use gtk::subclass::prelude::*;
 
-use crate::client::message::IrcCommand;
-use crate::client::{IrcClient, UserData};
+use crate::gtk_client::{BoxedIrcClient, RegistrationDataObject};
 use crate::pages::Chat;
+use client::message::IrcCommand;
 
 const CHANNEL_INDICATOR: char = '#';
 
@@ -30,7 +30,7 @@ glib::wrapper! {
 
 impl Session {
     /// Creates a new Session for the provided client, client must already be registered.
-    pub fn new(client: IrcClient, data: UserData) -> Self {
+    pub fn new(client: BoxedIrcClient, data: RegistrationDataObject) -> Self {
         let session: Self = Object::builder().property("user-data", data).build();
 
         session.setup_client(client);
@@ -40,13 +40,13 @@ impl Session {
 
     /// Assigns the client to the structure and starts
     /// an asynchronous read on server messages until the connections is closed
-    fn setup_client(&self, client: IrcClient) {
+    fn setup_client(&self, client: BoxedIrcClient) {
         self.imp().client.set(client).unwrap();
 
         self.start_client_handler();
     }
 
-    fn client(&self) -> IrcClient {
+    fn client(&self) -> BoxedIrcClient {
         self.imp().client.get().unwrap().clone()
     }
 
@@ -112,6 +112,7 @@ impl Session {
 
     // Shortcut for accessing the client's nickname
     fn nickname(&self) -> String {
-        self.property::<UserData>("user-data").nickname()
+        self.property::<RegistrationDataObject>("user-data")
+            .property("nickname")
     }
 }

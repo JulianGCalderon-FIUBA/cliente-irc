@@ -7,14 +7,14 @@ use gtk::prelude::ToValue;
 use gtk::subclass::prelude::*;
 use gtk::{glib, CompositeTemplate};
 
-use crate::client::UserData;
+use crate::gtk_client::RegistrationDataObject;
 
 // use super::UserPageProperty;
 
 #[derive(CompositeTemplate, Default)]
 #[template(resource = "/com/jgcalderon/irc-client/ui/user-page.ui")]
 pub struct Account {
-    data: RefCell<UserData>,
+    data: RefCell<RegistrationDataObject>,
 }
 
 #[glib::object_subclass]
@@ -35,8 +35,9 @@ impl ObjectSubclass for Account {
 
 impl ObjectImpl for Account {
     fn properties() -> &'static [glib::ParamSpec] {
-        static PROPERTIES: Lazy<Vec<ParamSpec>> =
-            Lazy::new(|| vec![ParamSpecObject::builder::<UserData>("user-data").build()]);
+        static PROPERTIES: Lazy<Vec<ParamSpec>> = Lazy::new(|| {
+            vec![ParamSpecObject::builder::<RegistrationDataObject>("user-data").build()]
+        });
         PROPERTIES.as_ref()
     }
 

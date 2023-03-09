@@ -7,10 +7,9 @@ use gtk::prelude::{ObjectExt, ToValue};
 use gtk::subclass::prelude::*;
 use gtk::{glib, CompositeTemplate, ListView, SingleSelection, Stack};
 
-
 #[derive(CompositeTemplate, Default)]
 #[template(resource = "/com/jgcalderon/irc-client/ui/sidebar.ui")]
-pub struct Sidebar {
+pub struct CategorizedStackSidebar {
     #[template_child]
     pub config_list: TemplateChild<ListView>,
     #[template_child]
@@ -21,9 +20,9 @@ pub struct Sidebar {
 }
 
 #[glib::object_subclass]
-impl ObjectSubclass for Sidebar {
+impl ObjectSubclass for CategorizedStackSidebar {
     const NAME: &'static str = "Sidebar";
-    type Type = super::Sidebar;
+    type Type = super::CategorizedStackSidebar;
     type ParentType = gtk::Box;
 
     fn class_init(klass: &mut Self::Class) {
@@ -36,7 +35,7 @@ impl ObjectSubclass for Sidebar {
     }
 }
 
-impl ObjectImpl for Sidebar {
+impl ObjectImpl for CategorizedStackSidebar {
     fn properties() -> &'static [glib::ParamSpec] {
         static PROPERTIES: Lazy<Vec<ParamSpec>> =
             Lazy::new(|| vec![ParamSpecObject::builder::<Stack>("stack").build()]);
@@ -69,5 +68,5 @@ impl ObjectImpl for Sidebar {
     }
 }
 
-impl WidgetImpl for Sidebar {}
-impl BoxImpl for Sidebar {}
+impl WidgetImpl for CategorizedStackSidebar {}
+impl BoxImpl for CategorizedStackSidebar {}

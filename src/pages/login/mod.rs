@@ -9,7 +9,7 @@ use glib::Object;
 use gtk::glib;
 use gtk::subclass::prelude::*;
 
-use crate::client::IrcClient;
+use crate::gtk_client::BoxedIrcClient;
 
 glib::wrapper! {
     /// This windows manages the registration process
@@ -43,7 +43,7 @@ impl Login {
     fn connect_client(&self) -> io::Result<()> {
         let address = self.imp().address.input();
 
-        let client = IrcClient::connect(address)?;
+        let client = BoxedIrcClient::connect(address)?;
 
         self.imp().client.set(client).unwrap();
 
@@ -56,7 +56,7 @@ impl Login {
         self.imp().client.get().is_some()
     }
 
-    fn client(&self) -> IrcClient {
+    fn client(&self) -> BoxedIrcClient {
         self.imp().client.get().unwrap().clone()
     }
 }

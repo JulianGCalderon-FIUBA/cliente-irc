@@ -2,14 +2,16 @@
 
 use std::ops::ControlFlow;
 
+use client::data::RegistrationData;
+use client::message::{IrcMessage, IrcResponse};
 use glib::{clone, MainContext};
 use gtk::glib;
 use gtk::prelude::{ObjectExt, ToValue};
 use gtk::subclass::prelude::ObjectSubclassIsExt;
 
+use crate::gtk_client::RegistrationDataObject;
+
 use super::Login;
-use crate::client::message::{IrcMessage, IrcResponse};
-use crate::client::UserData;
 
 impl Login {
     /// Starts an asynchronous read of server messages until registration is complete
@@ -53,7 +55,14 @@ impl Login {
         hostname: String,
         servername: String,
     ) -> ControlFlow<()> {
-        let data = UserData::new(nickname, realname, username, hostname, servername);
+        let data = RegistrationData {
+            nickname,
+            realname,
+            username,
+            hostname,
+            servername,
+        };
+        let data = RegistrationDataObject::new(data);
 
         self.emit_by_name::<()>(
             "registered",

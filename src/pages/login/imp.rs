@@ -5,9 +5,9 @@ use gtk::prelude::StaticType;
 use gtk::subclass::prelude::*;
 use gtk::{glib, template_callbacks, Button, CompositeTemplate};
 
-use crate::client::{IrcClient, UserData};
 use crate::components::field::Field;
 use crate::components::password_field::PasswordField;
+use crate::gtk_client::{BoxedIrcClient, RegistrationDataObject};
 
 #[derive(CompositeTemplate, Default)]
 #[template(resource = "/com/jgcalderon/irc-client/ui/registration.ui")]
@@ -24,7 +24,7 @@ pub struct Login {
     pub realname: TemplateChild<Field>,
     #[template_child]
     pub connect: TemplateChild<Button>,
-    pub client: OnceCell<IrcClient>,
+    pub client: OnceCell<BoxedIrcClient>,
 }
 
 #[glib::object_subclass]
@@ -60,8 +60,8 @@ impl ObjectImpl for Login {
             vec![Signal::builder("registered")
                 .param_types([
                     super::Login::static_type(),
-                    IrcClient::static_type(),
-                    UserData::static_type(),
+                    BoxedIrcClient::static_type(),
+                    RegistrationDataObject::static_type(),
                 ])
                 .build()]
         });

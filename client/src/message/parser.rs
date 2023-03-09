@@ -1,5 +1,6 @@
-//! This module contains parsing logic por separating a message into:
-//! `prefix`, `command`, `parameters`, `trailing`
+//! This module contains the parser for IRC messages.
+//!
+//! The parser is based on the RFC 1459 specification.
 
 const PREFIX_CHARACTER: u8 = b':';
 const MAX_LENGTH: usize = 510;
@@ -15,7 +16,14 @@ pub type Parameters = Vec<String>;
 pub type Trailing = Option<String>;
 type IrcMessageParse = (Prefix, Command, Parameters, Trailing);
 
-/// Parses string into `prefix`, `command`, `parameters` and `trailing`.
+/// Parses an IRC message
+///
+/// This function parses an IRC message and returns a tuple containing the prefix, the command, the
+/// parameters and the trailing.
+///
+/// # Errors
+///
+/// This function returns an error if the message is not a valid IRC message.
 pub fn parse(content: &str) -> Result<IrcMessageParse, ParsingError> {
     if content.is_empty() {
         return Err(ParsingError::EmptyMessage);
@@ -34,7 +42,13 @@ pub fn parse(content: &str) -> Result<IrcMessageParse, ParsingError> {
     Ok((prefix, command, parameters, trailing))
 }
 
-/// If next iter item is a prefix, it consumes it and returns its value
+/// Parses the prefix of an IRC message
+///
+/// If the next item in the iterator is a prefix, it is returned. Otherwise, None is returned.
+///
+/// # Errors
+///
+/// This function returns an error if the prefix is empty
 fn get_prefix(split: &mut Peekable<SplitWhitespace>) -> Result<Prefix, ParsingError> {
     let possible_prefix = match split.peek() {
         None => return Err(ParsingError::EmptyMessage),
@@ -61,7 +75,9 @@ fn get_prefix(split: &mut Peekable<SplitWhitespace>) -> Result<Prefix, ParsingEr
     Ok(None)
 }
 
-/// If next iter item is a command, it consumes it and returns its value
+/// Parses the command of an IRC message
+///
+/// If the next item in the iterator is a command, it is returned. Otherwise, an error is returned.
 fn get_command(split: &mut Peekable<SplitWhitespace>) -> Result<Command, ParsingError> {
     let possible_command = match split.next() {
         None => return Err(ParsingError::NoCommand),
@@ -71,7 +87,13 @@ fn get_command(split: &mut Peekable<SplitWhitespace>) -> Result<Command, Parsing
     Ok(possible_command.to_string())
 }
 
-/// Consumes parameters from iterator and returns them
+/// Parses the parameters of an IRC message
+///
+/// Returns a vector containing all the remaining parameters, until the trailing is found.
+///
+/// # Errors
+///
+/// This function returns an error if there are more than 15 parameters.
 fn get_parameters(split: &mut Peekable<SplitWhitespace>) -> Result<Parameters, ParsingError> {
     let mut parameters = Vec::new();
 
@@ -96,7 +118,13 @@ fn get_parameters(split: &mut Peekable<SplitWhitespace>) -> Result<Parameters, P
     Ok(parameters)
 }
 
-/// If next iter item is a trailing parameter, it consumes it and returns its value
+/// Parses the trailing of an IRC message
+///
+/// Returns the trailing, if it exists. Otherwise, None is returned.
+///
+/// # Errors
+///
+/// This function will never return an error
 fn get_trailing(split: &mut Peekable<SplitWhitespace>) -> Result<Trailing, ParsingError> {
     if split.peek().is_none() {
         return Ok(None);

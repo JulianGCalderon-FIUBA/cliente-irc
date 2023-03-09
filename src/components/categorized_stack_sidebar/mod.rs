@@ -21,13 +21,13 @@ glib::wrapper! {
     /// Has a single css node 'sidebar'
     ///
     /// Subclassifies [`gtk::Box`]
-    pub struct Sidebar(ObjectSubclass<imp::Sidebar>)
+    pub struct CategorizedStackSidebar(ObjectSubclass<imp::CategorizedStackSidebar>)
     @extends gtk::Widget, gtk::Box,
     @implements gtk::Accessible, gtk::Buildable,
         gtk::ConstraintTarget, gtk::Orientable;
 }
 
-impl Sidebar {
+impl CategorizedStackSidebar {
     /// Creates a new [´Sidebar´] with associated stack
     pub fn new(stack: Stack) -> Self {
         Object::builder().property("stack", stack).build()

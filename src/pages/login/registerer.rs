@@ -1,10 +1,10 @@
 //! This module encapsulates the sending of messages to the server
 use std::io;
 
+use client::message::IrcCommand;
 use gtk::subclass::prelude::*;
 
 use super::Login;
-use crate::client::message::IrcCommand;
 
 impl Login {
     /// Sends registration commands to the client

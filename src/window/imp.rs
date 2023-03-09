@@ -3,7 +3,7 @@ use gtk::prelude::StaticTypeExt;
 use gtk::subclass::prelude::*;
 use gtk::{glib, template_callbacks, CompositeTemplate, Stack};
 
-use crate::client::{IrcClient, UserData};
+use crate::gtk_client::{BoxedIrcClient, RegistrationDataObject};
 use crate::pages::{Login, Session};
 
 #[derive(CompositeTemplate, Default)]
@@ -42,7 +42,12 @@ impl Window {
     /// Called after registration is finished.
     ///
     /// Changes view to Session
-    pub fn registered(&self, registration: Login, client: IrcClient, data: UserData) {
+    pub fn registered(
+        &self,
+        registration: Login,
+        client: BoxedIrcClient,
+        data: RegistrationDataObject,
+    ) {
         let session = Session::new(client, data);
         self.stack.add_named(&session, Some("session"));
         self.stack.set_visible_child_name("session");

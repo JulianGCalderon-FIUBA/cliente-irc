@@ -2,11 +2,11 @@
 
 #![warn(missing_docs)]
 
-mod client;
 mod components;
 mod pages;
 mod utils;
 mod window;
+mod gtk_client;
 
 use gtk::gdk::Display;
 use gtk::prelude::*;

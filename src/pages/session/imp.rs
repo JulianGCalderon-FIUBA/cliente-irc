@@ -8,18 +8,18 @@ use gtk::subclass::prelude::*;
 use gtk::{glib, template_callbacks, CompositeTemplate, Stack};
 
 use super::CHANNEL_INDICATOR;
-use crate::client::message::IrcCommand;
-use crate::client::{IrcClient, UserData};
-use crate::components::Sidebar;
+use crate::components::CategorizedStackSidebar;
+use crate::gtk_client::{BoxedIrcClient, RegistrationDataObject};
 use crate::pages::{Account, Chat, ChatAdder};
+use client::message::IrcCommand;
 
 #[derive(CompositeTemplate, Default)]
 #[template(resource = "/com/jgcalderon/irc-client/ui/session.ui")]
 pub struct Session {
     #[template_child]
     pub pages: TemplateChild<Stack>,
-    pub client: OnceCell<IrcClient>,
-    pub data: RefCell<UserData>,
+    pub client: OnceCell<BoxedIrcClient>,
+    pub data: RefCell<RegistrationDataObject>,
 }
 
 #[glib::object_subclass]
@@ -35,7 +35,7 @@ impl ObjectSubclass for Session {
         Chat::ensure_type();
         ChatAdder::ensure_type();
         Account::ensure_type();
-        Sidebar::ensure_type();
+        CategorizedStackSidebar::ensure_type();
     }
 
     fn instance_init(obj: &InitializingObject<Self>) {
@@ -45,8 +45,9 @@ impl ObjectSubclass for Session {
 
 impl ObjectImpl for Session {
     fn properties() -> &'static [glib::ParamSpec] {
-        static PROPERTIES: Lazy<Vec<ParamSpec>> =
-            Lazy::new(|| vec![ParamSpecObject::builder::<UserData>("user-data").build()]);
+        static PROPERTIES: Lazy<Vec<ParamSpec>> = Lazy::new(|| {
+            vec![ParamSpecObject::builder::<RegistrationDataObject>("user-data").build()]
+        });
         PROPERTIES.as_ref()
     }
 
