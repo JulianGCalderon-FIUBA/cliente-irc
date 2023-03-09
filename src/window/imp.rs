@@ -3,9 +3,8 @@ use gtk::prelude::StaticTypeExt;
 use gtk::subclass::prelude::*;
 use gtk::{glib, template_callbacks, CompositeTemplate, Stack};
 
-use crate::client::{IrcClient, UserData};
-
-use crate::pages::{registration::Registration, session::Session};
+use crate::gtk_client::{BoxedIrcClient, RegistrationDataObject};
+use crate::pages::{Login, Session};
 
 #[derive(CompositeTemplate, Default)]
 #[template(resource = "/com/jgcalderon/irc-client/ui/window.ui")]
@@ -24,7 +23,7 @@ impl ObjectSubclass for Window {
         klass.bind_template();
         klass.bind_template_callbacks();
 
-        Registration::ensure_type();
+        Login::ensure_type();
     }
 
     fn instance_init(obj: &InitializingObject<Self>) {
@@ -40,10 +39,16 @@ impl ApplicationWindowImpl for Window {}
 #[template_callbacks]
 impl Window {
     #[template_callback]
-    /// Called after registration is finished.
+    /// Called when the user logs in.
     ///
-    /// Changes view to Session
-    pub fn registered(&self, registration: Registration, client: IrcClient, data: UserData) {
+    /// This function is called when the user logs in. It creates a new `Session`
+    /// and shows it.
+    pub fn registered(
+        &self,
+        registration: Login,
+        client: BoxedIrcClient,
+        data: RegistrationDataObject,
+    ) {
         let session = Session::new(client, data);
         self.stack.add_named(&session, Some("session"));
         self.stack.set_visible_child_name("session");

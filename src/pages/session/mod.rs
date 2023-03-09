@@ -1,6 +1,5 @@
-//! This module contains all [´Session`] related structures
+//! This module contains the Session page
 
-pub mod constant;
 mod handle;
 mod imp;
 
@@ -9,22 +8,37 @@ use gtk::glib::{self, clone};
 use gtk::prelude::{Cast, ObjectExt};
 use gtk::subclass::prelude::*;
 
-use crate::client::{IrcClient, UserData};
-use crate::message::IrcCommand;
+use crate::gtk_client::{BoxedIrcClient, RegistrationDataObject};
+use crate::pages::Chat;
+use client::message::IrcCommand;
 
-use self::constant::SessionProperty;
-use crate::widgets::chat_page::ChatPage;
-
+/// The character as prefix is used to indicate a channel
 const CHANNEL_INDICATOR: char = '#';
 
+const GROUP_CHAT_ICON: &str = "system-users-symbolic";
+const PRIVATE_CHAT_ICON: &str = "avatar-default-symbolic";
+
 glib::wrapper! {
-    /// This structures is used to handle de client functionaly.
-    /// It's created with an already regeistered client.
+    /// The session window is used to interact with the server
     ///
-    /// Handles all client related functionality,
-    /// from sending messages to configuring the state of the client
+    /// Must be created with a valid, already registered client
     ///
-    /// Subclassifies [´gtk::Box´]
+    /// # Features
+    ///
+    /// * Private message between clients
+    /// * Joining and leaving channels
+    /// * Sending messages to channels
+    ///
+    /// Subclassifies `gtk::Box`
+    ///
+    /// # Properties
+    ///
+    /// * `registration-data` - The user registration data
+    ///     - Type: `RegistrationDataObject`
+    ///
+    /// # CSS nodes
+    ///
+    /// `Session` has a single CSS node with name `session`.
     pub struct Session(ObjectSubclass<imp::Session>)
     @extends gtk::Widget, gtk::Box,
     @implements gtk::Accessible, gtk::Buildable,
@@ -32,10 +46,10 @@ glib::wrapper! {
 }
 
 impl Session {
-    /// Creates a new Session for the provided client, client must already be registered.
-    pub fn new(client: IrcClient, data: UserData) -> Self {
+    /// Creates a new session page with the given client and user data
+    pub fn new(client: BoxedIrcClient, data: RegistrationDataObject) -> Self {
         let session: Self = Object::builder()
-            .property(&SessionProperty::Data, data)
+            .property("registration-data", data)
             .build();
 
         session.setup_client(client);
@@ -43,47 +57,46 @@ impl Session {
         session
     }
 
-    /// Assigns the client to the structure and starts
-    /// an asynchronous read on server messages until the connections is closed
-    fn setup_client(&self, client: IrcClient) {
+    /// Sets up the client
+    ///
+    /// This functions starts the client handler
+    fn setup_client(&self, client: BoxedIrcClient) {
         self.imp().client.set(client).unwrap();
 
         self.start_client_handler();
     }
 
-    fn client(&self) -> IrcClient {
+    /// Returns the client
+    fn client(&self) -> BoxedIrcClient {
         self.imp().client.get().unwrap().clone()
     }
 
-    /// Adds a new ´Chat´ with given name to stack.
-    ///
-    /// Chats are stored in the chat section of the sidebar for easy openning.
-    fn add_chat(&self, title: String) -> ChatPage {
-        let chat = ChatPage::new(title.clone());
+    /// Adds a new chat to the session with the given title
+    fn add_chat(&self, title: String) -> Chat {
+        let chat = Chat::new(title.clone());
 
+        self.connect_chat_signals(&chat);
+
+        let name = build_name_for_chat_title(&title);
+        let page = self.imp().pages.add_titled(&chat, Some(&name), &title);
+
+        set_chat_page_icon(page);
+
+        chat
+    }
+
+    /// Connects the signals of the given chat to the session
+    fn connect_chat_signals(&self, chat: &Chat) {
         chat.connect_close(clone!(@weak self as session => move |chat| {
             session.imp().pages.remove(chat);
         }));
         chat.connect_send(clone!(@weak self as session => move |chat, message| {
             session.send_message(chat, message);
         }));
-
-        let name = format!("chat-{title}");
-        let page = self.imp().pages.add_titled(&chat, Some(&name), &title);
-
-        if title.starts_with('#') {
-            page.set_icon_name("system-users-symbolic");
-        } else {
-            page.set_icon_name("avatar-default-symbolic");
-        }
-
-        chat
     }
 
-    /// Sends ´message´ to the target of the given chat.
-    ///
-    /// May fail on a connection error.
-    fn send_message(&self, chat: &ChatPage, message: String) {
+    /// Sends a message to the given chat
+    fn send_message(&self, chat: &Chat, message: String) {
         let target = chat.property("name");
         let privmsg_command = IrcCommand::Privmsg { target, message };
         if self.client().send(privmsg_command).is_err() {
@@ -91,31 +104,55 @@ impl Session {
         };
     }
 
-    /// If the chat does not already exists, it creates it.
-    ///
-    /// Returns the specified [´Chat´]
-    fn get_or_insert_chat(&self, chat_name: String) -> ChatPage {
+    /// Gets the chat with the given title or creates a new one
+    fn get_or_insert_chat(&self, title: String) -> Chat {
+        let name = build_name_for_chat_title(&title);
         self.imp()
             .pages
-            .child_by_name(&chat_name)
+            .child_by_name(&name)
             .map(|widget| widget.downcast().unwrap())
-            .unwrap_or_else(|| self.add_chat(chat_name))
+            .unwrap_or_else(|| self.add_chat(title))
     }
 
-    /// Returns whether a received privmsg is for a private chat
-    /// Received the target of the command
+    /// Whether the target of a PRIVMSG is a channel
     fn is_private_chat(&self, target: &str) -> bool {
         *target == self.nickname()
     }
 
-    /// Returns whether a channel message was sent by the user client
-    /// Receives the sender of the command
+    /// Whether the sender of a PRIVMSG is the own client
     fn is_own_message(&self, sender: &str) -> bool {
         *sender == self.nickname()
     }
 
-    // Shortcut for accessing the client's nickname
+    /// Returns the nickname of the client
     fn nickname(&self) -> String {
-        self.property::<UserData>(&SessionProperty::Data).nickname()
+        self.property::<RegistrationDataObject>("registration-data")
+            .property("nickname")
     }
+
+    /// Join the given channel in the server
+    fn join_channel(&self, name: String) {
+        let join_command = IrcCommand::Join { name };
+        if self.client().send(join_command).is_err() {
+            println!("todo! connection error");
+        }
+    }
+}
+
+/// Sets the icon of the given page depending on the title
+fn set_chat_page_icon(page: gtk::StackPage) {
+    let Some(title) = page.title() else {return};
+
+    let icon_name = if title.starts_with('#') {
+        GROUP_CHAT_ICON
+    } else {
+        PRIVATE_CHAT_ICON
+    };
+
+    page.set_icon_name(icon_name);
+}
+
+/// Builds the name of the chat page for the given title
+fn build_name_for_chat_title(title: &str) -> String {
+    format!("chat-{title}")
 }

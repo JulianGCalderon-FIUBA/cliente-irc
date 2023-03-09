@@ -1,28 +1,26 @@
+//! Implementation of the Session page.
+
 use std::cell::RefCell;
 
 use glib::subclass::InitializingObject;
 use gtk::glib::once_cell::sync::{Lazy, OnceCell};
-use gtk::glib::ParamSpec;
+use gtk::glib::{ParamSpec, ParamSpecObject};
 use gtk::prelude::{StaticTypeExt, ToValue};
 use gtk::subclass::prelude::*;
 use gtk::{glib, template_callbacks, CompositeTemplate, Stack};
 
-use crate::client::{IrcClient, UserData};
-use crate::message::IrcCommand;
-use crate::widgets::{AddChatPage, Sidebar};
-
-use super::CHANNEL_INDICATOR;
-use crate::pages::session::SessionProperty;
-use crate::widgets::chat_page::ChatPage;
-use crate::widgets::user_page::UserPage;
+use super::{build_name_for_chat_title, CHANNEL_INDICATOR};
+use crate::components::CategorizedStackSidebar;
+use crate::gtk_client::{BoxedIrcClient, RegistrationDataObject};
+use crate::pages::{Account, Chat, ChatAdder};
 
 #[derive(CompositeTemplate, Default)]
 #[template(resource = "/com/jgcalderon/irc-client/ui/session.ui")]
 pub struct Session {
     #[template_child]
     pub pages: TemplateChild<Stack>,
-    pub client: OnceCell<IrcClient>,
-    pub data: RefCell<UserData>,
+    pub client: OnceCell<BoxedIrcClient>,
+    pub data: RefCell<RegistrationDataObject>,
 }
 
 #[glib::object_subclass]
@@ -34,11 +32,12 @@ impl ObjectSubclass for Session {
     fn class_init(klass: &mut Self::Class) {
         klass.bind_template();
         klass.bind_template_callbacks();
+        klass.set_css_name("session");
 
-        ChatPage::ensure_type();
-        AddChatPage::ensure_type();
-        UserPage::ensure_type();
-        Sidebar::ensure_type();
+        Chat::ensure_type();
+        ChatAdder::ensure_type();
+        Account::ensure_type();
+        CategorizedStackSidebar::ensure_type();
     }
 
     fn instance_init(obj: &InitializingObject<Self>) {
@@ -48,22 +47,26 @@ impl ObjectSubclass for Session {
 
 impl ObjectImpl for Session {
     fn properties() -> &'static [glib::ParamSpec] {
-        static PROPERTIES: Lazy<Vec<ParamSpec>> = Lazy::new(SessionProperty::vec);
+        static PROPERTIES: Lazy<Vec<ParamSpec>> = Lazy::new(|| {
+            vec![ParamSpecObject::builder::<RegistrationDataObject>("registration-data").build()]
+        });
         PROPERTIES.as_ref()
     }
 
     fn set_property(&self, _id: usize, value: &glib::Value, pspec: &glib::ParamSpec) {
-        match SessionProperty::from(pspec.name()) {
-            SessionProperty::Data => {
+        match pspec.name() {
+            "registration-data" => {
                 let data = value.get().unwrap();
                 self.data.replace(data);
             }
+            _ => unimplemented!(),
         };
     }
 
     fn property(&self, _id: usize, pspec: &glib::ParamSpec) -> glib::Value {
-        match SessionProperty::from(pspec.name()) {
-            SessionProperty::Data => self.data.borrow().to_value(),
+        match pspec.name() {
+            "registration-data" => self.data.borrow().to_value(),
+            _ => unimplemented!(),
         }
     }
 }
@@ -72,19 +75,21 @@ impl BoxImpl for Session {}
 
 #[template_callbacks]
 impl Session {
-    /// Called when a new chat openning is requested.
-    /// Adds the chat, if it is a group chat, it also notifies the server of joining it.
+    /// Called when the user requests to add a new chat
+    ///
+    /// This function adds a new chat to the session and
+    /// sends a join command to the server if the chat is a channel
+    ///
+    /// The new chat is made visible
     #[template_callback]
-    pub fn add_chat(&self, name: String) {
-        self.obj().add_chat(name.clone());
-        let full_name = format!("chat-{name}");
-        self.pages.set_visible_child_name(&full_name);
+    pub fn add_chat(&self, title: String) {
+        self.obj().add_chat(title.clone());
 
-        if name.starts_with(CHANNEL_INDICATOR) {
-            let join_command = IrcCommand::Join { name };
-            if self.obj().client().send(join_command).is_err() {
-                println!("todo! connection error");
-            }
+        let name = build_name_for_chat_title(&title);
+        self.pages.set_visible_child_name(&name);
+
+        if title.starts_with(CHANNEL_INDICATOR) {
+            self.obj().join_channel(title);
         }
     }
 }

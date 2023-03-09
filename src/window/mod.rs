@@ -1,17 +1,20 @@
-//! This modules contains all interface related structures
+//! # Window
+//!
+//! This module contains the `Window` type, which is the main window of the application.
+
 mod imp;
 
 use glib::Object;
-use gtk::gio;
-use gtk::glib;
-use gtk::Application;
+use gtk::{gio, glib, Application};
 
 glib::wrapper! {
-    /// Main Window of the IRC Client
+    /// The main window of the application.
     ///
-    /// Subclassifies [`gtk::ApplicationWindow`]
+    /// This is the main window of the application. It contains the main
+    /// `gtk::Stack`
     ///
-    /// After creation, Registration is presented.
+    /// After creation, the login page is shown. When the user logs in, the
+    /// session page is shown.
     pub struct Window(ObjectSubclass<imp::Window>)
     @extends gtk::Widget, gtk::Window, gtk::ApplicationWindow,
     @implements gio::ActionMap, gio::ActionGroup, gtk::Accessible,
