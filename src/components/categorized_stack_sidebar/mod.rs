@@ -2,12 +2,12 @@
 mod imp;
 
 use glib::Object;
-use gtk::glib::{self, clone};
-use gtk::prelude::{Cast, ListModelExt, ObjectExt};
+use gtk::glib::clone;
+use gtk::prelude::{Cast, ObjectExt};
 use gtk::subclass::prelude::ObjectSubclassIsExt;
 use gtk::{
-    BuilderListItemFactory, BuilderScope, CustomFilter, FilterListModel, SelectionModel,
-    SingleSelection, Stack, StackPage, INVALID_LIST_POSITION,
+    glib, BuilderListItemFactory, BuilderScope, CustomFilter, FilterListModel, SelectionModel,
+    SingleSelection, Stack, StackPage,
 };
 
 glib::wrapper! {
@@ -34,54 +34,26 @@ glib::wrapper! {
 }
 
 impl CategorizedStackSidebar {
+    /// Creates a new CategorizedStackSidebar with the given stack
     pub fn new(stack: Stack) -> Self {
         Object::builder().property("stack", stack).build()
     }
 
+    /// Returns the stack of the sidebar
     fn stack(&self) -> Stack {
         self.property("stack")
     }
 
-    fn setup(&self) {
-        self.connect_notify(Some("stack"), |sidebar, _| sidebar.setup_stack());
-    }
-
     /// Called after the stack property is set
     fn setup_stack(&self) {
-        let stack: Stack = self.property("stack");
-        let selection = stack.pages();
+        let stack = self.stack();
+        let pages = stack.pages();
 
-        self.setup_config_view(selection.clone());
-        self.setup_chats_view(selection);
+        self.imp().pages.borrow_mut().replace(pages);
     }
 
-    fn setup_config_view(&self, selection: SelectionModel) {
-        let factory = create_factory();
-
-        let filter = config_filter();
-
-        let selection_model = create_filtered_selection_model(selection, filter);
-        self.setup_config_selection(selection_model.clone());
-
-        self.imp().config_list.set_factory(Some(&factory));
-        self.imp().config_list.set_model(Some(&selection_model));
-
-        selection_model.connect_selected_item_notify(
-            clone!(@weak self as sidebar => move |model| {
-                let Some(selected) = model.selected_item() else {return};
-                let page: StackPage = selected.downcast().unwrap();
-
-                sidebar.select_page(page);
-                sidebar.chat_selection().set_selected(INVALID_LIST_POSITION);
-            }),
-        );
-    }
-
-    fn setup_config_selection(&self, selection_model: SingleSelection) {
-        self.imp()
-            .config_selection
-            .borrow_mut()
-            .replace(selection_model);
+    fn pages(&self) -> SelectionModel {
+        self.imp().pages.borrow().clone().unwrap()
     }
 
     fn select_page(&self, page: StackPage) {
@@ -89,118 +61,33 @@ impl CategorizedStackSidebar {
         self.stack().set_visible_child_name(&name);
     }
 
-    fn chat_selection(&self) -> SingleSelection {
-        self.imp().chat_selection.borrow().clone().unwrap()
+    /// Add a category to the sidebar with an associated key
+    ///
+    /// Only pages with the same key will be displayed in the category
+    fn add_category(&self, key: &str) {
+        let model = self.build_model_for_key(key);
+        let factory = self.build_factory();
+
+        let list_view = gtk::ListView::new(Some(model), Some(factory));
     }
 
-    fn config_selection(&self) -> SingleSelection {
-        self.imp().config_selection.borrow().clone().unwrap()
+    /// Build a selection model that filters pages for the given key
+    fn build_model_for_key(&self, key: &str) -> SingleSelection {
+        let filter = CustomFilter::new(clone!(@to-owned key => move |object| {
+            let page: &StackPage = object.downcast_ref().unwrap();
+            let Some(name) = page.name() else {return false};
+            name.starts_with(&key)
+        }));
+        let filter_model = FilterListModel::new(Some(self.pages()), Some(filter));
+
+        SingleSelection::new(Some(filter_model))
     }
 
-    fn setup_chats_view(&self, selection: SelectionModel) {
-        let factory = create_factory();
-
-        let filter = chat_filter();
-
-        let selection_model = create_filtered_selection_model(selection, filter);
-        self.setup_chat_selection(selection_model.clone());
-
-        self.imp().chat_list.set_factory(Some(&factory));
-        self.imp().chat_list.set_model(Some(&selection_model));
-
-        selection_model.connect_selected_item_notify(
-            clone!(@weak self as sidebar => move |model| {
-                let Some(selected) = model.selected_item() else {return};
-                let page: StackPage = selected.downcast().unwrap();
-
-                sidebar.select_page(page);
-                sidebar.config_selection().set_selected(INVALID_LIST_POSITION);
-            }),
-        );
-
-        selection_model.connect_items_changed(
-            clone!(@weak self as sidebar => move |model, position, _, added,| {
-                if added > 0 {
-                    model.set_selected(position);
-                }
-            }),
-        );
+    /// Build a list item factory for the sidebar
+    fn build_factory(&self) -> BuilderListItemFactory {
+        BuilderListItemFactory::from_resource(
+            BuilderScope::NONE,
+            "/com/jgcalderon/irc-client/ui/sidebar_row.ui",
+        )
     }
-
-    fn setup_chat_selection(&self, selection_model: SingleSelection) {
-        self.imp()
-            .chat_selection
-            .borrow_mut()
-            .replace(selection_model);
-    }
-}
-
-fn create_filtered_selection_model(
-    selection: SelectionModel,
-    filter: CustomFilter,
-) -> SingleSelection {
-    let filter_model = FilterListModel::new(Some(selection), Some(filter));
-    let selection = SingleSelection::new(Some(filter_model));
-    selection.set_can_unselect(true);
-
-    selection
-}
-
-fn config_filter() -> CustomFilter {
-    CustomFilter::new(|page| {
-        let page = page.downcast_ref::<StackPage>().unwrap();
-
-        let Some(name) = page.name() else {return false};
-
-        name.starts_with("config")
-    })
-}
-
-fn chat_filter() -> CustomFilter {
-    CustomFilter::new(|page| {
-        let page = page.downcast_ref::<StackPage>().unwrap();
-
-        let Some(name) = page.name() else {return false};
-
-        name.starts_with("chat")
-    })
-}
-
-fn create_factory() -> BuilderListItemFactory {
-    // let factory = SignalListItemFactory::new();
-
-    // factory.connect_setup(|_, list_item| {
-    //     let task_row = Label::new(Some("hola"));
-    //     list_item
-    //         .downcast_ref::<ListItem>()
-    //         .unwrap()
-    //         .set_child(Some(&task_row));
-    // });
-
-    // factory.connect_bind(move |_, list_item| {
-    //     let page = list_item
-    //         .downcast_ref::<ListItem>()
-    //         .unwrap()
-    //         .item()
-    //         .and_downcast::<StackPage>()
-    //         .unwrap();
-
-    //     let label = list_item
-    //         .downcast_ref::<ListItem>()
-    //         .unwrap()
-    //         .child()
-    //         .and_downcast::<Label>()
-    //         .unwrap();
-
-    //     page.bind_property("title", &label, "label")
-    //         .sync_create()
-    //         .build();
-    // });
-
-    // factory
-
-    BuilderListItemFactory::from_resource(
-        BuilderScope::NONE,
-        "/com/jgcalderon/irc-client/ui/sidebar-row.ui",
-    )
 }
