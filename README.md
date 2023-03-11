@@ -11,7 +11,7 @@ Para iniciar la interfaz grafica, se puede ejecutar el siguiente comando
 cargo run
 ```
 
-Para correr el programa utilizando la funcionalidad de registración automatica (localhost, puerto 800, nickname aleatorio), se puede incluir el _feature_ `automatic-login`. De la siguiente forma
+Para correr el programa utilizando la funcionalidad de registración automatica (localhost, puerto 8000, nickname aleatorio), se puede incluir el _feature_ `automatic-login`. De la siguiente forma
 ```bash
 cargo run --features automatic-login
 ```
