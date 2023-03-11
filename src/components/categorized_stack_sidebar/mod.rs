@@ -106,6 +106,7 @@ impl CategorizedStackSidebar {
         self.update_default_model();
     }
 
+    /// Connects the selection of a stack page with the selection of the model containing it
     fn connect_model_to_pages(&self, model: &SingleSelection) {
         let pages = self.pages();
 
@@ -115,21 +116,13 @@ impl CategorizedStackSidebar {
                 return;
             }
 
-
             let Some(page) = pages.item(selection.nth(0)) else {return};
-            let Ok(page) = page.downcast::<StackPage>() else {return};
-
-
 
             for i in 0..model.n_items() {
 
-
                 let Some(item) = model.item(i) else {continue};
-                let Ok(item) = item.downcast::<StackPage>() else {return};
 
-
-                if item.name() == page.name() {
-
+                if item == page {
                     model.set_selected(i);
                     return;
                 }
