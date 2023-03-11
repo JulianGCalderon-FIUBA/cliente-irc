@@ -2,7 +2,7 @@ Proyecto personal para profundizar conocimientos en GTK4 con RUST. Mi objetivo e
 
 # irc-client
 
-El cliente se implemento siguiendo el protocolo RFC 1459. Esta particularmente diseñado para funcionar con la implementación del respositorio _link_, pero se puede facilmente adaptar a otros servidores, cambiando ligeramente el manejo de mensajes.
+El cliente se implemento siguiendo el protocolo RFC 1459. Esta particularmente diseñado para funcionar con la implementación servidor [irc-server](www.google.com.ar), pero se puede facilmente adaptar a otros servidores, cambiando ligeramente el manejo de mensajes.
 
 ## Utilizacion
 
