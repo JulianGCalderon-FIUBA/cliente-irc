@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="CategorizedStackSidebar" parent="GtkBox">
+    <child>
+      <object class="GtkScrolledWindow">
+        <property name="width-request" bind-source="CategorizedStackSidebar"></property>
+        <property name="hscrollbar-policy">never</property>
+        <child>
+          <object class="GtkBox" id="container">
+            <property name="width-request" bind-source="CategorizedStackSidebar"></property>
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="GtkListView" id="default_view">
+                <property name="vexpand">true</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

@@ -3,27 +3,30 @@
 use std::cell::RefCell;
 
 use glib::subclass::InitializingObject;
-use gtk::glib::once_cell::sync::Lazy;
+use gtk::glib::once_cell::sync::{Lazy, OnceCell};
 use gtk::glib::{ParamSpec, ParamSpecObject};
-use gtk::prelude::ToValue;
+use gtk::prelude::*;
 use gtk::subclass::prelude::*;
-use gtk::{glib, CompositeTemplate, ListView, SingleSelection, Stack};
+use gtk::{glib, Box, CompositeTemplate, ListView, Stack};
+
+use crate::components::filtered_selection_model::FilteredSelectionModel;
 
 #[derive(CompositeTemplate, Default)]
-#[template(resource = "/com/jgcalderon/irc-client/ui/sidebar.ui")]
+#[template(resource = "/com/jgcalderon/irc-client/ui/components/categorized-stack-sidebar.ui")]
 pub struct CategorizedStackSidebar {
     #[template_child]
-    pub config_list: TemplateChild<ListView>,
+    pub container: TemplateChild<Box>,
     #[template_child]
-    pub chat_list: TemplateChild<ListView>,
-    pub config_selection: RefCell<Option<SingleSelection>>,
-    pub chat_selection: RefCell<Option<SingleSelection>>,
+    pub default_view: TemplateChild<ListView>,
+    pub default_model: OnceCell<FilteredSelectionModel>,
+    pub categories: RefCell<Vec<String>>,
+    pub models: RefCell<Vec<FilteredSelectionModel>>,
     stack: RefCell<Stack>,
 }
 
 #[glib::object_subclass]
 impl ObjectSubclass for CategorizedStackSidebar {
-    const NAME: &'static str = "Sidebar";
+    const NAME: &'static str = "CategorizedStackSidebar";
     type Type = super::CategorizedStackSidebar;
     type ParentType = gtk::Box;
 
@@ -64,7 +67,8 @@ impl ObjectImpl for CategorizedStackSidebar {
     fn constructed(&self) {
         self.parent_constructed();
 
-        self.obj().setup();
+        self.obj()
+            .connect_notify(Some("stack"), |sidebar, _| sidebar.setup_stack());
     }
 }
 

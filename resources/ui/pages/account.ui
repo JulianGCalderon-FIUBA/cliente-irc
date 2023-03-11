@@ -24,7 +24,7 @@
         <property name="locked">true</property>
         <binding name="input">
           <lookup name="nickname">
-            <lookup name="user-data">UserPage</lookup>
+            <lookup name="registration-data">UserPage</lookup>
           </lookup>
         </binding>
       </object>
@@ -35,7 +35,7 @@
         <property name="locked">true</property>
         <binding name="input">
           <lookup name="realname">
-            <lookup name="user-data">UserPage</lookup>
+            <lookup name="registration-data">UserPage</lookup>
           </lookup>
         </binding>
       </object>
@@ -46,7 +46,7 @@
         <property name="locked">true</property>
         <binding name="input">
           <lookup name="username">
-            <lookup name="user-data">UserPage</lookup>
+            <lookup name="registration-data">UserPage</lookup>
           </lookup>
         </binding>
       </object>
@@ -57,7 +57,7 @@
         <property name="locked">true</property>
         <binding name="input">
           <lookup name="servername">
-            <lookup name="user-data">UserPage</lookup>
+            <lookup name="registration-data">UserPage</lookup>
           </lookup>
         </binding>
       </object>
@@ -68,7 +68,7 @@
         <property name="locked">true</property>
         <binding name="input">
           <lookup name="hostname">
-            <lookup name="user-data">UserPage</lookup>
+            <lookup name="registration-data">UserPage</lookup>
           </lookup>
         </binding>
       </object>

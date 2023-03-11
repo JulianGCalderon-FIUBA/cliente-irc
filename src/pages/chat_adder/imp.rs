@@ -3,14 +3,14 @@
 use glib::subclass::InitializingObject;
 use gtk::glib::once_cell::sync::Lazy;
 use gtk::glib::subclass::Signal;
-use gtk::prelude::{ObjectExt, StaticType, ToValue};
+use gtk::prelude::*;
 use gtk::subclass::prelude::*;
 use gtk::{glib, template_callbacks, CompositeTemplate, Entry};
 
 use crate::utils::get_and_clear_entry;
 
 #[derive(CompositeTemplate, Default)]
-#[template(resource = "/com/jgcalderon/irc-client/ui/add-chat-page.ui")]
+#[template(resource = "/com/jgcalderon/irc-client/ui/pages/chat-adder.ui")]
 pub struct ChatAdder {}
 
 #[glib::object_subclass]

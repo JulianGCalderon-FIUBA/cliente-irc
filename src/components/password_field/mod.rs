@@ -3,8 +3,8 @@
 mod imp;
 
 use glib::Object;
-use gtk::prelude::ObjectExt;
-use gtk::subclass::prelude::ObjectSubclassIsExt;
+use gtk::prelude::*;
+use gtk::subclass::prelude::*;
 use gtk::{glib, LevelBar};
 
 glib::wrapper! {

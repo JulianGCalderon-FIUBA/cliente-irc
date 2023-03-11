@@ -2,7 +2,7 @@
 <interface>
   <template class="Session" parent="GtkBox">
     <child>
-      <object class="Sidebar">
+      <object class="CategorizedStackSidebar" id="sidebar">
         <property name="width-request">180</property>
         <property name="vexpand">true</property>
         <property name="stack">pages</property>
@@ -17,12 +17,12 @@
             <property name="icon-name">user-home-symbolic</property>
             <binding name="title">
               <lookup name="nickname">
-                <lookup name="user-data">Session</lookup>
+                <lookup name="registration-data">Session</lookup>
               </lookup>
             </binding>
             <property name="child">
               <object class="UserPage">
-                <property name="user-data" bind-source="Session" />
+                <property name="registration-data" bind-source="Session" />
               </object>
             </property>
           </object>

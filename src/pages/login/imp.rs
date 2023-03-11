@@ -3,7 +3,7 @@
 use glib::subclass::InitializingObject;
 use gtk::glib::once_cell::sync::{Lazy, OnceCell};
 use gtk::glib::subclass::Signal;
-use gtk::prelude::StaticType;
+use gtk::prelude::*;
 use gtk::subclass::prelude::*;
 use gtk::{glib, template_callbacks, Button, CompositeTemplate};
 
@@ -12,7 +12,7 @@ use crate::components::password_field::PasswordField;
 use crate::gtk_client::{BoxedIrcClient, RegistrationDataObject};
 
 #[derive(CompositeTemplate, Default)]
-#[template(resource = "/com/jgcalderon/irc-client/ui/registration.ui")]
+#[template(resource = "/com/jgcalderon/irc-client/ui/pages/login.ui")]
 pub struct Login {
     #[template_child]
     pub address: TemplateChild<Field>,

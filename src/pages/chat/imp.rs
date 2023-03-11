@@ -6,7 +6,7 @@ use glib::subclass::InitializingObject;
 use gtk::glib::once_cell::sync::Lazy;
 use gtk::glib::subclass::Signal;
 use gtk::glib::{ParamSpec, ParamSpecString};
-use gtk::prelude::{ObjectExt, StaticType, ToValue};
+use gtk::prelude::*;
 use gtk::subclass::prelude::*;
 use gtk::{glib, template_callbacks, CompositeTemplate, Entry, ListBox};
 
@@ -14,7 +14,7 @@ use super::create_own_message;
 use crate::utils::get_and_clear_entry;
 
 #[derive(CompositeTemplate, Default)]
-#[template(resource = "/com/jgcalderon/irc-client/ui/chat.ui")]
+#[template(resource = "/com/jgcalderon/irc-client/ui/pages/chat.ui")]
 pub struct Chat {
     #[template_child]
     pub messages: TemplateChild<ListBox>,

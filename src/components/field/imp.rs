@@ -5,12 +5,12 @@ use std::cell::RefCell;
 use glib::subclass::InitializingObject;
 use gtk::glib::once_cell::sync::Lazy;
 use gtk::glib::{ParamSpec, ParamSpecBoolean, ParamSpecString};
-use gtk::prelude::ToValue;
+use gtk::prelude::*;
 use gtk::subclass::prelude::*;
 use gtk::{glib, CompositeTemplate, Entry, Label};
 
 #[derive(CompositeTemplate, Default)]
-#[template(resource = "/com/jgcalderon/irc-client/ui/field.ui")]
+#[template(resource = "/com/jgcalderon/irc-client/ui/components/field.ui")]
 pub struct Field {
     #[template_child]
     pub entry: TemplateChild<Entry>,

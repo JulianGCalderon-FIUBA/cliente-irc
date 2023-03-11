@@ -46,8 +46,8 @@ mod imp {
     use client::data::RegistrationData;
     use gtk::glib::once_cell::sync::Lazy;
     use gtk::glib::{self, ParamSpec, ParamSpecString};
-    use gtk::prelude::ToValue;
-    use gtk::subclass::prelude::{ObjectImpl, ObjectSubclass};
+    use gtk::prelude::*;
+    use gtk::subclass::prelude::*;
 
     use std::cell::RefCell;
 
