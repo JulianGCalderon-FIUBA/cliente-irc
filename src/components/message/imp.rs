@@ -10,7 +10,7 @@ use gtk::subclass::prelude::*;
 use gtk::{glib, CompositeTemplate, Label};
 
 #[derive(CompositeTemplate, Default)]
-#[template(resource = "/com/jgcalderon/irc-client/ui/message.ui")]
+#[template(resource = "/com/jgcalderon/irc-client/ui/components/message.ui")]
 pub struct Message {
     #[template_child]
     pub sender_label: TemplateChild<Label>,

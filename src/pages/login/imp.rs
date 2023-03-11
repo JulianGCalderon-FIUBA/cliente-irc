@@ -12,7 +12,7 @@ use crate::components::password_field::PasswordField;
 use crate::gtk_client::{BoxedIrcClient, RegistrationDataObject};
 
 #[derive(CompositeTemplate, Default)]
-#[template(resource = "/com/jgcalderon/irc-client/ui/registration.ui")]
+#[template(resource = "/com/jgcalderon/irc-client/ui/pages/login.ui")]
 pub struct Login {
     #[template_child]
     pub address: TemplateChild<Field>,

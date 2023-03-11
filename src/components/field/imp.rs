@@ -10,7 +10,7 @@ use gtk::subclass::prelude::*;
 use gtk::{glib, CompositeTemplate, Entry, Label};
 
 #[derive(CompositeTemplate, Default)]
-#[template(resource = "/com/jgcalderon/irc-client/ui/field.ui")]
+#[template(resource = "/com/jgcalderon/irc-client/ui/components/field.ui")]
 pub struct Field {
     #[template_child]
     pub entry: TemplateChild<Entry>,

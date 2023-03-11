@@ -12,7 +12,7 @@ use gtk::{glib, CompositeTemplate};
 use crate::gtk_client::RegistrationDataObject;
 
 #[derive(CompositeTemplate, Default)]
-#[template(resource = "/com/jgcalderon/irc-client/ui/user-page.ui")]
+#[template(resource = "/com/jgcalderon/irc-client/ui/pages/account.ui")]
 pub struct Account {
     data: RefCell<RegistrationDataObject>,
 }

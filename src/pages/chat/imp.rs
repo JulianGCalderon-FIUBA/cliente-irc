@@ -14,7 +14,7 @@ use super::create_own_message;
 use crate::utils::get_and_clear_entry;
 
 #[derive(CompositeTemplate, Default)]
-#[template(resource = "/com/jgcalderon/irc-client/ui/chat.ui")]
+#[template(resource = "/com/jgcalderon/irc-client/ui/pages/chat.ui")]
 pub struct Chat {
     #[template_child]
     pub messages: TemplateChild<ListBox>,

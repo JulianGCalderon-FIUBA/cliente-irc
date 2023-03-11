@@ -243,7 +243,7 @@ impl CategorizedStackSidebar {
     fn build_factory(&self) -> BuilderListItemFactory {
         BuilderListItemFactory::from_resource(
             BuilderScope::NONE,
-            "/com/jgcalderon/irc-client/ui/sidebar-row.ui",
+            "/com/jgcalderon/irc-client/ui/components/stack-page-label.ui",
         )
     }
 

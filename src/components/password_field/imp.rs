@@ -10,7 +10,7 @@ use gtk::subclass::prelude::*;
 use gtk::{glib, CompositeTemplate, LevelBar, PasswordEntry};
 
 #[derive(CompositeTemplate, Default)]
-#[template(resource = "/com/jgcalderon/irc-client/ui/password-field.ui")]
+#[template(resource = "/com/jgcalderon/irc-client/ui/components/password-field.ui")]
 pub struct PasswordField {
     #[template_child]
     pub entry: TemplateChild<PasswordEntry>,

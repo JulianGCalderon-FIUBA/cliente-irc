@@ -2,15 +2,15 @@
 <gresources>
   <gresource prefix="/com/jgcalderon/irc-client">
     <file compressed="true" preprocess="xml-stripblanks">ui/window.ui</file>
-    <file compressed="true" preprocess="xml-stripblanks">ui/registration.ui</file>
-    <file compressed="true" preprocess="xml-stripblanks">ui/field.ui</file>
-    <file compressed="true" preprocess="xml-stripblanks">ui/password-field.ui</file>
-    <file compressed="true" preprocess="xml-stripblanks">ui/session.ui</file>
-    <file compressed="true" preprocess="xml-stripblanks">ui/chat.ui</file>
-    <file compressed="true" preprocess="xml-stripblanks">ui/message.ui</file>
-    <file compressed="true" preprocess="xml-stripblanks">ui/user-page.ui</file>
-    <file compressed="true" preprocess="xml-stripblanks">ui/add-chat-page.ui</file>
-    <file compressed="true" preprocess="xml-stripblanks">ui/sidebar.ui</file>
-    <file compressed="true" preprocess="xml-stripblanks">ui/sidebar-row.ui</file>
+    <file compressed="true" preprocess="xml-stripblanks">ui/pages/login.ui</file>
+    <file compressed="true" preprocess="xml-stripblanks">ui/pages/session.ui</file>
+    <file compressed="true" preprocess="xml-stripblanks">ui/pages/chat.ui</file>
+    <file compressed="true" preprocess="xml-stripblanks">ui/pages/chat-adder.ui</file>
+    <file compressed="true" preprocess="xml-stripblanks">ui/pages/account.ui</file>
+    <file compressed="true" preprocess="xml-stripblanks">ui/components/field.ui</file>
+    <file compressed="true" preprocess="xml-stripblanks">ui/components/password-field.ui</file>
+    <file compressed="true" preprocess="xml-stripblanks">ui/components/message.ui</file>
+    <file compressed="true" preprocess="xml-stripblanks">ui/components/categorized-stack-sidebar.ui</file>
+    <file compressed="true" preprocess="xml-stripblanks">ui/components/stack-page-label.ui</file>
   </gresource>
 </gresources>

@@ -15,7 +15,7 @@ use crate::gtk_client::{BoxedIrcClient, RegistrationDataObject};
 use crate::pages::{Account, Chat, ChatAdder};
 
 #[derive(CompositeTemplate, Default)]
-#[template(resource = "/com/jgcalderon/irc-client/ui/session.ui")]
+#[template(resource = "/com/jgcalderon/irc-client/ui/pages/session.ui")]
 pub struct Session {
     #[template_child]
     pub pages: TemplateChild<Stack>,

@@ -13,7 +13,7 @@ use gtk::{
 };
 
 #[derive(CompositeTemplate, Default)]
-#[template(resource = "/com/jgcalderon/irc-client/ui/sidebar.ui")]
+#[template(resource = "/com/jgcalderon/irc-client/ui/components/categorized-stack-sidebar.ui")]
 pub struct CategorizedStackSidebar {
     #[template_child]
     pub container: TemplateChild<Box>,
