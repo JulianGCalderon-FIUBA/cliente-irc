@@ -7,6 +7,7 @@ pub mod categorized_stack_sidebar;
 pub mod field;
 pub mod message;
 pub mod password_field;
+pub mod filtered_selection_model;
 
 pub use categorized_stack_sidebar::CategorizedStackSidebar;
 pub use field::Field;
