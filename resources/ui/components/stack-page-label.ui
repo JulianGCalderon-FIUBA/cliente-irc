@@ -13,7 +13,6 @@
                 <lookup name="item">GtkListItem</lookup>
               </lookup>
             </binding>
-
           </object>
         </child>
         <child>

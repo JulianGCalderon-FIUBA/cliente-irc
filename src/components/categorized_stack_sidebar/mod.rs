@@ -84,6 +84,7 @@ impl CategorizedStackSidebar {
         self.imp().default_view.set_model(Some(&model));
 
         self.connect_default_model(&model);
+        self.connect_model_to_pages(&model);
     }
 
     /// Add a category to the sidebar with an associated key
@@ -100,8 +101,42 @@ impl CategorizedStackSidebar {
         self.append_new_view(list_view);
 
         self.connect_model(key, &model);
+        self.connect_model_to_pages(&model);
 
         self.update_default_model();
+    }
+
+    fn connect_model_to_pages(&self, model: &SingleSelection) {
+        let pages = self.pages();
+
+        pages.connect_selection_changed(clone!(@weak model as model => move |pages, _, _| {
+            let selection = pages.selection();
+            if selection.is_empty() {
+                return;
+            }
+
+
+            let Some(page) = pages.item(selection.nth(0)) else {return};
+            let Ok(page) = page.downcast::<StackPage>() else {return};
+
+
+
+            for i in 0..model.n_items() {
+
+
+                let Some(item) = model.item(i) else {continue};
+                let Ok(item) = item.downcast::<StackPage>() else {return};
+
+
+                if item.name() == page.name() {
+
+                    model.set_selected(i);
+                    return;
+                }
+            }
+
+            model.set_selected(GTK_INVALID_LIST_POSITION);
+        }));
     }
 
     /// Adds the model to the model hashmap
