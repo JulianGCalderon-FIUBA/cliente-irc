@@ -2,7 +2,7 @@ Proyecto personal para profundizar conocimientos en GTK4 con RUST. Mi objetivo e
 
 # irc-client
 
-El cliente se implemento siguiendo el protocolo RFC 1459. Esta particularmente diseñado para funcionar con la implementación del servidor [irc-server](https://github.com/vuejs/vue), pero se puede facilmente adaptar a otros servidores, cambiando ligeramente el manejo de mensajes.
+El cliente se implemento siguiendo el protocolo RFC 1459. Esta particularmente diseñado para funcionar con la implementación del servidor [irc-server](https://github.com/juliangcalderon/irc-client), pero se puede facilmente adaptar a otros servidores, cambiando ligeramente el manejo de mensajes.
 
 ## Utilizacion
 
@@ -11,7 +11,7 @@ Para iniciar la interfaz grafica, se puede ejecutar el siguiente comando
 cargo run
 ```
 
-Para correr el programa utilizando la funcionalidad de registración automatica (localhost, puerto 8000, nickname aleatorio), se puede incluir el _feature_ `automatic-login`. De la siguiente forma
+Para correr el programa utilizando la funcionalidad de registración automatica (localhost, puerto 9000, nickname aleatorio), se puede incluir el _feature_ `automatic-login`. De la siguiente forma
 ```bash
 cargo run --features automatic-login
 ```
