@@ -101,7 +101,7 @@ impl CategorizedStackSidebar {
 
         self.connect_model(key, &model);
 
-        self.setup_default_view();
+        self.update_default_model();
     }
 
     /// Adds the model to the model hashmap
@@ -127,7 +127,21 @@ impl CategorizedStackSidebar {
 
     /// Build a selection model that contains all uncategorized pages
     fn build_model_for_default_key(&self) -> SingleSelection {
-        let filter = CustomFilter::new(
+        let filter = self.build_default_filter();
+
+        let filter_model = FilterListModel::new(Some(self.pages()), Some(filter));
+
+        self.imp()
+            .default_filter_model
+            .borrow_mut()
+            .replace(filter_model.clone());
+
+        self.build_selection_for_filter(filter_model)
+    }
+
+    /// Builds a filter that filters out all pages that belong to a category
+    fn build_default_filter(&self) -> CustomFilter {
+        CustomFilter::new(
             clone!(@weak self as sidebar => @default-return false, move |object| {
                 let page: &StackPage = object.downcast_ref().unwrap();
                 let Some(name) = page.name() else {return false};
@@ -142,9 +156,7 @@ impl CategorizedStackSidebar {
                 }
                 true
             }),
-        );
-
-        self.build_model_for_filter(filter)
+        )
     }
 
     /// Connect the key selection model to the sidebar
@@ -207,10 +219,8 @@ impl CategorizedStackSidebar {
     }
 
     /// Build a selection model that filters pages for the given filter
-    fn build_model_for_filter(&self, filter: CustomFilter) -> SingleSelection {
-        let filter_model = FilterListModel::new(Some(self.pages()), Some(filter));
-
-        let selection_model = SingleSelection::new(Some(filter_model));
+    fn build_selection_for_filter(&self, filter: FilterListModel) -> SingleSelection {
+        let selection_model = SingleSelection::new(Some(filter));
         selection_model.set_autoselect(false);
 
         selection_model
@@ -224,7 +234,9 @@ impl CategorizedStackSidebar {
             name.starts_with(&key)
         }));
 
-        self.build_model_for_filter(filter)
+        let filter_model = FilterListModel::new(Some(self.pages()), Some(filter));
+
+        self.build_selection_for_filter(filter_model)
     }
 
     /// Build a list item factory for the sidebar
@@ -233,6 +245,17 @@ impl CategorizedStackSidebar {
             BuilderScope::NONE,
             "/com/jgcalderon/irc-client/ui/sidebar-row.ui",
         )
+    }
+
+    /// Update the default model by reapplying the filter
+    fn update_default_model(&self) {
+        let filter = self.build_default_filter();
+        self.imp()
+            .default_filter_model
+            .borrow_mut()
+            .as_mut()
+            .unwrap()
+            .set_filter(Some(&filter));
     }
 }
 
