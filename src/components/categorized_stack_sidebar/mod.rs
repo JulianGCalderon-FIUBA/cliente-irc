@@ -21,6 +21,8 @@ glib::wrapper! {
     ///
     /// Categories can be added with the `add_category` method.
     ///
+    /// All uncategorized pages are displayed in the default group.
+    ///
     /// # Properties
     ///
     /// * `stack` - The stack to display
@@ -56,11 +58,9 @@ impl CategorizedStackSidebar {
         self.stack().pages()
     }
 
-    /// Called after the stack is set or after a category is added
-    ///
     /// This method sets up the default view of the sidebar
     ///
-    /// All uncategorized pages will be displayed here
+    /// ALl uncatgorized pages are displayed in this view
     fn setup_default_view(&self) {
         let factory = self.build_factory();
 
@@ -96,11 +96,13 @@ impl CategorizedStackSidebar {
 
         self.append_new_view(list_view);
 
-        self.imp()
-            .default_model
-            .get()
-            .unwrap()
+        self.default_model()
             .update_filter(self.build_default_filter())
+    }
+
+    /// Gets the model for the uncategorized pages
+    fn default_model(&self) -> &FilteredSelectionModel {
+        self.imp().default_model.get().unwrap()
     }
 
     /// Append a new view to the sidebar, with its corresponding separator
@@ -139,6 +141,7 @@ impl CategorizedStackSidebar {
     }
 }
 
+/// Builds a filter that filters out all pages that don't start with the given key
 fn build_filter_for_key(key: &str) -> CustomFilter {
     let key = key.to_owned();
     CustomFilter::new(move |object| {
